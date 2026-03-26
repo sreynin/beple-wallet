@@ -10,7 +10,6 @@ const en: Record<TranslationKeys, string> = {
   done: 'Done',
   loading: 'Please wait...',
   launch_tap_hint: 'Tap to continue',
-  launch_tagline: 'Bipple Wallet,\nFreedom for smarter payments.',
   error: 'Error',
   retry: 'Retry',
   save: 'Save',
