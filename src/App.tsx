@@ -9,7 +9,9 @@ import LanguageSelect from './pages/LanguageSelect'
 import Login from './pages/Login'
 import Terms from './pages/Terms'
 import PinSetup from './pages/PinSetup'
-import UserTypeSelect from './pages/UserTypeSelect'
+import AccountCheck from './pages/AccountCheck'
+import CryptoCheck from './pages/CryptoCheck'
+import OnboardingBank from './pages/OnboardingBank'
 import KycStart from './pages/KycStart'
 import KycPassport from './pages/KycPassport'
 import KycConfirm from './pages/KycConfirm'
@@ -57,8 +59,10 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/terms" element={<Terms />} />
+          <Route path="/account-check" element={<AccountCheck />} />
           <Route path="/pin-setup" element={<PinSetup />} />
-          <Route path="/user-type" element={<UserTypeSelect />} />
+          <Route path="/crypto-check" element={<CryptoCheck />} />
+          <Route path="/onboarding-bank" element={<OnboardingBank />} />
 
           {/* Public - KYC Flow (accessible during onboarding) */}
           <Route path="/kyc-start" element={<KycStart />} />

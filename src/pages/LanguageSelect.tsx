@@ -58,7 +58,7 @@ export default function LanguageSelect() {
 
       <div className="px-6 pb-8">
         <button
-          onClick={() => navigate('/login')}
+          onClick={() => navigate('/account-check')}
           className="w-full py-4 bg-primary text-white font-semibold rounded-xl active:bg-primary-dark transition-colors"
         >
           {t('next')}

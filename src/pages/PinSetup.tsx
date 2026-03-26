@@ -28,7 +28,7 @@ export default function PinSetup() {
       if (pin === firstPin) {
         setPin(pin)
         if (flow === 'signup') {
-          navigate('/user-type', { replace: true })
+          navigate('/home', { replace: true })
         } else if (flow === 'reset') {
           navigate(-1)
         } else if (location.state?.from === 'payment') {
@@ -36,8 +36,7 @@ export default function PinSetup() {
         } else if (location.state?.from === 'settings') {
           navigate(-1)
         } else if (isSignupFlow) {
-          // Backward-compatible fallback: when pinSet is false and no explicit flow is provided
-          navigate('/user-type', { replace: true })
+          navigate('/home', { replace: true })
         } else {
           // Default fallback to keep users in the app
           navigate('/home', { replace: true })
@@ -54,7 +53,7 @@ export default function PinSetup() {
       <Header title={t('pin_title')} />
       {isSignupFlow && (
         <div className="px-6 pt-3">
-          <StepIndicator current={3} />
+          <StepIndicator current={4} />
         </div>
       )}
       <PinInput

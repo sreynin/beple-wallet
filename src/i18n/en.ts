@@ -10,6 +10,8 @@ const en: Record<TranslationKeys, string> = {
   done: 'Done',
   loading: 'Please wait...',
   launch_tap_hint: 'Tap to continue',
+  launch_existing_user: 'Existing User',
+  launch_new_user: 'New User',
   error: 'Error',
   retry: 'Retry',
   save: 'Save',
@@ -89,7 +91,43 @@ const en: Record<TranslationKeys, string> = {
   pin_mismatch: 'Numbers do not match.',
   pin_delete: 'Del',
 
-  // User Type
+  // Account Check
+  account_check_heading: 'Do you have a\nKorean bank account?',
+  account_check_desc: 'Your service experience will differ.',
+  account_check_yes: 'Yes, I do',
+  account_check_yes_desc: 'Verify with Korean phone and bank account',
+  account_check_yes_auth: 'Bank verification',
+  account_check_no: 'No, I don\'t',
+  account_check_no_desc: 'Verify with passport and charge with crypto',
+  account_check_no_auth: 'Minimal-KYC (Passport)',
+
+  // Crypto Check
+  crypto_check_heading: 'Do you have\ncryptocurrency?',
+  crypto_check_desc: 'Your charging method will differ.',
+  crypto_check_yes: 'Yes, I have crypto',
+  crypto_check_yes_desc: 'Charge via Triple-A after KYC verification',
+  crypto_check_no: 'No, I don\'t',
+  crypto_check_no_desc: 'You can use the service once you acquire crypto',
+
+  // Onboarding Bank
+  onboarding_bank_title: 'Set Up Charging',
+  onboarding_type_heading: 'Select a charging method',
+  onboarding_type_desc: 'You can link a bank account or Korbit exchange.',
+  onboarding_type_bank: 'Bank Account',
+  onboarding_type_bank_desc: 'Register bank account for instant charging',
+  onboarding_type_korbit: 'Korbit Exchange',
+  onboarding_type_korbit_desc: 'Link exchange to charge by selling coins',
+  onboarding_korbit_heading: 'Connect Korbit',
+  onboarding_korbit_desc: 'Link your Korbit exchange to\ncharge Bipple Money by selling crypto.',
+  onboarding_korbit_step1: 'Issue an API key from the Korbit app',
+  onboarding_korbit_step2: 'Link your account with the API key',
+  onboarding_korbit_step3: 'Start charging by selling coins after linking',
+  onboarding_korbit_connect: 'Connect Korbit',
+  onboarding_korbit_connecting: 'Connecting to Korbit...',
+  onboarding_korbit_done: 'Korbit Connected',
+  onboarding_korbit_done_desc: 'Exchange link completed successfully.',
+
+  // User Type (legacy)
   usertype_title: 'User Type',
   usertype_heading: 'Select your user type',
   usertype_desc: 'Authentication method varies by user type.',
@@ -173,6 +211,10 @@ const en: Record<TranslationKeys, string> = {
   home_coins: 'Coin Assets',
   home_no_coins: 'No coins registered.',
   home_no_coins_desc: 'Register a coin to get started.',
+  home_setup_bank: 'Set Up Bank Account',
+  home_setup_bank_desc: 'Link your account to charge Bipple Money',
+  home_setup_korbit: 'Connect Korbit Exchange',
+  home_setup_korbit_desc: 'Register coins and charge by selling',
   home_usage: 'Transaction History',
   home_charge_btn: 'Charge Now',
 
@@ -499,6 +541,7 @@ const en: Record<TranslationKeys, string> = {
   profile_kyc_not: 'KYC Not Verified',
   profile_kyc_info: 'KYC Verification Info',
   profile_basic_info: 'Basic Information',
+  step_bank_setup: 'Set Up Bank',
 
   // Terms - login info
   terms_login_info: 'Logged in as',
@@ -595,6 +638,7 @@ const en: Record<TranslationKeys, string> = {
   otp_enter: 'Enter the 6-digit verification code',
   otp_confirm: 'Confirm',
   otp_resend: 'Resend',
+  otp_phone_verified: 'Phone number verified',
   otp_expire: 'Expires in',
   otp_success: 'Verification complete.',
   otp_fail: 'Code does not match.',

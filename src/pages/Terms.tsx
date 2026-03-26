@@ -66,7 +66,7 @@ export default function Terms() {
       <Header title={t('terms_title')} showBack={true} />
 
       <div className="flex-1 px-6 pt-4 overflow-y-auto">
-        <StepIndicator current={2} />
+        <StepIndicator current={3} />
 
         {/* Login info card */}
         {loginMethod && (

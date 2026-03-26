@@ -8,6 +8,8 @@ const ko = {
   done: '완료',
   loading: '잠시만 기다려주세요...',
   launch_tap_hint: '탭하여 계속',
+  launch_existing_user: '기존 사용자',
+  launch_new_user: '새로운 사용자',
   error: '오류',
   retry: '다시 시도',
   save: '저장',
@@ -87,7 +89,43 @@ const ko = {
   pin_mismatch: '입력하신 번호가 일치하지 않습니다.',
   pin_delete: '삭제',
 
-  // User Type
+  // Account Check (onboarding branch)
+  account_check_heading: '한국 은행 계좌가\n있으신가요?',
+  account_check_desc: '서비스 이용 방식이 달라집니다.',
+  account_check_yes: '예, 있습니다',
+  account_check_yes_desc: '한국 휴대폰과 은행 계좌로 인증합니다',
+  account_check_yes_auth: '은행 계좌 인증',
+  account_check_no: '아니요, 없습니다',
+  account_check_no_desc: '여권으로 인증하고 코인으로 충전합니다',
+  account_check_no_auth: 'Minimal-KYC (여권)',
+
+  // Crypto Check
+  crypto_check_heading: '가상화폐를\n보유하고 계신가요?',
+  crypto_check_desc: '충전 방식이 달라집니다.',
+  crypto_check_yes: '예, 보유하고 있습니다',
+  crypto_check_yes_desc: 'KYC 인증 후 Triple-A로 충전 가능',
+  crypto_check_no: '아니요, 없습니다',
+  crypto_check_no_desc: '추후 코인을 구매하면 사용 가능합니다',
+
+  // Onboarding Bank
+  onboarding_bank_title: '충전 수단 등록',
+  onboarding_type_heading: '충전 수단을 선택해주세요',
+  onboarding_type_desc: '은행 계좌 또는 Korbit 거래소를 연동할 수 있습니다.',
+  onboarding_type_bank: '은행 계좌',
+  onboarding_type_bank_desc: '은행 계좌를 등록하고 즉시 충전',
+  onboarding_type_korbit: 'Korbit 거래소',
+  onboarding_type_korbit_desc: '거래소 연동으로 코인 매도 충전',
+  onboarding_korbit_heading: 'Korbit 연동',
+  onboarding_korbit_desc: 'Korbit 거래소를 연동하여\n코인 매도로 비플머니를 충전하세요.',
+  onboarding_korbit_step1: 'Korbit 앱에서 API 키를 발급합니다',
+  onboarding_korbit_step2: 'API 키로 계정을 연동합니다',
+  onboarding_korbit_step3: '연동 완료 후 코인 매도 충전이 가능합니다',
+  onboarding_korbit_connect: 'Korbit 연동하기',
+  onboarding_korbit_connecting: 'Korbit 연동 중...',
+  onboarding_korbit_done: 'Korbit 연동 완료',
+  onboarding_korbit_done_desc: '거래소 연동이 완료되었습니다.',
+
+  // User Type (legacy)
   usertype_title: '사용자 유형',
   usertype_heading: '사용자 유형을 선택해주세요',
   usertype_desc: '서비스 이용을 위한 인증 방식이 달라집니다.',
@@ -171,6 +209,10 @@ const ko = {
   home_coins: '보유 코인 자산',
   home_no_coins: '등록된 코인이 없습니다.',
   home_no_coins_desc: '코인을 등록해보세요.',
+  home_setup_bank: '은행 계좌 등록',
+  home_setup_bank_desc: '계좌를 연결하고 비플머니를 충전하세요',
+  home_setup_korbit: 'Korbit 거래소 연동',
+  home_setup_korbit_desc: '코인을 등록하고 매도 충전하세요',
   home_usage: '이용내역',
   home_charge_btn: '충전하기',
 
@@ -221,7 +263,7 @@ const ko = {
   charge_bank_desc: '연결된 계좌에서 즉시 출금',
   charge_coin: '보유 코인',
   charge_coin_desc: '내 지갑의 코인으로 충전',
-  charge_triplea: 'Triple-A',
+  charge_triplea: 'Direct Transfer Crypto',
   charge_triplea_desc: '해외 거래소/개인 지갑 충전',
   charge_korbit: 'Korbit',
   charge_korbit_desc: '국내 거래소 자산 매도 충전',
@@ -497,6 +539,7 @@ const ko = {
   profile_kyc_not: 'KYC 미인증',
   profile_kyc_info: 'KYC 인증 정보',
   profile_basic_info: '기본 정보',
+  step_bank_setup: '은행 등록',
 
   // Terms - login info
   terms_login_info: '님으로 로그인됨',
@@ -593,6 +636,7 @@ const ko = {
   otp_enter: '인증번호 6자리를 입력해주세요',
   otp_confirm: '인증 확인',
   otp_resend: '재발송',
+  otp_phone_verified: '휴대폰 인증이 완료되었습니다',
   otp_expire: '유효시간',
   otp_success: '인증이 완료되었습니다.',
   otp_fail: '인증번호가 일치하지 않습니다.',

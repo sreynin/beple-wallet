@@ -10,6 +10,8 @@ const zh: Record<TranslationKeys, string> = {
   done: '完成',
   loading: '请稍候...',
   launch_tap_hint: '点击继续',
+  launch_existing_user: '现有用户',
+  launch_new_user: '新用户',
   error: '错误',
   retry: '重试',
   save: '保存',
@@ -89,7 +91,43 @@ const zh: Record<TranslationKeys, string> = {
   pin_mismatch: '密码不一致。',
   pin_delete: '删除',
 
-  // User Type
+  // Account Check
+  account_check_heading: '您有韩国\n银行账户吗？',
+  account_check_desc: '服务方式会有所不同。',
+  account_check_yes: '是的，我有',
+  account_check_yes_desc: '使用韩国手机和银行账户验证',
+  account_check_yes_auth: '银行账户验证',
+  account_check_no: '没有',
+  account_check_no_desc: '使用护照验证，用加密货币充值',
+  account_check_no_auth: '简易KYC（护照）',
+
+  // Crypto Check
+  crypto_check_heading: '您持有\n加密货币吗？',
+  crypto_check_desc: '充值方式会有所不同。',
+  crypto_check_yes: '是的，我持有',
+  crypto_check_yes_desc: 'KYC验证后可通过Triple-A充值',
+  crypto_check_no: '没有',
+  crypto_check_no_desc: '购买加密货币后即可使用',
+
+  // Onboarding Bank
+  onboarding_bank_title: '设置充值方式',
+  onboarding_type_heading: '请选择充值方式',
+  onboarding_type_desc: '可以关联银行账户或Korbit交易所。',
+  onboarding_type_bank: '银行账户',
+  onboarding_type_bank_desc: '注册银行账户，即时充值',
+  onboarding_type_korbit: 'Korbit交易所',
+  onboarding_type_korbit_desc: '关联交易所，卖币充值',
+  onboarding_korbit_heading: '连接Korbit',
+  onboarding_korbit_desc: '关联Korbit交易所，\n通过卖币为Bipple Money充值。',
+  onboarding_korbit_step1: '在Korbit应用中生成API密钥',
+  onboarding_korbit_step2: '使用API密钥关联账户',
+  onboarding_korbit_step3: '关联完成后即可卖币充值',
+  onboarding_korbit_connect: '连接Korbit',
+  onboarding_korbit_connecting: '正在连接Korbit...',
+  onboarding_korbit_done: 'Korbit连接完成',
+  onboarding_korbit_done_desc: '交易所关联成功。',
+
+  // User Type (legacy)
   usertype_title: '用户类型',
   usertype_heading: '请选择用户类型',
   usertype_desc: '认证方式因用户类型而异。',
@@ -173,6 +211,10 @@ const zh: Record<TranslationKeys, string> = {
   home_coins: '持有币种资产',
   home_no_coins: '没有已注册的币种。',
   home_no_coins_desc: '请注册币种。',
+  home_setup_bank: '注册银行账户',
+  home_setup_bank_desc: '关联账户为Bipple Money充值',
+  home_setup_korbit: '连接Korbit交易所',
+  home_setup_korbit_desc: '注册币种并卖出充值',
   home_usage: '使用记录',
   home_charge_btn: '去充值',
 
@@ -499,6 +541,7 @@ const zh: Record<TranslationKeys, string> = {
   profile_kyc_not: 'KYC未验证',
   profile_kyc_info: 'KYC验证信息',
   profile_basic_info: '基本信息',
+  step_bank_setup: '银行登记',
 
   // Terms - login info
   terms_login_info: '已登录',
@@ -595,6 +638,7 @@ const zh: Record<TranslationKeys, string> = {
   otp_enter: '请输入6位验证码',
   otp_confirm: '确认',
   otp_resend: '重新发送',
+  otp_phone_verified: '手机号码验证完成',
   otp_expire: '有效时间',
   otp_success: '验证完成。',
   otp_fail: '验证码不匹配。',

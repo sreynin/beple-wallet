@@ -50,7 +50,7 @@ export default function ChargeBank() {
           {[10000, 50000, 100000].map(val => (
             <button key={val} onClick={() => addAmount(val)}
               className="flex-1 py-2.5 bg-gray-50 rounded-lg text-xs font-medium text-text-gray active:bg-gray-100">
-              +{(val / 10000).toFixed(0)}万
+              +{(val / 10000).toFixed(0)}만
             </button>
           ))}
           <button onClick={() => setAmount('2000000')}

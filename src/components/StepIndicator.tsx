@@ -3,9 +3,9 @@ import { useT } from '../hooks/useT'
 
 const steps = [
   { key: 'profile_basic_info' },
+  { key: 'step_bank_setup' },
   { key: 'terms_title' },
   { label: 'PIN' },
-  { key: 'usertype_title' },
 ] as const
 
 export function StepIndicator({ current }: { current: 1 | 2 | 3 | 4 }) {
