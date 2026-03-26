@@ -530,6 +530,22 @@ const ko = {
   account_removed: '계좌가 삭제되었습니다.',
   account_set_default_done: '기본 계좌가 변경되었습니다.',
 
+  // OTP Verification
+  otp_verify: '인증하기',
+  otp_verified: '인증완료',
+  otp_send: '인증번호 발송',
+  otp_sending: '인증번호 발송 중...',
+  otp_sent_phone: '휴대폰으로 인증번호가 발송되었습니다.',
+  otp_sent_email: '이메일로 인증번호가 발송되었습니다.',
+  otp_enter: '인증번호 6자리를 입력해주세요',
+  otp_confirm: '인증 확인',
+  otp_resend: '재발송',
+  otp_expire: '유효시간',
+  otp_success: '인증이 완료되었습니다.',
+  otp_fail: '인증번호가 일치하지 않습니다.',
+  otp_phone_title: '휴대폰 인증',
+  otp_email_title: '이메일 인증',
+
   // KYC Failure States
   kyc_ocr_fail_title: '여권 정보 인식 불가',
   kyc_ocr_fail_msg: '여권 정보를 인식할 수 없습니다.\n빛 반사가 없는 곳에서 다시 촬영해주세요.',

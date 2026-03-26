@@ -532,6 +532,22 @@ const zh: Record<TranslationKeys, string> = {
   account_removed: '账户已删除。',
   account_set_default_done: '默认账户已更改。',
 
+  // OTP Verification
+  otp_verify: '验证',
+  otp_verified: '已验证',
+  otp_send: '发送验证码',
+  otp_sending: '正在发送验证码...',
+  otp_sent_phone: '验证码已发送到您的手机。',
+  otp_sent_email: '验证码已发送到您的邮箱。',
+  otp_enter: '请输入6位验证码',
+  otp_confirm: '确认',
+  otp_resend: '重新发送',
+  otp_expire: '有效时间',
+  otp_success: '验证完成。',
+  otp_fail: '验证码不匹配。',
+  otp_phone_title: '手机验证',
+  otp_email_title: '邮箱验证',
+
   // KYC Failure States
   kyc_ocr_fail_title: '护照识别失败',
   kyc_ocr_fail_msg: '无法识别护照信息。\n请在无反光的地方重新拍摄。',

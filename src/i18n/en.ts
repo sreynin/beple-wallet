@@ -532,6 +532,22 @@ const en: Record<TranslationKeys, string> = {
   account_removed: 'Account removed.',
   account_set_default_done: 'Default account changed.',
 
+  // OTP Verification
+  otp_verify: 'Verify',
+  otp_verified: 'Verified',
+  otp_send: 'Send Code',
+  otp_sending: 'Sending code...',
+  otp_sent_phone: 'Verification code sent to your phone.',
+  otp_sent_email: 'Verification code sent to your email.',
+  otp_enter: 'Enter the 6-digit verification code',
+  otp_confirm: 'Confirm',
+  otp_resend: 'Resend',
+  otp_expire: 'Expires in',
+  otp_success: 'Verification complete.',
+  otp_fail: 'Code does not match.',
+  otp_phone_title: 'Phone Verification',
+  otp_email_title: 'Email Verification',
+
   // KYC Failure States
   kyc_ocr_fail_title: 'Passport Recognition Failed',
   kyc_ocr_fail_msg: 'Unable to recognize passport information.\nPlease retake in a well-lit area without glare.',
