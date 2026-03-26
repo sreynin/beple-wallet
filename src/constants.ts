@@ -22,6 +22,11 @@ export const SESSION_TIMEOUT_MS = 600000    // Session inactivity timeout (10 mi
 // Initial balance
 export const INITIAL_BALANCE = 150000       // Default starting balance (KRW)
 
+// Wallet connect deep link for Korbit.
+// NOTE: Replace this with the real deeplink (the default below contains `undefined` placeholders).
+export const KORBIT_WALLET_CONNECT_URL =
+  'https://help.payprotocol.io/getting-started/undefined/undefined/wallet-connect/undefined-1/korbit'
+
 // Exchange rates (mock - production uses live API)
 export const MOCK_RATES: Record<string, number> = {
   BTC: 106514000,
