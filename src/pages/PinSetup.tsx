@@ -16,7 +16,9 @@ export default function PinSetup() {
   const [error, setError] = useState('')
 
   // Show step indicator only during signup flow (not when resetting from Settings)
-  const isSignupFlow = !pinSet
+  // Use userType as indicator: null = still in onboarding, set = already completed setup
+  const { userType } = useStore()
+  const isSignupFlow = userType === null
 
   const handleComplete = (pin: string) => {
     if (step === 'create') {
