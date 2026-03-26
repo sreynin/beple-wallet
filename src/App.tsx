@@ -38,6 +38,8 @@ import SettingsCoins from './pages/SettingsCoins'
 import SettingsAccount from './pages/SettingsAccount'
 import Profile from './pages/Profile'
 import SignUp from './pages/SignUp'
+import SettingsLanguage from './pages/SettingsLanguage'
+import SettingsTheme from './pages/SettingsTheme'
 
 function Protected({ children }: { children: React.ReactNode }) {
   return <AuthGuard>{children}</AuthGuard>
@@ -98,6 +100,8 @@ export default function App() {
           <Route path="/settings/terms" element={<Protected><SettingsTerms /></Protected>} />
           <Route path="/settings/coins" element={<Protected><SettingsCoins /></Protected>} />
           <Route path="/settings/profile" element={<Protected><Profile /></Protected>} />
+          <Route path="/settings/language" element={<Protected><SettingsLanguage /></Protected>} />
+          <Route path="/settings/theme" element={<Protected><SettingsTheme /></Protected>} />
           <Route path="/settings/account" element={<Protected><SettingsAccount /></Protected>} />
 
           {/* Fallback */}

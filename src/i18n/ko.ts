@@ -551,8 +551,11 @@ const ko = {
   settings_theme: '테마 설정',
   settings_theme_desc: '앱 테마 변경',
   theme_light: '라이트',
+  theme_light_desc: '밝은 배경의 기본 테마',
   theme_dark: '다크',
+  theme_dark_desc: '어두운 배경으로 눈의 피로를 줄여줍니다',
   theme_system: '시스템',
+  theme_system_desc: '기기 설정에 따라 자동으로 변경됩니다',
 
   // OTP Verification
   otp_verify: '인증하기',

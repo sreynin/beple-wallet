@@ -553,8 +553,11 @@ const zh: Record<TranslationKeys, string> = {
   settings_theme: '主题设置',
   settings_theme_desc: '更改应用主题',
   theme_light: '浅色',
+  theme_light_desc: '默认明亮主题',
   theme_dark: '深色',
+  theme_dark_desc: '深色背景减轻眼睛疲劳',
   theme_system: '跟随系统',
+  theme_system_desc: '根据设备设置自动切换',
 
   // OTP Verification
   otp_verify: '验证',

@@ -553,8 +553,11 @@ const en: Record<TranslationKeys, string> = {
   settings_theme: 'Theme',
   settings_theme_desc: 'Change app theme',
   theme_light: 'Light',
+  theme_light_desc: 'Default bright theme',
   theme_dark: 'Dark',
+  theme_dark_desc: 'Reduce eye strain with dark backgrounds',
   theme_system: 'System',
+  theme_system_desc: 'Follows your device settings automatically',
 
   // OTP Verification
   otp_verify: 'Verify',
