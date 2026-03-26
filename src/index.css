@@ -1,0 +1,106 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #1a56db;
+  --color-primary-light: #3b82f6;
+  --color-primary-dark: #1e40af;
+  --color-error: #dc2626;
+  --color-success: #16a34a;
+  --color-warning: #f59e0b;
+  --color-bg-gray: #f3f4f6;
+  --color-text-dark: #1f2937;
+  --color-text-gray: #6b7280;
+  --color-text-light: #9ca3af;
+  --color-border: #e5e7eb;
+  --font-sans: 'Malgun Gothic', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  font-family: var(--font-sans);
+  background: #111827;
+}
+
+/* Phone frame container */
+.phone-frame {
+  width: 393px;
+  height: 852px;
+  border-radius: 40px;
+  overflow: hidden;
+  box-shadow: 0 0 0 8px #1f2937, 0 0 0 10px #374151, 0 25px 80px rgba(0,0,0,0.5);
+  position: relative;
+  background: white;
+}
+
+.phone-notch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 126px;
+  height: 28px;
+  background: #1f2937;
+  border-radius: 0 0 18px 18px;
+  z-index: 100;
+}
+
+.screen {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.screen::-webkit-scrollbar { display: none; }
+
+/* Animations */
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+@keyframes slideInUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+@keyframes scanLine {
+  0% { top: 0; }
+  100% { top: 100%; }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes bounceIn {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-slide-in { animation: slideInRight 0.3s ease-out; }
+.animate-slide-up { animation: slideInUp 0.3s ease-out; }
+.animate-fade-in { animation: fadeIn 0.3s ease-out; }
+.animate-pulse-slow { animation: pulse 2s infinite; }
+.animate-bounce-in { animation: bounceIn 0.5s ease-out; }
+.animate-spin { animation: spin 1s linear infinite; }
+
+.bottom-sheet-enter {
+  animation: slideInUp 0.3s ease-out;
+}
+
+/* Custom scrollbar for lists */
+.custom-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+}
