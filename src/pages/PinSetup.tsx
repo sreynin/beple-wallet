@@ -30,8 +30,12 @@ export default function PinSetup() {
         setPin(pin)
         if (isSignupFlow) {
           navigate('/user-type')
-        } else {
+        } else if (location.state?.from === 'settings') {
           navigate(-1)
+        } else if (location.state?.from === 'payment') {
+          navigate('/payment-pin', { replace: true })
+        } else {
+          navigate('/home', { replace: true })
         }
       } else {
         setError(t('pin_mismatch'))

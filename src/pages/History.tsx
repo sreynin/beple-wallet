@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useStore, type Transaction } from '../store/useStore'
 import { useT } from '../hooks/useT'
 import { BottomNav } from '../components/BottomNav'
-import { SlidersHorizontal, ChevronRight, X, SearchX } from 'lucide-react'
+import { SlidersHorizontal, ChevronRight, X, SearchX, Inbox } from 'lucide-react'
 import { BottomSheet } from '../components/BottomSheet'
 
 type TxType = 'all' | 'charge' | 'payment' | 'atm' | 'fee'
@@ -138,9 +138,19 @@ export default function History() {
       <div className="flex-1 overflow-y-auto p-4">
         {Object.keys(grouped).length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64">
-            <SearchX size={48} className="text-text-light mb-3" />
-            <p className="text-sm text-text-gray">{t('hist_no_results')}</p>
-            <p className="text-xs text-text-light mt-1">{t('hist_no_results_desc')}</p>
+            {transactions.length === 0 ? (
+              <>
+                <Inbox size={48} className="text-text-light mb-3" />
+                <p className="text-sm text-text-gray">{t('hist_empty')}</p>
+                <p className="text-xs text-text-light mt-1">{t('hist_empty_desc')}</p>
+              </>
+            ) : (
+              <>
+                <SearchX size={48} className="text-text-light mb-3" />
+                <p className="text-sm text-text-gray">{t('hist_no_results')}</p>
+                <p className="text-xs text-text-light mt-1">{t('hist_no_results_desc')}</p>
+              </>
+            )}
           </div>
         ) : (
           Object.entries(grouped).map(([date, txs]) => (

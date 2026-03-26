@@ -474,6 +474,8 @@ const ko = {
   hist_active_filters: '필터 적용 중',
   hist_no_results: '조건에 맞는 거래내역이 없습니다.',
   hist_no_results_desc: '필터 조건을 변경해주세요.',
+  hist_empty: '아직 거래내역이 없습니다.',
+  hist_empty_desc: '충전 또는 결제 후 내역이 표시됩니다.',
 
   // Profile
   profile_title: '프로필',

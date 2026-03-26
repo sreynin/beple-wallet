@@ -31,7 +31,12 @@ export default function Login() {
 
   const handleSocialLogin = (method: 'google' | 'apple') => {
     login(method)
-    navigate('/terms')
+    // Returning user: skip onboarding if PIN and user type are already set
+    if (pinSet && pin !== '' && store.userType) {
+      navigate('/home', { replace: true })
+    } else {
+      navigate('/terms')
+    }
   }
 
   const handleCredentialLogin = () => {

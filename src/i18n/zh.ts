@@ -476,6 +476,8 @@ const zh: Record<TranslationKeys, string> = {
   hist_active_filters: '已应用筛选',
   hist_no_results: '没有匹配的交易记录。',
   hist_no_results_desc: '请尝试更改筛选条件。',
+  hist_empty: '暂无交易记录。',
+  hist_empty_desc: '充值或支付后，交易记录将显示在此处。',
 
   // Profile
   profile_title: '个人资料',

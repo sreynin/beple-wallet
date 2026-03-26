@@ -37,7 +37,7 @@ export default function PaymentPin() {
 
     // Security: require PIN to be set
     if (!pinSet || pin === '') {
-      navigate('/pin-setup')
+      navigate('/pin-setup', { state: { from: 'payment' } })
       return
     }
 

@@ -476,6 +476,8 @@ const en: Record<TranslationKeys, string> = {
   hist_active_filters: 'Filters applied',
   hist_no_results: 'No matching transactions found.',
   hist_no_results_desc: 'Try changing filter conditions.',
+  hist_empty: 'No transaction history yet.',
+  hist_empty_desc: 'Your transactions will appear here after charging or paying.',
 
   // Profile
   profile_title: 'Profile',
