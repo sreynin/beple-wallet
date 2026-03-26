@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Header } from '../components/Header'
 import { PinInput } from '../components/PinInput'
 import { StepIndicator } from '../components/StepIndicator'
@@ -15,10 +15,9 @@ export default function PinSetup() {
   const [firstPin, setFirstPin] = useState('')
   const [error, setError] = useState('')
 
-  // Show step indicator only during signup flow (not when resetting from Settings)
-  // Use userType as indicator: null = still in onboarding, set = already completed setup
-  const { userType } = useStore()
-  const isSignupFlow = userType === null
+  const navState = (location.state || {}) as { flow?: 'signup' | 'reset' }
+  const flow = navState.flow
+  const isSignupFlow = flow === 'signup' ? true : flow === 'reset' ? false : !pinSet
 
   const handleComplete = (pin: string) => {
     if (step === 'create') {
@@ -29,8 +28,13 @@ export default function PinSetup() {
       if (pin === firstPin) {
         setPin(pin)
         if (isSignupFlow) {
+<<<<<<< Updated upstream
           navigate('/user-type')
         } else if (location.state?.from === 'settings') {
+=======
+          navigate('/user-type', { replace: true })
+        } else {
+>>>>>>> Stashed changes
           navigate(-1)
         } else if (location.state?.from === 'payment') {
           navigate('/payment-pin', { replace: true })

@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useStore } from '../store/useStore'
 import { useT } from '../hooks/useT'
+import { AppLogo } from '../components/AppLogo'
 import { BottomNav } from '../components/BottomNav'
 import { Bell, CreditCard, QrCode, Landmark, ChevronRight, TrendingUp, Globe, BarChart3 } from 'lucide-react'
 
@@ -32,8 +33,8 @@ export default function Home() {
     <div className="flex flex-col h-[calc(100%-44px)] bg-bg-gray">
       <div className="flex items-center justify-between px-5 py-3 bg-white">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-            <span className="text-white text-xs font-bold">B</span>
+          <div className="w-9 h-9 rounded-xl bg-white border border-border/60 flex items-center justify-center overflow-hidden shadow-sm">
+            <AppLogo size={36} />
           </div>
           <span className="font-bold text-text-dark">{t('app_name')}</span>
         </div>

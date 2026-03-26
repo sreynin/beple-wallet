@@ -159,7 +159,7 @@ export default function Terms() {
 
       <div className="px-6 pb-8 pt-4">
         <button
-          onClick={() => navigate('/pin-setup')}
+          onClick={() => navigate('/pin-setup', { state: { flow: 'signup' } })}
           disabled={!requiredChecked}
           className={`w-full py-4 font-semibold rounded-xl transition-all ${
             requiredChecked

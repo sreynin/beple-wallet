@@ -4,7 +4,8 @@ import { useStore } from '../store/useStore'
 import { useT } from '../hooks/useT'
 import { Modal } from '../components/Modal'
 import { toast } from '../components/Toast'
-import { Wallet, UserPlus, Phone, Mail, ScanFace, Lock, ChevronRight, Loader2, CheckCircle } from 'lucide-react'
+import { AppLogo } from '../components/AppLogo'
+import { UserPlus, Phone, Mail, ScanFace, Lock, ChevronRight, Loader2, CheckCircle } from 'lucide-react'
 import { PIN_MAX_ATTEMPTS } from '../constants'
 
 type AuthMode = 'idle' | 'pin' | 'face-scanning' | 'face-done' | 'success'
@@ -20,6 +21,10 @@ export default function Login() {
   const [pinInput, setPinInput] = useState('')
   const [pinError, setPinError] = useState('')
   const [attempts, setAttempts] = useState(0)
+
+  const navigateAfterAuth = () => {
+    navigate('/user-type', { replace: true })
+  }
 
   // Detect if this is a returning user (has saved profile with PIN)
   const isReturning = pinSet && pin !== '' && profile.name !== '홍길동'
@@ -50,7 +55,7 @@ export default function Login() {
         setTimeout(() => {
           setAuthMode('success')
           login(credentialType!)
-          setTimeout(() => navigate('/home', { replace: true }), 600)
+          setTimeout(navigateAfterAuth, 600)
         }, 800)
       }, 2000)
     } else {
@@ -74,7 +79,7 @@ export default function Login() {
           setAuthMode('success')
           login(credentialType!)
           toast(t('otp_success'), 'success')
-          setTimeout(() => navigate('/home', { replace: true }), 600)
+          setTimeout(navigateAfterAuth, 600)
         } else {
           const nextAttempts = attempts + 1
           setAttempts(nextAttempts)
@@ -97,8 +102,8 @@ export default function Login() {
     <div className="flex flex-col h-[calc(100%-44px)] bg-white animate-slide-in">
       <div className="flex-1 flex flex-col items-center px-6 pt-12 overflow-y-auto">
         {/* Logo */}
-        <div className="w-20 h-20 rounded-3xl bg-primary flex items-center justify-center mb-6 shadow-lg shadow-primary/30">
-          <Wallet size={40} className="text-white" />
+        <div className="w-20 h-20 rounded-3xl bg-white flex items-center justify-center mb-6 shadow-lg shadow-primary/20 border border-border/40 p-2">
+          <AppLogo size={72} />
         </div>
         <h1 className="text-2xl font-bold text-text-dark mb-1">{t('login_title')}</h1>
         <p className="text-sm text-text-gray mb-8">{t('login_subtitle')}</p>

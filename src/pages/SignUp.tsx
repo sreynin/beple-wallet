@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { AppLogo } from '../components/AppLogo'
 import { Header } from '../components/Header'
 import { Modal } from '../components/Modal'
 import { StepIndicator } from '../components/StepIndicator'
@@ -132,6 +133,12 @@ export default function SignUp() {
 
       <div className="flex-1 px-6 pt-5 overflow-y-auto">
         <StepIndicator current={1} />
+
+        <div className="flex justify-center mb-4">
+          <div className="rounded-2xl bg-white border border-border/50 p-2 shadow-sm">
+            <AppLogo size={56} />
+          </div>
+        </div>
 
         <h2 className="text-lg font-bold text-text-dark whitespace-pre-line">{t('signup_heading')}</h2>
         <p className="text-xs text-text-gray mt-1 mb-4">{t('signup_desc')}</p>
