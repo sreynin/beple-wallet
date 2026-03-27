@@ -6,7 +6,9 @@ import { useT } from '../hooks/useT'
 import { ExternalLink, Loader2, CheckCircle, Smartphone, Shield, Key, Check } from 'lucide-react'
 import { MOCK_RATES } from '../constants'
 
-type Step = 'connect' | 'guide' | 'korbit-app' | 'korbit-approve' | 'korbit-done' | 'connected' | 'select' | 'confirm'
+type Step = 'connect' | 'guide'
+  | 'kb-loading' | 'kb-guide' | 'kb-account' | 'kb-terms' | 'kb-code' | 'kb-password' | 'kb-done'
+  | 'connected' | 'select' | 'confirm'
 
 // Korbit assets fetched via API after OAuth (simulated)
 const korbitAssets = [
@@ -30,14 +32,8 @@ export default function ChargeKorbit() {
   }
 
   const handleOpenKorbitApp = () => {
-    // Simulate: open Korbit app → approve → done
-    setStep('korbit-app')
-    setTimeout(() => setStep('korbit-approve'), 1500)
-    setTimeout(() => {
-      setStep('korbit-done')
-      connectKorbit()
-    }, 4000)
-    setTimeout(() => setStep('connected'), 5500)
+    setStep('kb-loading')
+    setTimeout(() => setStep('kb-guide'), 1500)
   }
 
   // ===== Step: Connect (intro) =====
@@ -121,93 +117,196 @@ export default function ChargeKorbit() {
     </div>
   )
 
-  // ===== Korbit App Simulation (3 screens) =====
-  if (step === 'korbit-app' || step === 'korbit-approve' || step === 'korbit-done') return (
+  // ===== Korbit App Simulation (full multi-step) =====
+  const isKbStep = step.startsWith('kb-')
+  const kbStepNum = step === 'kb-loading' ? 0 : step === 'kb-guide' ? 1 : step === 'kb-account' ? 2 : step === 'kb-terms' ? 3 : step === 'kb-code' ? 4 : step === 'kb-password' ? 5 : step === 'kb-done' ? 6 : -1
+
+  if (isKbStep) return (
     <div className="flex flex-col h-[calc(100%-44px)] bg-[#0a1628] animate-fade-in">
       {/* Korbit app header */}
-      <div className="flex items-center justify-center py-4 border-b border-[#1a2a44]">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" className="mr-2">
-          <path d="M6 6h4.5v12H6V6z" fill="white"/><path d="M12 6l6 6-6 6V6z" fill="white"/>
-        </svg>
-        <span className="text-white font-bold text-sm">Korbit</span>
+      <div className="flex items-center gap-3 px-5 py-4 border-b border-[#1a2a44]">
+        {kbStepNum > 1 && (
+          <button onClick={() => {
+            if (step === 'kb-account') setStep('kb-guide')
+            else if (step === 'kb-terms') setStep('kb-account')
+            else if (step === 'kb-code') setStep('kb-terms')
+            else if (step === 'kb-password') setStep('kb-code')
+          }} className="text-gray-400 text-sm">‹</button>
+        )}
+        <div className="flex items-center gap-2 flex-1 justify-center">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+            <path d="M6 6h4.5v12H6V6z" fill="white"/><path d="M12 6l6 6-6 6V6z" fill="white"/>
+          </svg>
+          <span className="text-white font-bold text-sm">Korbit</span>
+        </div>
+        <div className="w-4" />
       </div>
 
-      <div className="flex-1 flex flex-col items-center justify-center px-8">
-        {/* Loading Korbit app */}
-        {step === 'korbit-app' && (
-          <div className="animate-fade-in text-center">
-            <div className="w-20 h-20 rounded-2xl bg-[#0052FF] flex items-center justify-center mb-6 mx-auto">
+      {/* Step progress inside Korbit app */}
+      {kbStepNum >= 1 && kbStepNum <= 5 && (
+        <div className="flex gap-1 px-5 pt-3">
+          {[1,2,3,4,5].map(n => (
+            <div key={n} className={`flex-1 h-1 rounded-full ${n <= kbStepNum ? 'bg-[#0052FF]' : 'bg-[#1a2a44]'}`} />
+          ))}
+        </div>
+      )}
+
+      <div className="flex-1 flex flex-col px-6 pt-5 overflow-y-auto">
+
+        {/* 0. Loading */}
+        {step === 'kb-loading' && (
+          <div className="flex-1 flex flex-col items-center justify-center animate-fade-in">
+            <div className="w-20 h-20 rounded-2xl bg-[#0052FF] flex items-center justify-center mb-6">
               <svg viewBox="0 0 24 24" width="36" height="36" fill="none">
                 <path d="M6 6h4.5v12H6V6z" fill="white"/><path d="M12 6l6 6-6 6V6z" fill="white"/>
               </svg>
             </div>
-            <Loader2 size={24} className="text-[#0052FF] animate-spin mx-auto mb-4" />
+            <Loader2 size={24} className="text-[#0052FF] animate-spin mb-4" />
             <p className="text-white text-sm">{t('korbit_connecting')}</p>
-            <p className="text-gray-500 text-xs mt-1">{t('korbit_auth_waiting')}</p>
           </div>
         )}
 
-        {/* Approve screen */}
-        {step === 'korbit-approve' && (
-          <div className="animate-fade-in w-full">
-            <div className="bg-[#111d33] rounded-2xl p-6 mb-4">
-              <h3 className="text-white text-base font-bold text-center mb-4">API Access Request</h3>
-              <div className="flex items-center justify-center gap-4 mb-6">
-                <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">B</span>
-                </div>
-                <div className="flex flex-col items-center">
-                  <div className="flex gap-1">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#0052FF]" />
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#0052FF]" />
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#0052FF]" />
+        {/* 1. 연동 Guide */}
+        {step === 'kb-guide' && (
+          <div className="animate-fade-in">
+            <h3 className="text-white text-base font-bold mb-2">{t('korbit_auth_guide_title')}</h3>
+            <p className="text-gray-400 text-xs mb-5">{t('korbit_auth_guide_desc')}</p>
+            <div className="space-y-3">
+              {[
+                { icon: Shield, label: t('korbit_auth_step1'), desc: t('korbit_auth_step1_desc') },
+                { icon: Key, label: t('korbit_auth_step2'), desc: t('korbit_auth_step2_desc') },
+                { icon: CheckCircle, label: t('korbit_auth_step3'), desc: t('korbit_auth_step3_desc') },
+              ].map((s, i) => (
+                <div key={i} className="flex items-start gap-3 p-3 bg-[#111d33] rounded-xl">
+                  <s.icon size={18} className="text-[#0052FF] mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-white text-sm font-medium">{s.label}</p>
+                    <p className="text-gray-500 text-[10px] mt-0.5">{s.desc}</p>
                   </div>
                 </div>
-                <div className="w-12 h-12 rounded-xl bg-[#0052FF] flex items-center justify-center">
-                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
-                    <path d="M6 6h4.5v12H6V6z" fill="white"/><path d="M12 6l6 6-6 6V6z" fill="white"/>
-                  </svg>
-                </div>
-              </div>
-              <p className="text-gray-400 text-xs text-center mb-4">
-                <span className="text-white font-medium">Beple Wallet</span> requests access to your Korbit account
-              </p>
-              <div className="space-y-2 mb-4">
-                <div className="flex items-center gap-2 text-xs text-gray-400">
-                  <Check size={14} className="text-green-400" />
-                  <span>View account balance</span>
-                </div>
-                <div className="flex items-center gap-2 text-xs text-gray-400">
-                  <Check size={14} className="text-green-400" />
-                  <span>Place sell orders</span>
-                </div>
-                <div className="flex items-center gap-2 text-xs text-gray-400">
-                  <Check size={14} className="text-green-400" />
-                  <span>Withdraw KRW to linked bank</span>
-                </div>
-              </div>
+              ))}
             </div>
-            <div className="flex gap-3">
-              <div className="flex-1 py-3 bg-[#1a2a44] text-gray-400 font-medium rounded-xl text-center text-sm">Deny</div>
-              <div className="flex-1 py-3 bg-[#0052FF] text-white font-semibold rounded-xl text-center text-sm flex items-center justify-center gap-1.5">
-                <Loader2 size={14} className="animate-spin" />
-                Approve
+          </div>
+        )}
+
+        {/* 2. 계좌 연결 안내 */}
+        {step === 'kb-account' && (
+          <div className="animate-fade-in">
+            <h3 className="text-white text-base font-bold mb-2">{t('kb_account_title')}</h3>
+            <p className="text-gray-400 text-xs mb-5">{t('kb_account_desc')}</p>
+            <div className="bg-[#111d33] rounded-2xl p-5 space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-400 text-xs">{t('kb_account_email')}</span>
+                <span className="text-white text-sm">user@korbit.co.kr</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-gray-400 text-xs">{t('kb_account_level')}</span>
+                <span className="text-[#0052FF] text-sm font-medium">Level 2</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-gray-400 text-xs">{t('kb_account_bank')}</span>
+                <span className="text-white text-sm">신한은행 110-***-***901</span>
               </div>
             </div>
           </div>
         )}
 
-        {/* Approved */}
-        {step === 'korbit-done' && (
-          <div className="animate-fade-in text-center">
-            <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mb-4 mx-auto animate-bounce-in">
+        {/* 3. 이용 동의 */}
+        {step === 'kb-terms' && (
+          <div className="animate-fade-in">
+            <h3 className="text-white text-base font-bold mb-2">{t('kb_terms_title')}</h3>
+            <p className="text-gray-400 text-xs mb-5">{t('kb_terms_desc')}</p>
+            <div className="space-y-2">
+              {[
+                { label: t('kb_terms_api'), checked: true },
+                { label: t('kb_terms_data'), checked: true },
+                { label: t('kb_terms_trade'), checked: true },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-3 p-3 bg-[#111d33] rounded-xl">
+                  <div className="w-5 h-5 rounded bg-[#0052FF] flex items-center justify-center">
+                    <Check size={12} className="text-white" strokeWidth={3} />
+                  </div>
+                  <span className="text-gray-300 text-xs">{item.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 4. 인증 코드 확인 */}
+        {step === 'kb-code' && (
+          <div className="animate-fade-in">
+            <h3 className="text-white text-base font-bold mb-2">{t('kb_code_title')}</h3>
+            <p className="text-gray-400 text-xs mb-6">{t('kb_code_desc')}</p>
+            <div className="flex justify-center gap-3 mb-6">
+              {['3','8','2','7','1','5'].map((d, i) => (
+                <div key={i} className="w-10 h-12 rounded-lg bg-[#111d33] border border-[#0052FF]/50 flex items-center justify-center">
+                  <span className="text-white text-lg font-bold font-mono">{d}</span>
+                </div>
+              ))}
+            </div>
+            <p className="text-center text-gray-500 text-[10px]">{t('kb_code_sent')}</p>
+          </div>
+        )}
+
+        {/* 5. 비밀번호 입력 */}
+        {step === 'kb-password' && (
+          <div className="animate-fade-in">
+            <h3 className="text-white text-base font-bold mb-2">{t('kb_password_title')}</h3>
+            <p className="text-gray-400 text-xs mb-6">{t('kb_password_desc')}</p>
+            <div className="bg-[#111d33] rounded-xl p-4 mb-4">
+              <p className="text-gray-500 text-xs mb-2">{t('kb_password_label')}</p>
+              <div className="flex items-center gap-2">
+                <div className="flex gap-1.5">
+                  {Array.from({ length: 8 }).map((_, i) => (
+                    <div key={i} className="w-2.5 h-2.5 rounded-full bg-[#0052FF]" />
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="bg-[#111d33] rounded-xl p-4">
+              <p className="text-gray-500 text-xs mb-2">2FA (OTP)</p>
+              <div className="flex gap-2">
+                {['4','9','1','0','7','3'].map((d, i) => (
+                  <span key={i} className="text-white font-mono font-bold">{d}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 6. 인증 완료 */}
+        {step === 'kb-done' && (
+          <div className="flex-1 flex flex-col items-center justify-center animate-fade-in">
+            <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mb-4 animate-bounce-in">
               <CheckCircle size={40} className="text-green-400" />
             </div>
-            <p className="text-white font-bold text-base">Approved</p>
-            <p className="text-gray-500 text-xs mt-2">{t('korbit_connecting_sub')}</p>
+            <p className="text-white font-bold text-base">{t('kb_done_title')}</p>
+            <p className="text-gray-500 text-xs mt-2">{t('kb_done_desc')}</p>
           </div>
         )}
       </div>
+
+      {/* Bottom button */}
+      {kbStepNum >= 1 && (
+        <div className="px-6 pb-8 pt-4">
+          <button onClick={() => {
+            if (step === 'kb-guide') setStep('kb-account')
+            else if (step === 'kb-account') setStep('kb-terms')
+            else if (step === 'kb-terms') setStep('kb-code')
+            else if (step === 'kb-code') setStep('kb-password')
+            else if (step === 'kb-password') {
+              setStep('kb-done')
+              connectKorbit()
+              setTimeout(() => setStep('connected'), 1500)
+            }
+            else if (step === 'kb-done') setStep('connected')
+          }}
+            className="w-full py-4 bg-[#0052FF] text-white font-semibold rounded-xl active:bg-[#0040CC]">
+            {step === 'kb-done' ? t('confirm') : t('next')}
+          </button>
+        </div>
+      )}
     </div>
   )
 
