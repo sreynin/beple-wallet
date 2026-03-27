@@ -42,8 +42,8 @@ export default function ChargeBank() {
         <p className="text-xs text-text-gray mb-2">{t('charge_bank_amount')}</p>
         <div className="relative mb-2">
           <input type="text" value={numAmount > 0 ? numAmount.toLocaleString() : ''} onChange={e => setAmount(e.target.value.replace(/[^0-9]/g, ''))}
-            placeholder="0" className="w-full text-right text-3xl font-bold text-text-dark py-3 border-b-2 border-primary focus:outline-none pr-8" />
-          <span className="absolute right-0 bottom-4 text-lg text-text-gray">{t('won')}</span>
+            placeholder="0" className="w-full text-right text-3xl font-bold text-text-dark py-3 border-b-2 border-primary focus:outline-none pr-14" />
+          <span className="absolute right-0 bottom-4 text-lg text-text-gray ml-2">{t('won')}</span>
         </div>
         <p className="text-xs text-text-light text-right mb-4">{t('charge_bank_after')}: {afterBalance.toLocaleString()}{t('won')}</p>
         <div className="flex gap-2 mb-6">

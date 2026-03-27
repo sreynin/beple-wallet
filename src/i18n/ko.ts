@@ -95,7 +95,7 @@ const ko = {
   pin_delete: '삭제',
 
   // Account Check (onboarding branch)
-  account_check_heading: '한국 은행 계좌가\n있으신가요?',
+  account_check_heading: '한국의 은행 계좌가\n있으신가요?',
   account_check_desc: '서비스 이용 방식이 달라집니다.',
   account_check_yes: '예, 있습니다',
   account_check_yes_desc: '한국 휴대폰과 은행 계좌로 인증합니다',
@@ -418,6 +418,7 @@ const ko = {
   pay_scan_title: 'QR 결제',
   pay_scan_guide: '가맹점 QR 코드를 네모 상자 안에 맞춰주세요',
   pay_scan_flash: '플래시',
+  pay_scan_demo_merchant: '스타벅스 강남점',
   pay_scan_simulate: 'QR 스캔 시뮬레이션',
   pay_scan_scanning: 'QR 인식 중...',
   pay_scan_manual: '내 QR 직접입력',

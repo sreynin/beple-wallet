@@ -56,6 +56,16 @@ export default function Login() {
     }, 1000)
   }
 
+  // Random Korean names for demo
+  const randomNames = ['홍길동', '김민수', '이수진', '박지현', '강수민', '최영호', '정하나', '조은비']
+  const randomId = () => {
+    const y = String(Math.floor(Math.random() * 30) + 70).padStart(2, '0')
+    const m = String(Math.floor(Math.random() * 12) + 1).padStart(2, '0')
+    const d = String(Math.floor(Math.random() * 28) + 1).padStart(2, '0')
+    const g = String(Math.floor(Math.random() * 4) + 1)
+    return { front: `${y}${m}${d}`, back: g }
+  }
+
   const verifyOtp = () => {
     if (otpCode.length < 4) return
     setOtpState('verifying')
@@ -63,6 +73,15 @@ export default function Login() {
       setOtpState('done')
       setPhoneVerified(true)
       toast(t('otp_success'), 'success')
+      // Auto-fill carrier, name and national ID after verification
+      const id = randomId()
+      const carriers = ['SKT', 'KT', 'LG U+', '알뜰폰 SKT', '알뜰폰 KT', '알뜰폰 LG U+']
+      setTimeout(() => {
+        setCarrier(carriers[Math.floor(Math.random() * carriers.length)])
+        setName(randomNames[Math.floor(Math.random() * randomNames.length)])
+        setIdFront(id.front)
+        setIdBack(id.back)
+      }, 500)
       setTimeout(() => setOtpState('idle'), 800)
     }, 1000)
   }

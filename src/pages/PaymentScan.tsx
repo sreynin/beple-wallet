@@ -18,14 +18,14 @@ export default function PaymentScan() {
       return
     }
     setScanning(true)
-    setTimeout(() => { navigate('/payment-confirm', { state: { merchant: '스타벅스 강남점', amount: 12500 } }) }, 1500)
+    setTimeout(() => { navigate('/payment-confirm', { state: { merchant: t('pay_scan_demo_merchant'), amount: 12500 } }) }, 1500)
   }
 
   const handlePermissionAllow = () => {
     setPermissionAsked(false)
     setPermissionGranted(true)
     setScanning(true)
-    setTimeout(() => { navigate('/payment-confirm', { state: { merchant: '스타벅스 강남점', amount: 12500 } }) }, 1500)
+    setTimeout(() => { navigate('/payment-confirm', { state: { merchant: t('pay_scan_demo_merchant'), amount: 12500 } }) }, 1500)
   }
 
   const handlePermissionDeny = () => {

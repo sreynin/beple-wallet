@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Header } from '../components/Header'
 import { useStore } from '../store/useStore'
 import { useT } from '../hooks/useT'
-import { Loader2, ExternalLink } from 'lucide-react'
+import { ExternalLink } from 'lucide-react'
 
-type Step = 'connect' | 'connecting' | 'select' | 'confirm'
+type Step = 'connect' | 'select' | 'confirm'
 
 const korbitAssets = [
   { symbol: 'BTC', name: 'Bitcoin', balance: 0.042, rate: 82500000 },
@@ -15,22 +15,13 @@ const korbitAssets = [
 
 export default function ChargeKorbit() {
   const navigate = useNavigate()
-  const { korbitConnected, connectKorbit } = useStore()
+  const { korbitConnected } = useStore()
   const t = useT()
   const [step, setStep] = useState<Step>(korbitConnected ? 'select' : 'connect')
   const [asset, setAsset] = useState(korbitAssets[0])
   const [qty, setQty] = useState('')
   const numQty = parseFloat(qty || '0')
   const estimatedKrw = Math.floor(numQty * asset.rate)
-
-  useEffect(() => {
-    if (step !== 'connecting') return
-    const timeoutId = window.setTimeout(() => {
-      connectKorbit()
-      setStep('select')
-    }, 2000)
-    return () => window.clearTimeout(timeoutId)
-  }, [connectKorbit, step])
 
   if (step === 'connect') return (
     <div className="flex flex-col h-[calc(100%-44px)] bg-white animate-slide-in">
@@ -48,22 +39,12 @@ export default function ChargeKorbit() {
         </div>
       </div>
       <div className="px-6 pb-8 pt-4">
-        <button onClick={() => setStep('connecting')} className="w-full py-4 bg-blue-600 text-white font-semibold rounded-xl flex items-center justify-center gap-2">
+        <button onClick={() => navigate('/settings/coins', { state: { from: 'korbit-charge' } })} className="w-full py-4 bg-blue-600 text-white font-semibold rounded-xl flex items-center justify-center gap-2">
           <ExternalLink size={18} />{t('korbit_connect_btn')}
         </button>
       </div>
     </div>
   )
-
-  if (step === 'connecting') {
-    return (
-      <div className="flex flex-col h-[calc(100%-44px)] bg-white items-center justify-center">
-        <Loader2 size={48} className="text-blue-600 animate-spin mb-4" />
-        <p className="text-sm text-text-gray">{t('korbit_connecting')}</p>
-        <p className="text-xs text-text-light mt-1">{t('korbit_connecting_sub')}</p>
-      </div>
-    )
-  }
 
   if (step === 'select') return (
     <div className="flex flex-col h-[calc(100%-44px)] bg-white animate-slide-in">

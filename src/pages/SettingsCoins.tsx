@@ -5,7 +5,7 @@ import { Header } from '../components/Header'
 import { BottomSheet } from '../components/BottomSheet'
 import { toast } from '../components/Toast'
 import { Plus, ChevronRight, Check, Loader2, CheckCircle, XCircle, Copy, AlertCircle, Lock } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 type Step = 'list' | 'coin' | 'wc-terms' | 'wc-code' | 'wc-confirm' | 'verifying' | 'success' | 'fail'
 
@@ -28,10 +28,15 @@ function fakeWallet() { return 'PCI0298C33376771B335DCC30C8D8CA946FA344CFCBDFC84
 
 export default function SettingsCoins() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { coins, disconnectCoin, addCoin, connectKorbit, profile, language } = useStore()
   const t = useT()
 
-  const [step, setStep] = useState<Step>('list')
+  const navFrom = (location.state as any)?.from
+  const fromOnboarding = navFrom === 'onboarding'
+  const fromKorbitCharge = navFrom === 'korbit-charge'
+  const skipToRegister = fromOnboarding || fromKorbitCharge
+  const [step, setStep] = useState<Step>(skipToRegister ? 'coin' : 'list')
   const [confirmId, setConfirmId] = useState<string | null>(null)
   const [detailId, setDetailId] = useState<string | null>(null)
   const confirmCoin = coins.find(c => c.id === confirmId)
@@ -393,7 +398,11 @@ export default function SettingsCoins() {
         </div>
       </div>
       <div className="px-6 pb-8">
-        <button onClick={() => setStep('list')} className="w-full py-4 bg-primary text-white font-semibold rounded-xl">{t('confirm')}</button>
+        <button onClick={() => {
+          if (fromOnboarding) navigate('/terms', { replace: true })
+          else if (fromKorbitCharge) navigate('/charge-korbit', { replace: true })
+          else setStep('list')
+        }} className="w-full py-4 bg-primary text-white font-semibold rounded-xl">{t('confirm')}</button>
       </div>
     </div>
   )

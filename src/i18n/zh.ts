@@ -420,6 +420,7 @@ const zh: Record<TranslationKeys, string> = {
   pay_scan_title: 'QR支付',
   pay_scan_guide: '请将商户QR码放入框内',
   pay_scan_flash: '闪光灯',
+  pay_scan_demo_merchant: '星巴克江南店',
   pay_scan_simulate: '模拟QR扫描',
   pay_scan_scanning: '正在扫描QR...',
   pay_scan_manual: '手动输入QR',

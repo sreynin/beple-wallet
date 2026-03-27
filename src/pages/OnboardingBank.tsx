@@ -49,11 +49,8 @@ export default function OnboardingBank() {
   }
 
   const handleKorbitConnect = () => {
-    setStep('korbit-verifying')
-    setTimeout(() => {
-      connectKorbit()
-      setStep('korbit-done')
-    }, 2000)
+    // Navigate to full Coin Management (Wallet Connect) flow
+    navigate('/settings/coins', { state: { from: 'onboarding' } })
   }
 
   // === Type Select (Bank Account or Korbit) ===

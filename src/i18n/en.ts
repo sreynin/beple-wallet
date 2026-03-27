@@ -420,6 +420,7 @@ const en: Record<TranslationKeys, string> = {
   pay_scan_title: 'QR Payment',
   pay_scan_guide: 'Place the merchant QR code in the frame',
   pay_scan_flash: 'Flash',
+  pay_scan_demo_merchant: 'Starbucks Gangnam',
   pay_scan_simulate: 'Simulate QR Scan',
   pay_scan_scanning: 'Scanning QR...',
   pay_scan_manual: 'Enter QR manually',
