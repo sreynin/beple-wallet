@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom'
 import { Header } from '../components/Header'
 import { useStore } from '../store/useStore'
 import { useT } from '../hooks/useT'
-import { ExternalLink, Loader2, CheckCircle, Smartphone, Shield, Key } from 'lucide-react'
+import { ExternalLink, Loader2, CheckCircle, Smartphone, Shield, Key, Check } from 'lucide-react'
 import { MOCK_RATES } from '../constants'
 
-type Step = 'connect' | 'guide' | 'authenticating' | 'connected' | 'select' | 'confirm'
+type Step = 'connect' | 'guide' | 'korbit-app' | 'korbit-approve' | 'korbit-done' | 'connected' | 'select' | 'confirm'
 
 // Korbit assets fetched via API after OAuth (simulated)
 const korbitAssets = [
@@ -30,12 +30,14 @@ export default function ChargeKorbit() {
   }
 
   const handleOpenKorbitApp = () => {
-    setStep('authenticating')
-    // Simulate: Korbit app OAuth (first-time only, 3s)
+    // Simulate: open Korbit app → approve → done
+    setStep('korbit-app')
+    setTimeout(() => setStep('korbit-approve'), 1500)
     setTimeout(() => {
+      setStep('korbit-done')
       connectKorbit()
-      setStep('connected')
-    }, 3000)
+    }, 4000)
+    setTimeout(() => setStep('connected'), 5500)
   }
 
   // ===== Step: Connect (intro) =====
@@ -119,15 +121,93 @@ export default function ChargeKorbit() {
     </div>
   )
 
-  // ===== Step: Authenticating (simulating Korbit app OAuth) =====
-  if (step === 'authenticating') return (
-    <div className="flex flex-col h-[calc(100%-44px)] bg-white items-center justify-center animate-fade-in">
-      <div className="w-20 h-20 rounded-2xl bg-[#0052FF]/10 flex items-center justify-center mb-6">
-        <Loader2 size={36} className="text-[#0052FF] animate-spin" />
+  // ===== Korbit App Simulation (3 screens) =====
+  if (step === 'korbit-app' || step === 'korbit-approve' || step === 'korbit-done') return (
+    <div className="flex flex-col h-[calc(100%-44px)] bg-[#0a1628] animate-fade-in">
+      {/* Korbit app header */}
+      <div className="flex items-center justify-center py-4 border-b border-[#1a2a44]">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" className="mr-2">
+          <path d="M6 6h4.5v12H6V6z" fill="white"/><path d="M12 6l6 6-6 6V6z" fill="white"/>
+        </svg>
+        <span className="text-white font-bold text-sm">Korbit</span>
       </div>
-      <p className="text-base font-semibold text-text-dark">{t('korbit_connecting')}</p>
-      <p className="text-xs text-text-gray mt-1">{t('korbit_connecting_sub')}</p>
-      <p className="text-[10px] text-text-light mt-4">{t('korbit_auth_waiting')}</p>
+
+      <div className="flex-1 flex flex-col items-center justify-center px-8">
+        {/* Loading Korbit app */}
+        {step === 'korbit-app' && (
+          <div className="animate-fade-in text-center">
+            <div className="w-20 h-20 rounded-2xl bg-[#0052FF] flex items-center justify-center mb-6 mx-auto">
+              <svg viewBox="0 0 24 24" width="36" height="36" fill="none">
+                <path d="M6 6h4.5v12H6V6z" fill="white"/><path d="M12 6l6 6-6 6V6z" fill="white"/>
+              </svg>
+            </div>
+            <Loader2 size={24} className="text-[#0052FF] animate-spin mx-auto mb-4" />
+            <p className="text-white text-sm">{t('korbit_connecting')}</p>
+            <p className="text-gray-500 text-xs mt-1">{t('korbit_auth_waiting')}</p>
+          </div>
+        )}
+
+        {/* Approve screen */}
+        {step === 'korbit-approve' && (
+          <div className="animate-fade-in w-full">
+            <div className="bg-[#111d33] rounded-2xl p-6 mb-4">
+              <h3 className="text-white text-base font-bold text-center mb-4">API Access Request</h3>
+              <div className="flex items-center justify-center gap-4 mb-6">
+                <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">B</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <div className="flex gap-1">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#0052FF]" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#0052FF]" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#0052FF]" />
+                  </div>
+                </div>
+                <div className="w-12 h-12 rounded-xl bg-[#0052FF] flex items-center justify-center">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+                    <path d="M6 6h4.5v12H6V6z" fill="white"/><path d="M12 6l6 6-6 6V6z" fill="white"/>
+                  </svg>
+                </div>
+              </div>
+              <p className="text-gray-400 text-xs text-center mb-4">
+                <span className="text-white font-medium">Beple Wallet</span> requests access to your Korbit account
+              </p>
+              <div className="space-y-2 mb-4">
+                <div className="flex items-center gap-2 text-xs text-gray-400">
+                  <Check size={14} className="text-green-400" />
+                  <span>View account balance</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-gray-400">
+                  <Check size={14} className="text-green-400" />
+                  <span>Place sell orders</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-gray-400">
+                  <Check size={14} className="text-green-400" />
+                  <span>Withdraw KRW to linked bank</span>
+                </div>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <div className="flex-1 py-3 bg-[#1a2a44] text-gray-400 font-medium rounded-xl text-center text-sm">Deny</div>
+              <div className="flex-1 py-3 bg-[#0052FF] text-white font-semibold rounded-xl text-center text-sm flex items-center justify-center gap-1.5">
+                <Loader2 size={14} className="animate-spin" />
+                Approve
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Approved */}
+        {step === 'korbit-done' && (
+          <div className="animate-fade-in text-center">
+            <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mb-4 mx-auto animate-bounce-in">
+              <CheckCircle size={40} className="text-green-400" />
+            </div>
+            <p className="text-white font-bold text-base">Approved</p>
+            <p className="text-gray-500 text-xs mt-2">{t('korbit_connecting_sub')}</p>
+          </div>
+        )}
+      </div>
     </div>
   )
 
