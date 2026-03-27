@@ -11,6 +11,7 @@ const loginMethodLabels: Record<string, { ko: string; en: string; zh: string; co
   korbit: { ko: 'Korbit 계정', en: 'Korbit Account', zh: 'Korbit账户', color: 'bg-blue-50 text-[#0052FF]' },
   email: { ko: '이메일 계정', en: 'Email Account', zh: '邮箱账户', color: 'bg-orange-50 text-orange-600' },
   phone: { ko: '휴대폰 인증', en: 'Phone', zh: '手机验证', color: 'bg-green-50 text-green-600' },
+  passport: { ko: '여권 인증', en: 'Passport', zh: '护照验证', color: 'bg-green-50 text-green-600' },
 }
 
 export default function Profile() {
@@ -27,7 +28,9 @@ export default function Profile() {
     toast(t('profile_saved'))
   }
 
-  const methodInfo = loginMethod ? loginMethodLabels[loginMethod] : null
+  // Foreigners use passport KYC, not phone verification — override login method label
+  const effectiveLoginMethod = (userType === 'foreigner' && isKycComplete) ? 'passport' : loginMethod
+  const methodInfo = effectiveLoginMethod ? loginMethodLabels[effectiveLoginMethod] : null
   const methodLabel = methodInfo ? methodInfo[language as 'ko' | 'en' | 'zh'] || methodInfo.en : ''
 
   const maskResidenceId = (id: string) => {

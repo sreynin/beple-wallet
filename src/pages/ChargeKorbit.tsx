@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Header } from '../components/Header'
 import { useStore } from '../store/useStore'
 import { useT } from '../hooks/useT'
@@ -19,6 +19,8 @@ const korbitAssets = [
 
 export default function ChargeKorbit() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const fromOnboarding = (location.state as any)?.fromOnboarding === true
   const { korbitConnected, connectKorbit } = useStore()
   const t = useT()
   const [step, setStep] = useState<Step>(korbitConnected ? 'select' : 'connect')
@@ -328,7 +330,7 @@ export default function ChargeKorbit() {
         </div>
       </div>
       <div className="px-6 pb-8">
-        <button onClick={() => setStep('select')} className="w-full py-4 bg-primary text-white font-semibold rounded-xl">{t('next')}</button>
+        <button onClick={() => fromOnboarding ? navigate('/terms') : setStep('select')} className="w-full py-4 bg-primary text-white font-semibold rounded-xl">{t('next')}</button>
       </div>
     </div>
   )
@@ -355,7 +357,7 @@ export default function ChargeKorbit() {
           <span className="text-sm text-text-gray font-medium">{asset.symbol}</span>
         </div>
         <div className="flex justify-between mb-4">
-          <p className="text-xs text-text-light">{t('korbit_select_available')}: {asset.balance} {asset.symbol}</p>
+          <p className={`text-xs ${numQty > asset.balance ? 'text-error font-medium' : 'text-text-light'}`}>{t('korbit_select_available')}: {asset.balance} {asset.symbol}</p>
           <button onClick={() => setQty(String(asset.balance))} className="text-xs text-primary font-medium">{t('korbit_select_max')}</button>
         </div>
         {numQty > 0 && (
@@ -366,8 +368,8 @@ export default function ChargeKorbit() {
         )}
       </div>
       <div className="px-6 pb-8 pt-4">
-        <button onClick={() => setStep('confirm')} disabled={numQty <= 0}
-          className={`w-full py-4 font-semibold rounded-xl ${numQty > 0 ? 'bg-primary text-white' : 'bg-gray-200 text-text-light'}`}>{t('korbit_select_next')}</button>
+        <button onClick={() => setStep('confirm')} disabled={numQty <= 0 || numQty > asset.balance}
+          className={`w-full py-4 font-semibold rounded-xl ${numQty > 0 && numQty <= asset.balance ? 'bg-primary text-white' : 'bg-gray-200 text-text-light'}`}>{t('korbit_select_next')}</button>
       </div>
     </div>
   )

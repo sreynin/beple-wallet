@@ -275,7 +275,7 @@ const ko = {
   dtc_guide_desc: '외부 지갑에서 코인을 전송하여 비플머니를 충전하는 방법입니다.',
   dtc_guide_step1: '받는 주소 생성 요청',
   dtc_guide_step2: '가상자산을 보유한 앱 실행',
-  dtc_guide_step3: '받는 주소 복사 후 Transfer',
+  dtc_guide_step3: '입금 주소 복사 후 전송',
   dtc_guide_step4: '입금 확인 대기',
   dtc_guide_step5: '완료',
   dtc_guide_skip: '다음부터 이 안내를 건너뛰기',

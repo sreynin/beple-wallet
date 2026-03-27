@@ -110,8 +110,9 @@ export default function Login() {
             <input
               type="tel"
               value={phone}
-              onChange={e => { setPhone(e.target.value.replace(/[^0-9]/g, '')); setPhoneVerified(false) }}
+              onChange={e => { setPhone(e.target.value.replace(/[^0-9]/g, '').slice(0, 11)); setPhoneVerified(false) }}
               placeholder={t('signup_phone_placeholder')}
+              maxLength={11}
               className="w-full pr-24 py-3.5 border-b-2 border-border text-base text-text-dark focus:border-primary focus:outline-none transition-all"
             />
             <div className="absolute right-0 top-1/2 -translate-y-1/2">
@@ -160,7 +161,7 @@ export default function Login() {
               value={idFront}
               onChange={e => setIdFront(e.target.value.replace(/[^0-9]/g, '').slice(0, 6))}
               placeholder="YYMMDD"
-              className="flex-1 py-3.5 border-b-2 border-border text-base text-text-dark font-mono focus:border-primary focus:outline-none transition-all text-center tracking-wider"
+              className="flex-1 py-3.5 border-b-2 border-border text-base text-text-dark font-mono focus:border-primary focus:outline-none transition-all text-left tracking-wider"
             />
             <span className="text-text-light text-lg font-bold">-</span>
             <div className="flex items-center gap-1.5 flex-1">

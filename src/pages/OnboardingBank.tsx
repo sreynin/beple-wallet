@@ -50,7 +50,8 @@ export default function OnboardingBank() {
 
   const handleKorbitConnect = () => {
     // Navigate to Korbit OAuth flow (first-time authentication)
-    navigate('/charge-korbit')
+    // After completion, ChargeKorbit's 'connected' step will redirect back
+    navigate('/charge-korbit', { state: { fromOnboarding: true } })
   }
 
   // === Type Select (Bank Account or Korbit) ===
