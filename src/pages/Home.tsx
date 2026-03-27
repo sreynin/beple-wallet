@@ -8,11 +8,12 @@ import { Bell, CreditCard, QrCode, Landmark, TrendingUp, BarChart3, Plus } from 
 
 export default function Home() {
   const navigate = useNavigate()
-  const { bippleMoney, notifications, bankAccounts, korbitConnected } = useStore()
+  const { bippleMoney, notifications, bankAccounts, korbitConnected, userType } = useStore()
   const t = useT()
   const unread = notifications.filter(n => !n.read).length
+  const isForeigner = userType === 'foreigner'
 
-  const isNewUser = bankAccounts.length === 0 && !korbitConnected
+  const isNewUser = !isForeigner && bankAccounts.length === 0 && !korbitConnected
 
   return (
     <div className="flex flex-col h-[calc(100%-44px)] bg-bg-gray">

@@ -2,21 +2,27 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Header } from '../components/Header'
 import { MaintenanceModal } from '../components/MaintenanceModal'
+import { useStore } from '../store/useStore'
 import { useT } from '../hooks/useT'
 import { Landmark, Globe, BarChart3, Wrench } from 'lucide-react'
 
 export default function ChargeHub() {
   const navigate = useNavigate()
+  const { userType } = useStore()
   const t = useT()
   const [maintenanceModal, setMaintenanceModal] = useState(false)
+  const isForeigner = userType === 'foreigner'
 
   const korbitMaintenance = false
 
-  const options = [
-    { icon: BarChart3, label: t('charge_korbit'), desc: t('charge_korbit_desc'), path: '/charge-korbit', badge: null, maintenance: korbitMaintenance },
-    { icon: Globe, label: t('charge_triplea'), desc: t('charge_triplea_desc'), path: '/charge-triplea', badge: null, maintenance: false },
-    { icon: Landmark, label: t('charge_bank'), desc: t('charge_bank_desc'), path: '/charge-bank', badge: null, maintenance: false },
+  const allOptions = [
+    { icon: BarChart3, label: t('charge_korbit'), desc: t('charge_korbit_desc'), path: '/charge-korbit', badge: null, maintenance: korbitMaintenance, domesticOnly: true },
+    { icon: Globe, label: t('charge_triplea'), desc: t('charge_triplea_desc'), path: '/charge-triplea', badge: null, maintenance: false, domesticOnly: false },
+    { icon: Landmark, label: t('charge_bank'), desc: t('charge_bank_desc'), path: '/charge-bank', badge: null, maintenance: false, domesticOnly: true },
   ]
+
+  // Foreigners only see Direct Transfer Crypto
+  const options = isForeigner ? allOptions.filter(o => !o.domesticOnly) : allOptions
 
   const handleOptionClick = (opt: typeof options[0]) => {
     if (opt.maintenance) {

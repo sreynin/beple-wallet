@@ -140,18 +140,22 @@ export default function Settings() {
           </button>
         </div>
 
-        {/* Account Management */}
-        <p className="text-[10px] font-semibold text-text-light uppercase tracking-wider mb-2 px-1">{t('settings_about')}</p>
-        <div className="bg-white rounded-2xl overflow-hidden mb-4">
-          <button onClick={() => navigate('/settings/account')} className="w-full flex items-center gap-3 px-4 py-4 active:bg-gray-50">
-            <div className="w-9 h-9 rounded-xl bg-green-50 flex items-center justify-center"><CreditCard size={18} className="text-green-600" /></div>
-            <div className="flex-1 text-left">
-              <p className="text-sm font-medium text-text-dark">{t('settings_account')}</p>
-              <p className="text-[10px] text-text-light mt-0.5">{t('settings_account_desc')}</p>
+        {/* Account Management — domestic only */}
+        {userType !== 'foreigner' && (
+          <>
+            <p className="text-[10px] font-semibold text-text-light uppercase tracking-wider mb-2 px-1">{t('settings_about')}</p>
+            <div className="bg-white rounded-2xl overflow-hidden mb-4">
+              <button onClick={() => navigate('/settings/account')} className="w-full flex items-center gap-3 px-4 py-4 active:bg-gray-50">
+                <div className="w-9 h-9 rounded-xl bg-green-50 flex items-center justify-center"><CreditCard size={18} className="text-green-600" /></div>
+                <div className="flex-1 text-left">
+                  <p className="text-sm font-medium text-text-dark">{t('settings_account')}</p>
+                  <p className="text-[10px] text-text-light mt-0.5">{t('settings_account_desc')}</p>
+                </div>
+                <ChevronRight size={16} className="text-text-light" />
+              </button>
             </div>
-            <ChevronRight size={16} className="text-text-light" />
-          </button>
-        </div>
+          </>
+        )}
 
         {/* Version */}
         <div className="bg-white rounded-2xl overflow-hidden mb-4">
