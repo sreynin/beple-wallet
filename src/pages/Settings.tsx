@@ -185,7 +185,7 @@ export default function Settings() {
         <p className="text-sm text-text-gray text-center mb-6">{t('settings_logout_confirm')}</p>
         <div className="flex gap-3">
           <button onClick={() => setLogoutModal(false)} className="flex-1 py-3 bg-gray-100 text-text-gray font-medium rounded-xl">{t('cancel')}</button>
-          <button onClick={() => { logout(); navigate('/', { replace: true }) }} className="flex-1 py-3 bg-error text-white font-medium rounded-xl">{t('settings_logout')}</button>
+          <button onClick={() => { logout(); localStorage.removeItem('bipple-wallet-storage'); sessionStorage.removeItem('bp-session'); window.location.href = '/' }} className="flex-1 py-3 bg-error text-white font-medium rounded-xl">{t('settings_logout')}</button>
         </div>
       </Modal>
 

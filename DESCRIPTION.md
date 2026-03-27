@@ -1,92 +1,126 @@
 # Beple Wallet (비플월렛)
 
-A hybrid payment wallet platform for both **domestic Korean users** and **foreign tourists** visiting South Korea. Charge, pay, and withdraw KRW through cryptocurrency exchanges and stablecoin integrations.
+A hybrid wallet and exchange platform that unifies **fiat banking**, **local crypto exchanges**, and **global crypto networks** into one app — so both locals and foreigners can store, exchange, and spend money seamlessly.
 
 ---
 
-## Overview
+## What Problem Does This Solve?
 
-Beple Wallet bridges the gap between crypto assets and everyday KRW payments in South Korea. It provides a unified mobile interface where users can:
+Today, managing money across banks, crypto exchanges, and international transfers requires multiple apps. Foreigners visiting Korea can't easily spend crypto at local stores. Locals juggle between banking apps and exchange platforms.
 
-- **Charge** Bipple Money (KRW) from bank accounts, crypto exchanges (Korbit), or stablecoin platforms (Triple-A)
-- **Pay** merchants via QR code scanning
-- **Withdraw** cash from ATMs nationwide
-- **Manage** multiple cryptocurrency assets (BTC, ETH, USDC, USDT, XRP, SOL)
+**Beple Wallet fixes this** by putting everything in one place:
+
+```
+┌─────────────────────────────────────────────────┐
+│                  Beple Wallet                    │
+│                                                  │
+│   🌐 Global Crypto    🇰🇷 Local Exchange    🏦 Banks  │
+│   (Triple-A)          (Korbit)           (Korean) │
+│        │                   │                 │    │
+│        └───────────┬───────┘─────────────────┘    │
+│                    │                              │
+│              [ Unified Wallet ]                   │
+│              [ Pay / Withdraw / Send ]            │
+└─────────────────────────────────────────────────┘
+```
 
 ---
 
-## User Types
+## How It Works (Simple Version)
+
+### For Foreigners (No Korean bank needed)
+1. Open app → Quick passport KYC
+2. Send crypto (USDT/USDC) from any wallet
+3. Crypto converts to KRW automatically
+4. Pay at stores, withdraw cash at ATMs
+
+### For Locals (Korean residents)
+1. Open app → Link bank accounts
+2. Connect Korbit exchange
+3. Top up wallet from bank or sell crypto
+4. Pay, transfer, withdraw — all in one app
+
+---
+
+## Three Layers Working Together
+
+| Layer | Provider | What It Does |
+|---|---|---|
+| **Global Crypto** | Triple-A | Receives crypto from anywhere in the world (USDT, USDC, BTC, ETH) |
+| **Local Exchange** | Korbit | Converts crypto ↔ KRW at real-time market rates |
+| **Local Banking** | Korean Banks | Deposits, withdrawals, and direct payments to/from bank accounts |
+
+**The magic:** These three layers connect through one wallet balance. Users don't need to think about which system they're using — it just works.
+
+---
+
+## Core Features
+
+### Unified Wallet
+One balance that receives money from **any source** — bank transfer, crypto deposit, or exchange conversion. Spend it anywhere with QR payments or ATM withdrawals.
+
+### Currency Exchange
+- **Crypto → KRW**: Send USDT from Binance, receive KRW in wallet
+- **Bank → Wallet**: Transfer from linked Korean bank account
+- **Exchange → Wallet**: Sell BTC on Korbit, receive KRW instantly
+
+### Multi-Bank Integration
+Link multiple Korean bank accounts. Choose which one to use for deposits or withdrawals. Manage them all from one screen.
+
+### QR Payments
+Scan merchant QR codes to pay instantly from wallet balance. Works at any participating store, cafe, or restaurant.
+
+### ATM Cash Withdrawal
+Need physical cash? Withdraw at any NICE ATM using QR code — no bank card needed.
+
+---
+
+## Who Uses This?
 
 ### Domestic Users (내국인)
+- Have Korean bank accounts
+- May hold crypto on Korbit
+- Want one app to manage banking + crypto + payments
+- **Charge limit:** 2,000,000 KRW
 
-| Feature | Detail |
-|---|---|
-| Target | Korean residents with Korbit exchange accounts |
-| Charging | Bank account transfer / Korbit exchange (sell crypto → KRW) |
-| Authentication | Real-name verification via ARS |
-| Charge Limit | 2,000,000 KRW |
-| KYC | Auto-verified through ARS real-name system |
-
-### Foreign Users (외국인 / Tourist)
-
-| Feature | Detail |
-|---|---|
-| Target | Tourists and stablecoin holders visiting Korea |
-| Charging | Triple-A integration (USDT/USDC on-chain → KRW) |
-| Authentication | Minimal-KYC (Passport OCR + Face recognition) |
-| Charge Limit | 1,000,000 KRW |
-| KYC | Passport scan + Liveness detection + HiKorea verification |
+### Foreign Users (외국인)
+- No Korean bank account required
+- Hold crypto (USDT, USDC, BTC, ETH)
+- Need to spend in KRW while visiting Korea
+- **Charge limit:** 1,000,000 KRW (Minimal-KYC)
 
 ---
 
-## Key Features
+## Charging Methods
 
-### Wallet & Payments
-- **Bipple Money Balance** — KRW prepaid wallet for instant payments
-- **QR Code Payment** — Scan merchant QR to pay at stores, cafes, restaurants
-- **ATM Withdrawal** — Cash out at NICE ATMs (10,000 KRW units, 1,300 KRW fee)
-- **Transaction History** — Full history with filters (period, type, status, payment method)
-- **Digital Receipts** — Electronic receipts for tax deduction
-
-### Charging Methods
-- **Bank Account** — Direct transfer from linked Korean bank accounts
-- **Korbit Exchange** — OAuth-connected crypto asset sell → KRW conversion
-- **Triple-A Stablecoin** — On-chain USDT/USDC deposit → KRW conversion
-- **Coin Conversion** — Convert held crypto assets to Bipple Money (1% fee)
-
-### KYC & Identity
-- **Passport OCR** — Automatic passport data extraction with MRZ reading
-- **Face Recognition** — Liveness detection + face matching against passport photo
-- **HiKorea Integration** — Residence status verification for foreigners
-- **ARS Verification** — Phone-based real-name verification for domestic users
-
-### Multi-Platform Exchange Support
-- **Korbit** — Korea's first crypto exchange (218+ trading pairs)
-- **Triple-A** — Global stablecoin payment infrastructure
-- **Upbit / Binance** — Additional exchange integrations via API key
-
-### Security
-- **6-digit Transaction PIN** — Required for all payments and withdrawals
-- **PIN Lockout** — 5 failed attempts → 5-minute lockout
-- **Face ID / Biometric** — Optional biometric login
-- **Auth Guard** — Protected routes require authentication
-- **LocalStorage Persistence** — Session survives browser refresh
-
-### Internationalization
-- **Korean (한국어)** — Full native support
-- **English** — Complete translation
-- **Chinese (中文)** — Simplified Chinese support
+| Method | How It Works | Who Uses It |
+|---|---|---|
+| **Bank Account** | Direct transfer from linked account | Domestic |
+| **Korbit Exchange** | Sell crypto on Korbit → KRW to wallet | Domestic |
+| **Direct Transfer Crypto** | Send USDT/USDC on-chain → auto-convert to KRW | Foreign + Domestic |
 
 ---
 
-## Common Rules (공통 숫자 정책)
+## Security
+
+| Feature | Detail |
+|---|---|
+| 6-digit PIN | Required for every payment and withdrawal |
+| PIN Lockout | 5 wrong attempts → 5-minute lockout |
+| Face ID | Optional biometric login |
+| KYC | Passport OCR + face liveness for foreigners; ARS real-name for locals |
+| Encrypted sessions | LocalStorage with persisted state |
+
+---
+
+## Common Rules
 
 | Rule | Value |
 |---|---|
 | ATM fee | 1,300 KRW per transaction |
 | ATM daily limit | 300,000 KRW |
 | ATM unit | 10,000 KRW increments |
-| Coin conversion fee | 1% |
+| Crypto charge fee | 1% |
 | PIN digits | 6 |
 | Domestic charge limit | 2,000,000 KRW |
 | Foreigner charge limit | 1,000,000 KRW |
@@ -96,62 +130,67 @@ Beple Wallet bridges the gap between crypto assets and everyday KRW payments in 
 ## App Flow
 
 ```
-Language Select → Login/SignUp → Terms → PIN Setup → User Type Select
-                                                         │
-                              ┌──────────────────────────┤
-                              │                          │
-                         Domestic                    Foreigner
-                              │                          │
-                       ARS Verification         KYC (Passport + Face)
-                              │                          │
-                              └──────────┬───────────────┘
-                                         │
-                                       Home
-                                    ┌────┼────┐
-                                    │    │    │
-                                 Charge  Pay  ATM
-                                    │    │    │
-                                 Complete History Settings
+New User:   Login → Terms → PIN → Home
+                                    │
+                    ┌───────────────┼───────────────┐
+                    │               │               │
+                 Charge            Pay             ATM
+                    │               │               │
+          ┌─────────┤          QR Scan          QR Scan
+          │         │               │               │
+       Korbit    Crypto          Confirm         Amount
+          │      Transfer           │               │
+       Sell →      │            Success          Withdraw
+       KRW      Confirm            │               │
+          │         │           Receipt          Receipt
+          └────→ Balance ←─────────┘───────────────┘
 ```
 
 ---
 
-## State & Error Messages
+## Languages
 
-| Category | States |
+| Language | Coverage |
 |---|---|
-| **Empty** | No coins registered, No notifications |
-| **Error** | ATM limit exceeded, Coin balance insufficient, KYC OCR/Face/Stay failed, PIN locked |
-| **Success** | Charge complete, Payment complete, ATM withdrawal complete |
-| **System** | Loading/Processing spinner, Camera permission dialog, Exchange maintenance |
+| Korean (한국어) | Full |
+| English | Full |
+| Chinese (中文) | Full |
 
 ---
 
 ## Tech Stack
 
-| Technology | Version | Purpose |
-|---|---|---|
-| React | 19.x | UI framework |
-| TypeScript | 5.9 | Type safety |
-| Vite | 8.x | Build tool |
-| Tailwind CSS | 4.x | Styling |
-| Zustand | 5.x | State management (with persist middleware) |
-| React Router | 7.x | Client-side routing |
-| Lucide React | 1.6 | Icon library |
+| Technology | Purpose |
+|---|---|
+| React 19 + TypeScript | UI framework |
+| Vite 8 | Build tool |
+| Tailwind CSS 4 | Styling + dark mode |
+| Zustand 5 | State management with localStorage persistence |
+| React Router 7 | Client-side routing with auth guards |
+| Lucide React | Icons |
+
+---
+
+## Future Potential
+
+- **Merchant dashboard** — Store owners manage payments
+- **Cross-border remittance** — Send money internationally
+- **Multi-currency wallet** — USD, KHR, JPY alongside KRW
+- **AI exchange optimization** — Best rate recommendations
+- **Rewards & points** — Cashback on transactions
+- **Offline payments** — NFC / contactless support
 
 ---
 
 ## Design Specification
 
-Based on **비플월렛 UX/UI 상세 설계서 v1.02** — 71-slide wireframe specification covering:
-- Target & policy principles
-- Full user flow wireframes
+Based on **비플월렛 UX/UI 상세 설계서 v1.02** covering:
+- Target & policy principles for domestic + foreign users
+- 71-slide wireframe with all screens
 - State & error message catalog
-- KYC failure state definitions
-- Account/Coin registration process details
+- KYC failure definitions (OCR, face, stay permit)
+- Account & coin registration flows
 
 ---
 
-## License
-
-This is a prototype/proof-of-concept application. All rights reserved.
+*Prototype — all data is client-side. No real banking or crypto transactions.*

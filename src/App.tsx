@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useEffect } from 'react'
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { PhoneFrame } from './components/PhoneFrame'
 import { LaunchScreen } from './components/LaunchScreen'
 import { ToastProvider } from './components/Toast'
@@ -49,9 +50,21 @@ function Protected({ children }: { children: React.ReactNode }) {
   return <AuthGuard>{children}</AuthGuard>
 }
 
+function FreshWindowRedirect() {
+  const navigate = useNavigate()
+  useEffect(() => {
+    if (!sessionStorage.getItem('bp-session')) {
+      sessionStorage.setItem('bp-session', '1')
+      navigate('/', { replace: true })
+    }
+  }, [])
+  return null
+}
+
 export default function App() {
   return (
     <BrowserRouter>
+      <FreshWindowRedirect />
       <PhoneFrame>
         <Routes>
           {/* Public - Onboarding */}

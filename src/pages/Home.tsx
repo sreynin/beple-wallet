@@ -61,10 +61,8 @@ export default function Home() {
               { label: t('home_pay'), icon: QrCode, path: '/payment-pin' },
               { label: t('home_atm'), icon: Landmark, path: '/atm-scan' },
             ].map(btn => (
-              <button key={btn.label} onClick={() => !isNewUser && navigate(btn.path)} disabled={isNewUser}
-                className={`flex-1 flex flex-col items-center gap-1.5 py-3 rounded-xl transition-colors ${
-                  isNewUser ? 'bg-white/10 opacity-40 cursor-not-allowed' : 'bg-white/15 active:bg-white/25'
-                }`}>
+              <button key={btn.label} onClick={() => navigate(btn.path)}
+                className="flex-1 flex flex-col items-center gap-1.5 py-3 rounded-xl bg-white/15 active:bg-white/25 transition-colors">
                 <btn.icon size={20} />
                 <span className="text-[11px] font-medium">{btn.label}</span>
               </button>
@@ -94,7 +92,7 @@ export default function Home() {
               </button>
 
               {/* Set Up Korbit */}
-              <button onClick={() => navigate('/settings/coins')}
+              <button onClick={() => navigate('/charge-korbit')}
                 className="w-full bg-white rounded-2xl p-5 active:bg-gray-50 transition-colors">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-xl bg-[#0052FF]/10 flex items-center justify-center">
@@ -168,6 +166,30 @@ export default function Home() {
               )}
             </>
           )}
+        </div>
+
+        {/* Event Banners - stacked */}
+        <div className="mx-4 mt-4 space-y-2">
+          <div className="rounded-2xl p-4 bg-gradient-to-r from-green-100 to-green-50 relative overflow-hidden">
+            <span className="text-[10px] font-bold text-green-700 bg-green-200 px-2 py-0.5 rounded-full">{t('banner_new_service')}</span>
+            <p className="text-sm font-bold text-text-dark mt-2 whitespace-pre-line leading-snug">{t('banner_new_service_title')}</p>
+            <div className="absolute right-3 bottom-2 text-3xl">💰</div>
+          </div>
+
+          <button onClick={() => navigate('/settings/account')}
+            className="w-full rounded-2xl p-4 bg-gradient-to-r from-blue-100 to-blue-50 relative overflow-hidden text-left">
+            <span className="text-[10px] font-bold text-blue-700 bg-blue-200 px-2 py-0.5 rounded-full">{t('banner_event')}</span>
+            <p className="text-sm font-bold text-text-dark mt-2 whitespace-pre-line leading-snug">{t('banner_register_title')}</p>
+            <div className="absolute right-3 bottom-2 bg-white rounded-lg px-2 py-1 shadow-sm">
+              <span className="text-xs font-bold text-primary">{t('banner_register_reward')}</span>
+            </div>
+          </button>
+
+          <div className="rounded-2xl p-4 bg-gradient-to-r from-amber-100 to-amber-50 relative overflow-hidden">
+            <span className="text-[10px] font-bold text-amber-700 bg-amber-200 px-2 py-0.5 rounded-full">{t('banner_event')}</span>
+            <p className="text-sm font-bold text-text-dark mt-2 whitespace-pre-line leading-snug">{t('banner_sns_title')}</p>
+            <div className="absolute right-3 bottom-2 text-3xl">☕</div>
+          </div>
         </div>
 
         {/* Quick actions - only for existing users */}

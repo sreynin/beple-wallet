@@ -4,8 +4,9 @@ import { useStore } from '../store/useStore'
 import { useT } from '../hooks/useT'
 import { Modal } from '../components/Modal'
 import { toast } from '../components/Toast'
-import { AppLogo } from '../components/AppLogo'
-import { User, Phone, ChevronRight, Loader2, CheckCircle, ShieldCheck } from 'lucide-react'
+import { Header } from '../components/Header'
+import { StepIndicator } from '../components/StepIndicator'
+import { Phone, ChevronRight, Loader2, CheckCircle, ShieldCheck } from 'lucide-react'
 
 type OtpState = 'idle' | 'sending' | 'input' | 'verifying' | 'done'
 
@@ -14,14 +15,18 @@ export default function Login() {
   const navigate = useNavigate()
   const t = useT()
 
-  const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
+  const [carrier, setCarrier] = useState('')
+  const [idFront, setIdFront] = useState('')  // YYMMDD
+  const [idBack, setIdBack] = useState('')   // first digit only (rest masked)
+  const [name, setName] = useState('')
   const [otpState, setOtpState] = useState<OtpState>('idle')
   const [otpCode, setOtpCode] = useState('')
   const [otpTimer, setOtpTimer] = useState(0)
   const [phoneVerified, setPhoneVerified] = useState(false)
 
   const phoneValid = phone.replace(/[^0-9]/g, '').length >= 8
+  const nationalId = idFront && idBack ? `${idFront}-${idBack}000000` : ''
   const canProceed = name.trim().length > 0 && phoneVerified
 
   // Returning user check
@@ -64,7 +69,7 @@ export default function Login() {
 
   const handleNext = () => {
     login('phone')
-    updateProfile({ name: name.trim(), phone })
+    updateProfile({ name: name.trim(), phone, residenceId: nationalId })
     // Domestic → Bank setup, Foreigner → KYC passport
     if (userType === 'domestic') {
       navigate('/onboarding-bank')
@@ -75,46 +80,22 @@ export default function Login() {
 
   return (
     <div className="flex flex-col h-[calc(100%-44px)] bg-white animate-slide-in">
-      <div className="flex-1 flex flex-col items-center px-6 pt-10 overflow-y-auto">
-        {/* Logo */}
-        <div className="w-20 h-20 rounded-3xl bg-white flex items-center justify-center mb-5 shadow-lg shadow-primary/20 border border-border/40 p-2">
-          <AppLogo size={72} />
-        </div>
-        <h1 className="text-2xl font-bold text-text-dark mb-1">{t('login_title')}</h1>
-        <p className="text-sm text-text-gray mb-8">{t('login_subtitle')}</p>
+      <Header title={t('profile_basic_info')} />
+      <div className="flex-1 flex flex-col px-6 pt-4 overflow-y-auto">
+        <StepIndicator current={1} />
 
-        {/* Name Input */}
+        {/* 1. Phone Number */}
         <div className="w-full mb-4">
-          <label className="text-xs font-medium text-text-gray mb-1.5 block">{t('signup_fullname')}</label>
+          <label className="text-xs font-medium text-primary mb-1.5 block">{t('signup_phone')}</label>
           <div className="relative">
-            <div className="absolute left-4 top-1/2 -translate-y-1/2">
-              <User size={18} className={name ? 'text-primary' : 'text-text-light'} />
-            </div>
-            <input
-              type="text"
-              value={name}
-              onChange={e => setName(e.target.value)}
-              placeholder={t('signup_fullname_placeholder')}
-              className="w-full pl-12 pr-4 py-4 bg-gray-50 border-2 border-border rounded-xl text-sm text-text-dark focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-            />
-          </div>
-        </div>
-
-        {/* Phone Input + Verify */}
-        <div className="w-full mb-4">
-          <label className="text-xs font-medium text-text-gray mb-1.5 block">{t('signup_phone')}</label>
-          <div className="relative">
-            <div className="absolute left-4 top-1/2 -translate-y-1/2">
-              <Phone size={18} className={phone ? 'text-primary' : 'text-text-light'} />
-            </div>
             <input
               type="tel"
               value={phone}
-              onChange={e => { setPhone(e.target.value); setPhoneVerified(false) }}
+              onChange={e => { setPhone(e.target.value.replace(/[^0-9]/g, '')); setPhoneVerified(false) }}
               placeholder={t('signup_phone_placeholder')}
-              className="w-full pl-12 pr-24 py-4 bg-gray-50 border-2 border-border rounded-xl text-sm text-text-dark focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+              className="w-full pr-24 py-3.5 border-b-2 border-border text-base text-text-dark focus:border-primary focus:outline-none transition-all"
             />
-            <div className="absolute right-2 top-1/2 -translate-y-1/2">
+            <div className="absolute right-0 top-1/2 -translate-y-1/2">
               {phoneVerified ? (
                 <span className="flex items-center gap-1 text-[10px] font-medium text-green-600 bg-green-50 px-2.5 py-1.5 rounded-full">
                   <CheckCircle size={12} />{t('otp_verified')}
@@ -129,6 +110,69 @@ export default function Login() {
               )}
             </div>
           </div>
+        </div>
+
+        {/* 2. Mobile Carrier */}
+        <div className="w-full mb-4">
+          <label className="text-xs font-medium text-text-gray mb-1.5 block">{t('mobile_carrier')}</label>
+          <select
+            value={carrier}
+            onChange={e => setCarrier(e.target.value)}
+            className="w-full py-3.5 border-b-2 border-border text-sm text-text-dark focus:border-primary focus:outline-none transition-all bg-transparent appearance-none cursor-pointer"
+          >
+            <option value="">{t('mobile_carrier_select')}</option>
+            <option value="SKT">SKT</option>
+            <option value="KT">KT</option>
+            <option value="LG U+">LG U+</option>
+            <option value="알뜰폰 SKT">{t('carrier_mvno')} SKT</option>
+            <option value="알뜰폰 KT">{t('carrier_mvno')} KT</option>
+            <option value="알뜰폰 LG U+">{t('carrier_mvno')} LG U+</option>
+          </select>
+        </div>
+
+        {/* 3. National ID (split: YYMMDD - X ●●●●●●) */}
+        <div className="w-full mb-4">
+          <label className="text-xs font-medium text-text-gray mb-1.5 block">{t('national_id')}</label>
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              inputMode="numeric"
+              maxLength={6}
+              value={idFront}
+              onChange={e => setIdFront(e.target.value.replace(/[^0-9]/g, '').slice(0, 6))}
+              placeholder="YYMMDD"
+              className="flex-1 py-3.5 border-b-2 border-border text-base text-text-dark font-mono focus:border-primary focus:outline-none transition-all text-center tracking-wider"
+            />
+            <span className="text-text-light text-lg font-bold">-</span>
+            <div className="flex items-center gap-1.5 flex-1">
+              <input
+                type="text"
+                inputMode="numeric"
+                maxLength={1}
+                value={idBack}
+                onChange={e => setIdBack(e.target.value.replace(/[^0-9]/g, '').slice(0, 1))}
+                placeholder="0"
+                className="w-10 py-3.5 border-b-2 border-border text-base text-text-dark font-mono focus:border-primary focus:outline-none transition-all text-center"
+              />
+              <div className="flex items-center gap-1">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="w-2.5 h-2.5 rounded-full bg-text-dark" />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 4. Name */}
+        <div className="w-full mb-4">
+          <label className="text-xs font-medium text-text-gray mb-1.5 block">{t('signup_fullname')}</label>
+          <input
+            type="text"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            placeholder={t('signup_fullname_placeholder')}
+            className="w-full py-3.5 border-b-2 border-border text-base text-text-dark focus:border-primary focus:outline-none transition-all"
+          />
         </div>
 
         {/* Verified badge */}
