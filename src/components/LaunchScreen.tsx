@@ -176,7 +176,7 @@ export function LaunchScreen() {
         />
       ))}
 
-      <div className="absolute inset-0 flex flex-col px-6">
+      <div className="absolute inset-0 flex flex-col px-6 overflow-y-auto">
         {/* Logo + Branding */}
         <div className="flex-1 flex items-end pb-8">
           <div className="w-full max-w-[360px]">
@@ -199,7 +199,7 @@ export function LaunchScreen() {
         </div>
 
         {/* Buttons - slide up when phase is 'choose' */}
-        <div className={`pb-10 space-y-3 transition-all duration-500 ${
+        <div className={`pb-20 space-y-3 transition-all duration-500 ${
           phase === 'choose' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8 pointer-events-none'
         }`}>
           <button onClick={handleExistingUser}
