@@ -15,7 +15,7 @@ export default function PinSetup() {
   const [firstPin, setFirstPin] = useState('')
   const [error, setError] = useState('')
 
-  const navState = (location.state || {}) as { flow?: 'signup' | 'reset' }
+  const navState = (location.state || {}) as { flow?: 'signup' | 'reset' | 'kyc' }
   const flow = navState.flow
   const isSignupFlow = flow === 'signup' ? true : flow === 'reset' ? false : !pinSet
 
@@ -27,7 +27,7 @@ export default function PinSetup() {
     } else {
       if (pin === firstPin) {
         setPin(pin)
-        if (flow === 'signup') {
+        if (flow === 'signup' || flow === 'kyc') {
           navigate('/home', { replace: true })
         } else if (flow === 'reset') {
           navigate(-1)
@@ -51,7 +51,7 @@ export default function PinSetup() {
   return (
     <div className="flex flex-col h-[calc(100%-44px)] bg-white animate-slide-in">
       <Header title={t('pin_title')} />
-      {isSignupFlow && (
+      {isSignupFlow && flow !== 'kyc' && (
         <div className="px-6 pt-3">
           <StepIndicator current={4} />
         </div>

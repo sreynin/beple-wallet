@@ -252,11 +252,12 @@ const zh: Record<TranslationKeys, string> = {
   kyc_verify_hikorea: '正在与HiKorea数据进行比对。',
 
   // KYC Success
-  kyc_success_title: '验证完成',
-  kyc_success_msg: '身份验证已完成。\n现在您可以自由使用\nBeple钱包的所有服务。',
+  kyc_success_title: '验证完成！',
+  kyc_success_msg: '身份验证已成功完成。现在您可以使用Beple钱包服务。',
   kyc_success_limit: '当前充值限额',
   kyc_success_grade: '验证等级',
-  kyc_success_go_home: '前往首页',
+  kyc_success_upgrade_hint: '升级到Full KYC可提高您的限额。',
+  kyc_success_continue: '继续',
 
   // Home
   home_balance: 'Beple Money余额',

@@ -252,11 +252,12 @@ const en: Record<TranslationKeys, string> = {
   kyc_verify_hikorea: 'Cross-referencing with HiKorea data.',
 
   // KYC Success
-  kyc_success_title: 'Verification Complete',
-  kyc_success_msg: 'Identity verification is complete.\nYou can now freely use all\nBeple Wallet services.',
+  kyc_success_title: 'Verification Complete!',
+  kyc_success_msg: 'Identity verification has been successfully completed. You can now use Beple Wallet services.',
   kyc_success_limit: 'Current Charging Limit',
   kyc_success_grade: 'Verification Level',
-  kyc_success_go_home: 'Go to Home',
+  kyc_success_upgrade_hint: 'Upgrade to Full KYC to increase your limit.',
+  kyc_success_continue: 'Continue',
 
   // Home
   home_balance: 'Beple Money Balance',

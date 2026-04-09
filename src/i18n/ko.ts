@@ -250,11 +250,12 @@ const ko = {
   kyc_verify_hikorea: 'HiKorea 데이터를 대조하고 있습니다.',
 
   // KYC Success
-  kyc_success_title: '인증 완료',
-  kyc_success_msg: '본인 인증이 완료되었습니다.\n이제 비플월렛의 모든 서비스를\n자유롭게 이용하실 수 있습니다.',
+  kyc_success_title: '인증이 완료되었습니다!',
+  kyc_success_msg: '본인 인증이 성공적으로 완료되었습니다. 이제 비플월렛 서비스를 이용할 수 있습니다.',
   kyc_success_limit: '현재 충전 한도 (Limit)',
   kyc_success_grade: '인증 등급',
-  kyc_success_go_home: '홈으로 이동 (Go Home)',
+  kyc_success_upgrade_hint: 'Full KYC로 업그레이드하면 한도를 늘릴 수 있습니다.',
+  kyc_success_continue: '계속하기',
 
   // Home
   home_balance: '비플머니 잔액',

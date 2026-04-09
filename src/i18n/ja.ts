@@ -252,11 +252,12 @@ const ja: Record<TranslationKeys, string> = {
   kyc_verify_hikorea: 'Cross-referencing with HiKorea data.',
 
   // KYC Success
-  kyc_success_title: 'Verification Complete',
-  kyc_success_msg: 'Identity verification is complete.\nYou can now freely use all\nBeple Wallet services.',
-  kyc_success_limit: 'Current Charging Limit',
-  kyc_success_grade: 'Verification Level',
-  kyc_success_go_home: 'Go to Home',
+  kyc_success_title: '認証が完了しました！',
+  kyc_success_msg: '本人認証が正常に完了しました。Bepleウォレットサービスをご利用いただけます。',
+  kyc_success_limit: '現在の充電上限',
+  kyc_success_grade: '認証レベル',
+  kyc_success_upgrade_hint: 'Full KYCにアップグレードすると上限を増やすことができます。',
+  kyc_success_continue: '続ける',
 
   // Home
   home_balance: 'Beple Money Balance',
