@@ -3,26 +3,59 @@ import { useNavigate } from 'react-router-dom'
 import { Header } from '../components/Header'
 import { useStore } from '../store/useStore'
 import { useT } from '../hooks/useT'
-import { CheckCircle, Loader2, Phone, Check, Landmark, BarChart3 } from 'lucide-react'
+import { CheckCircle, Loader2, Phone, Check, Landmark, BarChart3, ChevronRight, Info } from 'lucide-react'
 import { StepIndicator } from '../components/StepIndicator'
 
 const banks = [
-  { id: 'shinhan', name: '신한은행', icon: '🏦' },
-  { id: 'kb', name: '국민은행', icon: '🏛️' },
-  { id: 'woori', name: '우리은행', icon: '🏗️' },
-  { id: 'hana', name: '하나은행', icon: '🏢' },
-  { id: 'nh', name: '농협은행', icon: '🌾' },
-  { id: 'ibk', name: 'IBK기업은행', icon: '🏭' },
-  { id: 'kakao', name: '카카오뱅크', icon: '💬' },
-  { id: 'toss', name: '토스뱅크', icon: '📱' },
+  { id: 'nh', name: '농협은행', bg: '#FFF3E0' },
+  { id: 'woori', name: '우리은행', bg: '#E3F2FD' },
+  { id: 'kb', name: '국민은행', bg: '#FFF8E1' },
+  { id: 'shinhan', name: '신한은행', bg: '#E8EAF6' },
+  { id: 'hana', name: '하나은행', bg: '#E0F2F1' },
+  { id: 'ibk', name: '기업은행', bg: '#E3F2FD' },
+  { id: 'busan', name: '부산은행', bg: '#FFEBEE' },
+  { id: 'post', name: '우체국', bg: '#FFF8E1' },
+  { id: 'im', name: 'iM뱅크', bg: '#E0F2F1' },
+  { id: 'saemaul', name: '새마을금고', bg: '#F0F0F0' },
+  { id: 'gwangju', name: '광주은행', bg: '#FFF3E0' },
+  { id: 'sc', name: 'SC제일은행', bg: '#E0F7FA' },
+  { id: 'gyeongnam', name: '경남은행', bg: '#FFEBEE' },
+  { id: 'citi', name: '씨티은행', bg: '#F0F0F0' },
+  { id: 'shinhyup', name: '신협', bg: '#E8F5E9' },
+  { id: 'jeonbuk', name: '전북은행', bg: '#E3F2FD' },
+  { id: 'suhyup', name: '수협은행', bg: '#E3F2FD' },
+  { id: 'jeju', name: '제주은행', bg: '#F0F0F0' },
+  { id: 'kdb', name: '산업은행', bg: '#E3F2FD' },
+  { id: 'kbank', name: '케이뱅크', bg: '#F5F5F5' },
+  { id: 'kakao', name: '카카오뱅크', bg: '#FFF9C4' },
+  { id: 'toss', name: '토스뱅크', bg: '#E3F2FD' },
+  { id: 'sanlim', name: '산림조합중앙회', bg: '#E8F5E9' },
+  { id: 'savings', name: '저축은행중앙회', bg: '#E3F2FD' },
 ]
 
+/* ── Bank logo: loads PNG from /banks/{id}.png, falls back to styled text ── */
+function BankLogo({ id, size = 32 }: { id: string; size?: number }) {
+  return (
+    <img
+      src={`/banks/${id}.png`}
+      alt=""
+      width={size}
+      height={size}
+      className="object-contain"
+      onError={(e) => {
+        // Hide broken image, parent bg color still shows bank identity
+        e.currentTarget.style.display = 'none'
+      }}
+    />
+  )
+}
+
 type AccountType = 'bank' | 'korbit'
-type Step = 'type-select' | 'bank-select' | 'form' | 'terms' | 'ars' | 'verifying' | 'done' | 'korbit-connect' | 'korbit-verifying' | 'korbit-done'
+type Step = 'type-select' | 'bank-select' | 'terms' | 'form' | 'ars' | 'verifying' | 'done' | 'korbit-connect' | 'korbit-verifying' | 'korbit-done'
 
 export default function OnboardingBank() {
   const navigate = useNavigate()
-  const { addBankAccount, bankAccounts, connectKorbit } = useStore()
+  const { addBankAccount, bankAccounts, connectKorbit, profile, kycData } = useStore()
   const t = useT()
 
   const [step, setStep] = useState<Step>('type-select')
@@ -30,10 +63,19 @@ export default function OnboardingBank() {
   const [selBank, setSelBank] = useState('')
   const [accountNumber, setAccountNumber] = useState('')
   const [holderName, setHolderName] = useState('')
-  const [termsChecked, setTermsChecked] = useState(false)
+  const [term1, setTerm1] = useState(false)
+  const [term2, setTerm2] = useState(false)
+  const [term3, setTerm3] = useState(false)
   const [arsCode] = useState(String(Math.floor(Math.random() * 90 + 10)))
 
   const goNext = () => navigate('/terms')
+
+  // Pre-fill name from profile or KYC data
+  const getPrefilledName = () => {
+    if (profile.name) return profile.name
+    if (kycData.surname && kycData.givenName) return `${kycData.surname} ${kycData.givenName}`
+    return ''
+  }
 
   const handleBankComplete = () => {
     const bank = banks.find(b => b.id === selBank)
@@ -41,7 +83,7 @@ export default function OnboardingBank() {
       addBankAccount({
         bankName: bank.name,
         accountNumber: accountNumber.replace(/(\d{3})(\d{3,4})(\d+)/, '$1-$2-$3'),
-        holderName,
+        holderName: holderName || getPrefilledName(),
         isDefault: bankAccounts.length === 0,
       })
     }
@@ -49,9 +91,32 @@ export default function OnboardingBank() {
   }
 
   const handleKorbitConnect = () => {
-    // Navigate to Korbit OAuth flow (first-time authentication)
-    // After completion, ChargeKorbit's 'connected' step will redirect back
     navigate('/charge-korbit', { state: { fromOnboarding: true } })
+  }
+
+  const allRequiredTerms = term1 && term2
+  const allTerms = term1 && term2 && term3
+
+  const handleAgreeAll = () => {
+    if (allTerms) {
+      setTerm1(false)
+      setTerm2(false)
+      setTerm3(false)
+    } else {
+      setTerm1(true)
+      setTerm2(true)
+      setTerm3(true)
+    }
+  }
+
+  const handleTermsConfirm = () => {
+    if (allRequiredTerms) {
+      // Pre-fill holder name when moving to form
+      if (!holderName) {
+        setHolderName(getPrefilledName())
+      }
+      setStep('form')
+    }
   }
 
   // === Type Select (Bank Account or Korbit) ===
@@ -102,85 +167,171 @@ export default function OnboardingBank() {
     </div>
   )
 
-  // === Bank: Select Bank ===
+  // === Bank: Select Bank (3-column card grid) ===
   if (step === 'bank-select') return (
     <div className="flex flex-col h-[calc(100%-44px)] bg-white animate-slide-in">
-      <Header title={t('onboarding_bank_title')} onBack={() => setStep('type-select')} />
-      <div className="flex-1 px-6 pt-6 overflow-y-auto">
-        <h2 className="text-base font-semibold text-text-dark mb-1">{t('account_bank_select')}</h2>
-        <p className="text-xs text-text-gray mb-5">{t('account_bank_select_desc')}</p>
-        <div className="grid grid-cols-2 gap-2">
+      <Header title={t('ob_bank_register_title')} onBack={() => setStep('type-select')} />
+      <div className="flex-1 px-5 pt-5 overflow-y-auto pb-4">
+        <h2 className="text-base font-bold text-text-dark mb-5">{t('ob_bank_select_heading')}</h2>
+        <div className="grid grid-cols-3 gap-2.5">
           {banks.map(bank => (
             <button key={bank.id} onClick={() => setSelBank(bank.id)}
-              className={`flex items-center gap-2.5 p-3.5 rounded-xl border-2 transition-all ${
-                selBank === bank.id ? 'border-primary bg-primary/5' : 'border-border'
+              className={`flex flex-col items-center gap-2 py-3 px-2 rounded-xl transition-all ${
+                selBank === bank.id
+                  ? 'bg-primary/5 ring-2 ring-primary'
+                  : 'bg-gray-50 hover:bg-gray-100'
               }`}>
-              <span className="text-xl">{bank.icon}</span>
-              <span className={`text-xs font-medium ${selBank === bank.id ? 'text-primary' : 'text-text-dark'}`}>{bank.name}</span>
+              <div className="w-12 h-12 rounded-lg flex items-center justify-center"
+                style={{ backgroundColor: bank.bg }}>
+                <BankLogo id={bank.id} size={32} />
+              </div>
+              <span className={`text-[10px] leading-tight text-center font-medium ${
+                selBank === bank.id ? 'text-primary' : 'text-text-dark'
+              }`}>{bank.name}</span>
             </button>
           ))}
         </div>
       </div>
       <div className="px-6 pb-8 pt-4">
-        <button onClick={() => setStep('form')} disabled={!selBank}
+        <button onClick={() => { setTerm1(false); setTerm2(false); setTerm3(false); setStep('terms') }} disabled={!selBank}
           className={`w-full py-4 font-semibold rounded-xl ${selBank ? 'bg-primary text-white' : 'bg-gray-200 text-text-light'}`}>{t('next')}</button>
       </div>
     </div>
   )
 
-  // === Bank: Account Form ===
-  if (step === 'form') return (
+  // === Bank: Open Banking Consent ===
+  if (step === 'terms') return (
     <div className="flex flex-col h-[calc(100%-44px)] bg-white animate-slide-in">
-      <Header title={t('onboarding_bank_title')} onBack={() => setStep('bank-select')} />
-      <div className="flex-1 px-6 pt-6">
-        <div className="flex items-center gap-2.5 mb-5 bg-gray-50 rounded-xl p-3">
-          <span className="text-xl">{banks.find(b => b.id === selBank)?.icon}</span>
-          <span className="text-sm font-medium text-text-dark">{banks.find(b => b.id === selBank)?.name}</span>
+      <Header title={t('ob_bank_register_title')} onBack={() => setStep('bank-select')} />
+      <div className="flex-1 px-5 pt-5 overflow-y-auto">
+        {/* Title */}
+        <h2 className="text-base font-bold text-text-dark mb-4">{t('ob_openbanking_title')}</h2>
+
+        {/* What is Open Banking */}
+        <div className="mb-5">
+          <p className="text-xs font-semibold text-text-dark mb-1">{t('ob_openbanking_what')}</p>
+          <p className="text-[11px] text-text-gray leading-relaxed">{t('ob_openbanking_desc')}</p>
         </div>
-        <div className="space-y-4">
-          <div>
-            <label className="text-xs font-medium text-text-gray mb-1.5 block">{t('account_number')}</label>
-            <input type="text" value={accountNumber} onChange={e => setAccountNumber(e.target.value.replace(/[^0-9]/g, ''))}
-              placeholder={t('account_number_placeholder')} maxLength={14}
-              className="w-full px-4 py-3.5 bg-gray-50 border border-border rounded-xl text-sm text-text-dark font-mono focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20" />
+
+        {/* Consent Checkboxes */}
+        <div className="space-y-0 border border-border rounded-xl overflow-hidden mb-3">
+          {/* Term 1 - Required */}
+          <button onClick={() => setTerm1(!term1)}
+            className="w-full flex items-center gap-3 px-4 py-3.5 border-b border-border">
+            <div className={`w-5 h-5 rounded flex items-center justify-center flex-shrink-0 transition-colors ${
+              term1 ? 'bg-primary' : 'border-2 border-gray-300'
+            }`}>
+              {term1 && <Check size={12} className="text-white" strokeWidth={3} />}
+            </div>
+            <span className="text-xs text-text-dark flex-1 text-left">{t('ob_openbanking_term1')}</span>
+            <ChevronRight size={16} className="text-text-light flex-shrink-0" />
+          </button>
+
+          {/* Term 2 - Required */}
+          <button onClick={() => setTerm2(!term2)}
+            className="w-full flex items-center gap-3 px-4 py-3.5 border-b border-border">
+            <div className={`w-5 h-5 rounded flex items-center justify-center flex-shrink-0 transition-colors ${
+              term2 ? 'bg-primary' : 'border-2 border-gray-300'
+            }`}>
+              {term2 && <Check size={12} className="text-white" strokeWidth={3} />}
+            </div>
+            <span className="text-xs text-text-dark flex-1 text-left">{t('ob_openbanking_term2')}</span>
+            <ChevronRight size={16} className="text-text-light flex-shrink-0" />
+          </button>
+
+          {/* Term 3 - Optional */}
+          <button onClick={() => setTerm3(!term3)}
+            className="w-full flex items-center gap-3 px-4 py-3.5">
+            <div className={`w-5 h-5 rounded flex items-center justify-center flex-shrink-0 transition-colors ${
+              term3 ? 'bg-primary' : 'border-2 border-gray-300'
+            }`}>
+              {term3 && <Check size={12} className="text-white" strokeWidth={3} />}
+            </div>
+            <span className="text-xs text-text-dark flex-1 text-left">{t('ob_openbanking_term3')}</span>
+            <ChevronRight size={16} className="text-text-light flex-shrink-0" />
+          </button>
+        </div>
+
+        {/* Agree All */}
+        <button onClick={handleAgreeAll}
+          className="flex items-center justify-center gap-2 w-full py-2 mb-5">
+          <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
+            allTerms ? 'bg-primary' : 'border-2 border-gray-300'
+          }`}>
+            {allTerms && <Check size={12} className="text-white" strokeWidth={3} />}
           </div>
-          <div>
-            <label className="text-xs font-medium text-text-gray mb-1.5 block">{t('account_holder')}</label>
-            <input type="text" value={holderName} onChange={e => setHolderName(e.target.value)}
-              placeholder={t('account_holder_placeholder')}
-              className="w-full px-4 py-3.5 bg-gray-50 border border-border rounded-xl text-sm text-text-dark focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20" />
-          </div>
+          <span className="text-xs font-semibold text-primary">{t('ob_openbanking_agree_all')}</span>
+        </button>
+
+        {/* SMS Warning */}
+        <div className="bg-gray-50 rounded-xl p-4 mb-4">
+          <p className="text-xs font-semibold text-text-dark mb-2">{t('ob_openbanking_sms_warning')}</p>
+          <p className="text-[10px] text-text-gray leading-relaxed mb-2">{t('ob_openbanking_sms_desc')}</p>
+          <p className="text-[10px] text-text-gray leading-relaxed">{t('ob_openbanking_sms_desc2')}</p>
         </div>
       </div>
-      <div className="px-6 pb-8 pt-4">
-        <button onClick={() => setStep('terms')} disabled={!accountNumber || !holderName || accountNumber.length < 8}
-          className={`w-full py-4 font-semibold rounded-xl ${accountNumber && holderName && accountNumber.length >= 8 ? 'bg-primary text-white' : 'bg-gray-200 text-text-light'}`}>
-          {t('next')}
-        </button>
+
+      {/* Cancel / Confirm Buttons */}
+      <div className="px-5 pb-8 pt-4 flex gap-3">
+        <button onClick={() => setStep('bank-select')}
+          className="flex-1 py-4 font-semibold rounded-xl border border-border text-text-gray">{t('ob_cancel')}</button>
+        <button onClick={handleTermsConfirm} disabled={!allRequiredTerms}
+          className={`flex-1 py-4 font-semibold rounded-xl ${
+            allRequiredTerms ? 'bg-primary text-white' : 'bg-gray-200 text-text-light'
+          }`}>{t('ob_confirm')}</button>
       </div>
     </div>
   )
 
-  // === Bank: Terms ===
-  if (step === 'terms') return (
+  // === Bank: Account Form (Redesigned) ===
+  if (step === 'form') return (
     <div className="flex flex-col h-[calc(100%-44px)] bg-white animate-slide-in">
-      <Header title={t('settings_account_terms')} onBack={() => setStep('form')} />
-      <div className="flex-1 px-6 pt-6">
-        <h2 className="text-base font-semibold text-text-dark mb-4">{t('settings_account_terms')}</h2>
-        <label className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl cursor-pointer">
-          <button onClick={() => setTermsChecked(!termsChecked)}
-            className={`w-5 h-5 rounded-full flex items-center justify-center transition-colors ${termsChecked ? 'bg-primary' : 'bg-gray-200'}`}>
-            {termsChecked && <Check size={12} className="text-white" strokeWidth={3} />}
-          </button>
-          <span className="text-sm text-text-dark">[{t('terms_required')}] {t('settings_account_terms_check')}</span>
-        </label>
-        <div className="mt-3 bg-gray-50 rounded-xl p-3 max-h-32 overflow-y-auto">
-          <p className="text-[10px] text-text-gray leading-relaxed">{t('terms_service_content')}</p>
+      <Header title={t('ob_bank_register_title')} onBack={() => setStep('terms')} />
+      <div className="flex-1 px-5 pt-5 overflow-y-auto">
+        {/* Heading */}
+        <h2 className="text-base font-bold text-text-dark mb-1 whitespace-pre-line">{t('ob_form_heading')}</h2>
+
+        <div className="mt-6 space-y-5">
+          {/* Bank Name (read-only) */}
+          <div>
+            <label className="text-xs font-medium text-text-gray mb-1.5 block">{t('ob_form_bank_name')}</label>
+            <div className="w-full px-4 py-3.5 bg-gray-50 border border-border rounded-xl text-sm text-text-dark">
+              {banks.find(b => b.id === selBank)?.name}
+            </div>
+          </div>
+
+          {/* Account Number */}
+          <div>
+            <label className="text-xs font-medium text-text-gray mb-1.5 block">{t('ob_form_account_number')}</label>
+            <input type="text" inputMode="numeric" value={accountNumber}
+              onChange={e => setAccountNumber(e.target.value.replace(/[^0-9]/g, ''))}
+              placeholder={t('ob_form_account_placeholder')}
+              maxLength={14}
+              className="w-full px-4 py-3.5 bg-gray-50 border border-border rounded-xl text-sm text-text-dark font-mono focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20" />
+          </div>
+
+          {/* Name (pre-filled) */}
+          <div>
+            <label className="text-xs font-medium text-text-gray mb-1.5 block">{t('ob_form_name')}</label>
+            <input type="text" value={holderName}
+              onChange={e => setHolderName(e.target.value)}
+              placeholder={t('account_holder_placeholder')}
+              className="w-full px-4 py-3.5 bg-gray-50 border border-border rounded-xl text-sm text-text-dark focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20" />
+          </div>
+        </div>
+
+        {/* ARS Info Box */}
+        <div className="mt-6 bg-blue-50 rounded-xl p-4 flex gap-3">
+          <Info size={18} className="text-primary flex-shrink-0 mt-0.5" />
+          <p className="text-[11px] text-primary leading-relaxed">{t('ob_form_ars_info')}</p>
         </div>
       </div>
+
       <div className="px-6 pb-8 pt-4">
-        <button onClick={() => setStep('ars')} disabled={!termsChecked}
-          className={`w-full py-4 font-semibold rounded-xl ${termsChecked ? 'bg-primary text-white' : 'bg-gray-200 text-text-light'}`}>{t('next')}</button>
+        <button onClick={() => setStep('ars')} disabled={!accountNumber || !holderName || accountNumber.length < 8}
+          className={`w-full py-4 font-semibold rounded-xl ${
+            accountNumber && holderName && accountNumber.length >= 8 ? 'bg-primary text-white' : 'bg-gray-200 text-text-light'
+          }`}>{t('next')}</button>
       </div>
     </div>
   )
@@ -188,7 +339,7 @@ export default function OnboardingBank() {
   // === Bank: ARS ===
   if (step === 'ars') return (
     <div className="flex flex-col h-[calc(100%-44px)] bg-white animate-slide-in">
-      <Header title={t('settings_account_ars')} onBack={() => setStep('terms')} />
+      <Header title={t('settings_account_ars')} onBack={() => setStep('form')} />
       <div className="flex-1 flex flex-col items-center justify-center px-8">
         <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-6"><Phone size={36} className="text-primary" /></div>
         <p className="text-base font-semibold text-text-dark text-center mb-2">{t('settings_account_ars')}</p>
@@ -222,7 +373,10 @@ export default function OnboardingBank() {
         <p className="text-sm text-text-gray mt-1">{t('settings_account_done_msg')}</p>
         <div className="mt-4 bg-gray-50 rounded-xl p-4 w-full">
           <div className="flex items-center gap-3">
-            <span className="text-xl">{banks.find(b => b.id === selBank)?.icon}</span>
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center"
+              style={{ backgroundColor: banks.find(b => b.id === selBank)?.bg }}>
+              <BankLogo id={selBank} size={28} />
+            </div>
             <div>
               <p className="text-sm font-semibold text-text-dark">{banks.find(b => b.id === selBank)?.name}</p>
               <p className="text-xs text-text-gray">{accountNumber.replace(/(\d{3})(\d{3,4})(\d+)/, '$1-$2-$3')} · {holderName}</p>

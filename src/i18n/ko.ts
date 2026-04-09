@@ -849,6 +849,28 @@ const ko = {
   tx_fee: '수수료',
   tx_exchange: '환전',
   bipple_money: '비플머니',
+
+  // Open Banking Registration
+  ob_bank_register_title: '계좌 등록',
+  ob_bank_select_heading: '본인 명의의 계좌를 선택하세요.',
+  ob_openbanking_title: '오픈뱅킹 계좌 등록 시 아래 관련 동의가 필요합니다.',
+  ob_openbanking_what: '오픈뱅킹이란?',
+  ob_openbanking_desc: '은행 및 증권사간 2개 이상 금융 계좌를 하나의 프로그램으로 관리할 수 있도록 하는 표준화된 금융 시스템입니다.',
+  ob_openbanking_term1: '(필수) 오픈뱅킹 참여은행 자동이체 이용약관',
+  ob_openbanking_term2: '(필수) 개인정보 제3자 정보제공 동의',
+  ob_openbanking_term3: '(선택) 개인정보 수집·이용 및 제공 동의',
+  ob_openbanking_agree_all: '전체 동의하기',
+  ob_openbanking_sms_warning: '은행으로부터 문자 메시지를 받더라도 놀라지 마세요!',
+  ob_openbanking_sms_desc: '오픈뱅킹 시스템에 계좌가 등록되는 안내이며, 인증번호와 안내문은 금전적 변경 등 직접적인 영향이 있는 것이 아니니 참고하세요.',
+  ob_openbanking_sms_desc2: '이미 등록되어 있으시다면 건너뛸 수 있으며 계좌만 입력해 주시면 됩니다. 이후 등록되어 있지 않을 경우 오픈뱅킹이 사용됩니다.',
+  ob_cancel: '취소',
+  ob_confirm: '확인',
+  ob_form_heading: '계좌번호를 입력해 주세요.\n계좌 인증 후 ARS 인증을 진행합니다.',
+  ob_form_bank_name: '은행명',
+  ob_form_account_number: '계좌번호',
+  ob_form_account_placeholder: '숫자만 입력',
+  ob_form_name: '이름',
+  ob_form_ars_info: '안전한 계좌 등록을 위해 ARS 전화를 받고 남은번호 6자리를 입력해주세요.',
 } as const
 
 export default ko

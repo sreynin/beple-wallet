@@ -851,6 +851,28 @@ const es: Record<TranslationKeys, string> = {
   tx_fee: 'Fee',
   tx_exchange: 'Exchange',
   bipple_money: 'Bipple Money',
+
+  // Open Banking Registration
+  ob_bank_register_title: 'Registro de cuenta',
+  ob_bank_select_heading: 'Seleccione su propia cuenta bancaria.',
+  ob_openbanking_title: 'Se requieren los siguientes consentimientos para el registro de cuenta de banca abierta.',
+  ob_openbanking_what: '¿Qué es la Banca Abierta?',
+  ob_openbanking_desc: 'Un sistema financiero estandarizado que le permite administrar dos o más cuentas financieras en bancos y firmas de valores en un solo programa.',
+  ob_openbanking_term1: '(Obligatorio) Términos de transferencia automática de banca abierta',
+  ob_openbanking_term2: '(Obligatorio) Consentimiento de compartir información personal con terceros',
+  ob_openbanking_term3: '(Opcional) Consentimiento de recopilación y uso de información personal',
+  ob_openbanking_agree_all: 'Aceptar todo',
+  ob_openbanking_sms_warning: '¡No se alarme por los SMS de su banco!',
+  ob_openbanking_sms_desc: 'Esta es una notificación de que su cuenta se está registrando en el sistema de banca abierta. Los códigos de verificación y avisos no afectan directamente sus finanzas.',
+  ob_openbanking_sms_desc2: 'Si ya está registrado, puede omitir e ingresar solo su número de cuenta. Si no está registrado, se utilizará la banca abierta.',
+  ob_cancel: 'Cancelar',
+  ob_confirm: 'Confirmar',
+  ob_form_heading: 'Ingrese su número de cuenta.\nLa verificación ARS se realizará después de la verificación de cuenta.',
+  ob_form_bank_name: 'Nombre del banco',
+  ob_form_account_number: 'Número de cuenta',
+  ob_form_account_placeholder: 'Solo números',
+  ob_form_name: 'Nombre',
+  ob_form_ars_info: 'Para un registro seguro, reciba la llamada ARS e ingrese los 6 dígitos restantes.',
 }
 
 export default es

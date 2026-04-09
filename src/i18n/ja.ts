@@ -851,6 +851,28 @@ const ja: Record<TranslationKeys, string> = {
   tx_fee: 'Fee',
   tx_exchange: 'Exchange',
   bipple_money: 'Bipple Money',
+
+  // Open Banking Registration
+  ob_bank_register_title: '口座登録',
+  ob_bank_select_heading: 'ご本人名義の口座を選択してください。',
+  ob_openbanking_title: 'オープンバンキング口座登録には以下の同意が必要です。',
+  ob_openbanking_what: 'オープンバンキングとは？',
+  ob_openbanking_desc: '銀行や証券会社間の2つ以上の金融口座を一つのプログラムで管理できる標準化された金融システムです。',
+  ob_openbanking_term1: '（必須）オープンバンキング参加銀行自動振替利用規約',
+  ob_openbanking_term2: '（必須）個人情報第三者提供同意',
+  ob_openbanking_term3: '（任意）個人情報収集・利用および提供同意',
+  ob_openbanking_agree_all: 'すべてに同意する',
+  ob_openbanking_sms_warning: '銀行からのSMSが届いても驚かないでください！',
+  ob_openbanking_sms_desc: 'オープンバンキングシステムへの口座登録のお知らせです。認証番号や案内は金銭的な変更に直接影響するものではありません。',
+  ob_openbanking_sms_desc2: 'すでに登録されている場合はスキップして口座番号のみ入力してください。未登録の場合はオープンバンキングが使用されます。',
+  ob_cancel: 'キャンセル',
+  ob_confirm: '確認',
+  ob_form_heading: '口座番号を入力してください。\n口座認証後、ARS認証を行います。',
+  ob_form_bank_name: '銀行名',
+  ob_form_account_number: '口座番号',
+  ob_form_account_placeholder: '数字のみ入力',
+  ob_form_name: '名前',
+  ob_form_ars_info: '安全な口座登録のため、ARS電話を受けて残りの6桁を入力してください。',
 }
 
 export default ja

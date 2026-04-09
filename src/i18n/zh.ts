@@ -851,6 +851,28 @@ const zh: Record<TranslationKeys, string> = {
   tx_fee: '手续费',
   tx_exchange: '兑换',
   bipple_money: 'Bipple Money',
+
+  // Open Banking Registration
+  ob_bank_register_title: '账户注册',
+  ob_bank_select_heading: '请选择您本人名下的账户。',
+  ob_openbanking_title: '开放银行账户注册需要以下同意。',
+  ob_openbanking_what: '什么是开放银行？',
+  ob_openbanking_desc: '一种标准化金融系统，允许您在一个程序中管理银行和证券公司的两个或多个金融账户。',
+  ob_openbanking_term1: '（必选）开放银行参与银行自动转账使用条款',
+  ob_openbanking_term2: '（必选）个人信息第三方提供同意',
+  ob_openbanking_term3: '（可选）个人信息收集、使用及提供同意',
+  ob_openbanking_agree_all: '全部同意',
+  ob_openbanking_sms_warning: '收到银行短信请不要惊慌！',
+  ob_openbanking_sms_desc: '这是账户在开放银行系统中注册的通知。验证码和通知不会直接影响您的财务。',
+  ob_openbanking_sms_desc2: '如果已注册，可以跳过并直接输入账号。如果未注册，将使用开放银行。',
+  ob_cancel: '取消',
+  ob_confirm: '确认',
+  ob_form_heading: '请输入账号。\n账户验证后将进行ARS验证。',
+  ob_form_bank_name: '银行名称',
+  ob_form_account_number: '账号',
+  ob_form_account_placeholder: '仅输入数字',
+  ob_form_name: '姓名',
+  ob_form_ars_info: '为了安全注册账户，请接听ARS电话并输入剩余的6位数字。',
 }
 
 export default zh

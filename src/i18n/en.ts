@@ -851,6 +851,28 @@ const en: Record<TranslationKeys, string> = {
   tx_fee: 'Fee',
   tx_exchange: 'Exchange',
   bipple_money: 'Bipple Money',
+
+  // Open Banking Registration
+  ob_bank_register_title: 'Account Registration',
+  ob_bank_select_heading: 'Select your own bank account.',
+  ob_openbanking_title: 'The following consents are required for open banking account registration.',
+  ob_openbanking_what: 'What is Open Banking?',
+  ob_openbanking_desc: 'A standardized financial system that allows you to manage two or more financial accounts across banks and securities firms in one program.',
+  ob_openbanking_term1: '(Required) Open banking auto-transfer terms',
+  ob_openbanking_term2: '(Required) Personal information third-party sharing consent',
+  ob_openbanking_term3: '(Optional) Personal information collection and usage consent',
+  ob_openbanking_agree_all: 'Agree to all',
+  ob_openbanking_sms_warning: "Don't be alarmed by SMS from your bank!",
+  ob_openbanking_sms_desc: 'This is a notification that your account is being registered in the open banking system. Verification codes and notices do not directly affect your finances.',
+  ob_openbanking_sms_desc2: 'If already registered, you can skip and just enter your account number. If not registered, open banking will be used.',
+  ob_cancel: 'Cancel',
+  ob_confirm: 'Confirm',
+  ob_form_heading: 'Please enter your account number.\nARS verification will proceed after account verification.',
+  ob_form_bank_name: 'Bank Name',
+  ob_form_account_number: 'Account Number',
+  ob_form_account_placeholder: 'Numbers only',
+  ob_form_name: 'Name',
+  ob_form_ars_info: 'For safe account registration, please receive the ARS call and enter the remaining 6 digits.',
 }
 
 export default en
