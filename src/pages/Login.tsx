@@ -157,14 +157,14 @@ export default function Login() {
   }
 
   // Checkbox component
-  const Checkbox = ({ checked, onToggle, size = 20 }: { checked: boolean; onToggle: () => void; size?: number }) => (
-    <button onClick={onToggle} className="flex-shrink-0">
+  const Checkbox = ({ checked, size = 20 }: { checked: boolean; onToggle: () => void; size?: number }) => (
+    <div className="flex-shrink-0">
       <div className={`w-${size === 24 ? 6 : 5} h-${size === 24 ? 6 : 5} rounded-full flex items-center justify-center transition-colors ${
         checked ? 'bg-primary' : 'bg-gray-200'
       }`} style={{ width: size, height: size }}>
         <Check size={size * 0.6} className="text-white" strokeWidth={3} />
       </div>
-    </button>
+    </div>
   )
 
   return (
@@ -305,12 +305,13 @@ export default function Login() {
                 >
                   <Checkbox checked={allGroup1Agreed} onToggle={() => toggleGroup(GROUP1_ITEMS)} />
                   <span className="flex-1 text-sm font-semibold text-text-dark text-left">{t('reg_terms_group1')}</span>
-                  <button
+                  <span
+                    role="button"
                     onClick={e => { e.stopPropagation(); handleExpandGroup('group1') }}
                     className="p-1"
                   >
                     {expandedGroup === 'group1' ? <ChevronUp size={16} className="text-text-gray" /> : <ChevronDown size={16} className="text-text-gray" />}
-                  </button>
+                  </span>
                 </button>
 
                 {expandedGroup === 'group1' && (
@@ -334,12 +335,13 @@ export default function Login() {
                 >
                   <Checkbox checked={allGroup2Agreed} onToggle={() => toggleGroup(GROUP2_ITEMS)} />
                   <span className="flex-1 text-sm font-semibold text-text-dark text-left">{t('reg_terms_group2')}</span>
-                  <button
+                  <span
+                    role="button"
                     onClick={e => { e.stopPropagation(); handleExpandGroup('group2') }}
                     className="p-1"
                   >
                     {expandedGroup === 'group2' ? <ChevronUp size={16} className="text-text-gray" /> : <ChevronDown size={16} className="text-text-gray" />}
-                  </button>
+                  </span>
                 </button>
 
                 {expandedGroup === 'group2' && (

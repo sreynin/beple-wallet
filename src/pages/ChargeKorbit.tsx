@@ -30,7 +30,7 @@ export default function ChargeKorbit() {
   const estimatedKrw = Math.floor(numQty * asset.rate)
 
   const handleStartAuth = () => {
-    setStep('guide')
+    navigate('/coins', { state: { from: fromOnboarding ? 'onboarding' : 'korbit-charge' } })
   }
 
   const handleOpenKorbitApp = () => {
@@ -42,22 +42,27 @@ export default function ChargeKorbit() {
   if (step === 'connect') return (
     <div className="flex flex-col h-[calc(100%-44px)] bg-white animate-slide-in">
       <Header title={t('korbit_connect_title')} />
-      <div className="flex-1 flex flex-col items-center justify-center px-6">
-        <div className="w-20 h-20 rounded-2xl bg-[#0052FF] flex items-center justify-center mb-6 shadow-lg shadow-[#0052FF]/20">
-          <svg viewBox="0 0 24 24" width="36" height="36" fill="none">
-            <path d="M6 6h4.5v12H6V6z" fill="white"/><path d="M12 6l6 6-6 6V6z" fill="white"/>
-          </svg>
+      <div className="flex-1 px-6 pt-8 overflow-y-auto">
+        {/* Korbit Logo */}
+        <div className="flex justify-center mb-6">
+          <div className="w-16 h-16 rounded-2xl bg-[#2563EB] flex items-center justify-center shadow-lg shadow-[#2563EB]/20">
+            <span className="text-white text-2xl font-bold">K</span>
+          </div>
         </div>
+
+        {/* Title */}
         <h2 className="text-center text-lg font-bold text-text-dark mb-2">{t('korbit_connect_heading')}</h2>
-        <p className="text-center text-sm text-text-gray mb-6 whitespace-pre-line">{t('korbit_connect_desc')}</p>
-        <div className="w-full bg-gray-50 rounded-xl p-4 space-y-2 text-xs text-text-gray">
+        <p className="text-center text-sm text-text-gray whitespace-pre-line mb-8">{t('korbit_connect_desc')}</p>
+
+        {/* Notes */}
+        <div className="w-full bg-gray-50 rounded-xl p-5 space-y-3 text-sm text-text-gray">
           <p>• {t('korbit_connect_note1')}</p>
           <p>• {t('korbit_connect_note2')}</p>
           <p>• {t('korbit_connect_note3')}</p>
         </div>
       </div>
       <div className="px-6 pb-8 pt-4">
-        <button onClick={handleStartAuth} className="w-full py-4 bg-[#0052FF] text-white font-semibold rounded-xl flex items-center justify-center gap-2 active:bg-[#0040CC]">
+        <button onClick={handleStartAuth} className="w-full py-4 bg-[#2563EB] text-white font-semibold rounded-xl flex items-center justify-center gap-2 active:bg-[#1d4fc7]">
           <ExternalLink size={18} />{t('korbit_connect_btn')}
         </button>
       </div>

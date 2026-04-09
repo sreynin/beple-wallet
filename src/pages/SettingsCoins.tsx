@@ -7,7 +7,7 @@ import { toast } from '../components/Toast'
 import { Plus, ChevronRight, Check, Loader2, CheckCircle, XCircle, Copy, AlertCircle, Lock } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
 
-type Step = 'list' | 'coin' | 'wc-terms' | 'wc-code' | 'wc-confirm' | 'verifying' | 'success' | 'fail'
+type Step = 'list' | 'coin' | 'wc-code' | 'wc-confirm' | 'verifying' | 'success' | 'fail'
 
 const allCoins = [
   { symbol: 'PCI', ko: '페이코인', en: 'PayCoin', icon: '▶', color: 'bg-blue-500', paySupport: true, available: true },
@@ -23,7 +23,7 @@ const coinRates: Record<string, number> = {
   PCI: 350, BTC: 82500000, ETH: 2400000, XRP: 850, USDT: 1350, SOL: 180000, POL: 700,
 }
 
-function generateCode() { return String(Math.floor(10000000 + Math.random() * 90000000)) }
+function generateCode() { return '11398298' }
 function fakeWallet() { return 'PCI0298C33376771B335DCC30C8D8CA946FA344CFCBDFC849938F' }
 
 export default function SettingsCoins() {
@@ -46,7 +46,6 @@ export default function SettingsCoins() {
   const [termsOpen, setTermsOpen] = useState(false)
   const [termsPrivacy, setTermsPrivacy] = useState(false)
   const [termsThird, setTermsThird] = useState(false)
-  const [privacyAgreed, setPrivacyAgreed] = useState(false)
   const [verifyCode, setVerifyCode] = useState('')
   const [timeLeft, setTimeLeft] = useState(180)
   const [infoConfirmed, setInfoConfirmed] = useState(false)
@@ -59,7 +58,15 @@ export default function SettingsCoins() {
 
   const toggleCoin = (sym: string) => {
     const next = new Set(selected)
-    if (next.has(sym)) next.delete(sym); else next.add(sym)
+    if (next.has(sym)) {
+      next.delete(sym)
+    } else {
+      next.add(sym)
+      // Auto-show terms sheet when a coin is selected
+      setTermsPrivacy(false)
+      setTermsThird(false)
+      setTermsOpen(true)
+    }
     setSelected(next)
   }
   const toggleAll = () => {
@@ -72,20 +79,21 @@ export default function SettingsCoins() {
 
   const startRegister = () => {
     setSelected(new Set()); setTermsPrivacy(false); setTermsThird(false)
-    setPrivacyAgreed(false); setInfoConfirmed(false)
+    setInfoConfirmed(false)
     setStep('coin')
   }
 
   // Timer for wc-code
   useEffect(() => {
     if (step !== 'wc-code') return
-    const timer = setInterval(() => {
+    setTimeLeft(180)
+    const id = setInterval(() => {
       setTimeLeft(prev => {
-        if (prev <= 1) { setVerifyCode(generateCode()); return 180 }
+        if (prev <= 1) { return 180 }
         return prev - 1
       })
     }, 1000)
-    return () => clearInterval(timer)
+    return () => clearInterval(id)
   }, [step])
 
   const handleVerifyComplete = () => {
@@ -117,7 +125,7 @@ export default function SettingsCoins() {
   // ① Coin Select (multi-select, 전체 선택, payment badges)
   if (step === 'coin') return (
     <div className="flex flex-col h-[calc(100%-44px)] bg-white animate-slide-in">
-      <Header title={t('wc_asset_title')} onBack={() => setStep('list')} />
+      <Header title={t('wc_asset_title')} onBack={() => skipToRegister ? navigate(-1) : setStep('list')} />
       <div className="flex-1 px-5 pt-5 overflow-y-auto">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -185,7 +193,12 @@ export default function SettingsCoins() {
               <ChevronRight size={16} className="text-text-light" />
             </button>
           </div>
-          <button onClick={() => { setTermsOpen(false); setStep('wc-terms') }} disabled={!termsPrivacy || !termsThird}
+          <button onClick={() => {
+            setTermsOpen(false)
+            setVerifyCode(generateCode())
+            setTimeLeft(180)
+            setStep('wc-code')
+          }} disabled={!termsPrivacy || !termsThird}
             className={`w-full py-4 font-semibold rounded-xl ${termsPrivacy && termsThird ? 'bg-primary text-white' : 'bg-gray-200 text-text-light'}`}>
             {t('wc_terms_agree')}
           </button>
@@ -194,63 +207,10 @@ export default function SettingsCoins() {
     </div>
   )
 
-  // ③ Wallet Connect Terms + Privacy
-  if (step === 'wc-terms') return (
-    <div className="flex flex-col h-[calc(100%-44px)] bg-white animate-slide-in">
-      <Header title="Wallet Connect" onBack={() => setStep('coin')} />
-      <div className="flex-1 px-6 pt-6 overflow-y-auto">
-        <h2 className="text-lg font-bold text-text-dark leading-snug whitespace-pre-line">{t('wc_heading')}</h2>
-        <p className="text-xs text-text-gray mt-2">{t('wc_safe_notice')}</p>
-        <div className="flex items-center gap-2 mt-3 mb-6">
-          <Lock size={14} className="text-green-600" />
-          <span className="text-xs text-green-600 font-medium">https://korbit.co.kr</span>
-        </div>
-        <p className="text-sm text-text-dark leading-relaxed mb-6">{t('wc_instruction')}</p>
-
-        {/* Code illustration */}
-        <div className="bg-gray-50 border border-border rounded-xl p-5 mb-6">
-          <p className="text-xs font-medium text-text-gray text-center mb-1">{t('wc_code_label')}</p>
-          <p className="text-[10px] text-text-light text-center mb-4 whitespace-pre-line">{t('wc_code_input_desc')}</p>
-          <div className="flex justify-center gap-2">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className={`w-7 h-9 rounded border-2 border-primary/30 bg-white ${i === 3 ? 'mr-2' : ''}`} />
-            ))}
-          </div>
-        </div>
-
-        {/* Notice */}
-        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-5">
-          <div className="flex items-center gap-1.5 mb-2">
-            <AlertCircle size={14} className="text-yellow-600" />
-            <span className="text-xs font-semibold text-yellow-700">{t('wc_notice_title')}</span>
-          </div>
-          <ul className="space-y-1.5 text-[11px] text-yellow-700 leading-relaxed">
-            <li>• {t('wc_notice_1')}</li>
-            <li>• {t('wc_notice_2')}</li>
-            <li>• {t('wc_notice_3')}</li>
-          </ul>
-        </div>
-
-        <button onClick={() => setPrivacyAgreed(!privacyAgreed)} className="flex items-center gap-3 mb-4">
-          <div className={`w-5 h-5 rounded-full flex items-center justify-center transition-colors ${privacyAgreed ? 'bg-primary' : 'bg-gray-200'}`}>
-            {privacyAgreed && <Check size={12} className="text-white" strokeWidth={3} />}
-          </div>
-          <span className="text-sm text-text-dark">{t('wc_privacy_agree')}</span>
-        </button>
-      </div>
-      <div className="px-6 pb-8 pt-4">
-        <button onClick={() => { setVerifyCode(generateCode()); setTimeLeft(180); setStep('wc-code') }} disabled={!privacyAgreed}
-          className={`w-full py-4 font-semibold rounded-xl ${privacyAgreed ? 'bg-primary text-white' : 'bg-gray-200 text-text-light'}`}>
-          {t('confirm')}
-        </button>
-      </div>
-    </div>
-  )
-
   // ④ Verification Code
   if (step === 'wc-code') return (
     <div className="flex flex-col h-[calc(100%-44px)] bg-white animate-slide-in">
-      <Header title="Wallet Connect" onBack={() => setStep('wc-terms')} />
+      <Header title="Wallet Connect" onBack={() => setStep('coin')} />
       <div className="flex-1 px-6 pt-6 overflow-y-auto">
         <h2 className="text-lg font-bold text-text-dark leading-snug whitespace-pre-line">{t('wc_code_heading')}</h2>
         <p className="text-xs text-text-gray mt-2">{t('wc_safe_notice')}</p>
@@ -292,8 +252,12 @@ export default function SettingsCoins() {
         </div>
       </div>
       <div className="px-6 pb-8 pt-4">
-        <button onClick={() => { setInfoConfirmed(false); setStep('wc-confirm') }}
-          className="w-full py-4 bg-primary text-white font-semibold rounded-xl">{t('wc_complete')}</button>
+        <button onClick={() => {
+          setInfoConfirmed(false)
+          setStep('wc-confirm')
+          window.scrollTo(0, 0)
+        }}
+          className="w-full py-4 bg-[#2563EB] text-white font-semibold rounded-xl border-2 border-[#2563EB] active:bg-[#1d4fc7]">{t('wc_complete')}</button>
       </div>
     </div>
   )
@@ -303,20 +267,26 @@ export default function SettingsCoins() {
     <div className="flex flex-col h-[calc(100%-44px)] bg-white animate-slide-in">
       <Header title="Wallet Connect" onBack={() => setStep('wc-code')} />
       <div className="flex-1 px-6 pt-6 overflow-y-auto">
-        <h2 className="text-lg font-bold text-text-dark mb-1">{t('wc_confirm_heading')}</h2>
+        <h2 className="text-lg font-bold text-text-dark leading-snug mb-1">{t('wc_confirm_heading')}</h2>
         <p className="text-xs text-text-gray mb-6">{t('wc_confirm_desc')}</p>
 
         {/* User info */}
         <div className="bg-gray-50 rounded-xl p-4 mb-4">
           <p className="text-xs font-semibold text-text-gray mb-3">{t('wc_confirm_user_info')}</p>
-          <div className="space-y-2 text-sm">
-            <div className="flex justify-between">
+          <div className="space-y-2.5 text-sm">
+            <div className="flex justify-between items-center">
               <span className="text-text-gray">{t('wc_confirm_name_ko')}</span>
-              <span className="text-text-dark font-medium flex items-center gap-1">{profile.name} <Check size={14} className="text-green-500" /></span>
+              <span className="text-text-dark font-medium flex items-center gap-1.5">
+                {profile.name || 'JOHN SMITH'}
+                <Check size={14} className="text-primary" />
+              </span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <span className="text-text-gray">{t('wc_confirm_name_en')}</span>
-              <span className="text-text-dark font-medium flex items-center gap-1">{profile.name.toUpperCase()} <Check size={14} className="text-green-500" /></span>
+              <span className="text-text-dark font-medium flex items-center gap-1.5">
+                {(profile.name || 'JOHN SMITH').toUpperCase()}
+                <Check size={14} className="text-primary" />
+              </span>
             </div>
           </div>
         </div>
@@ -328,13 +298,13 @@ export default function SettingsCoins() {
             const c = allCoins.find(x => x.symbol === sym)
             return c ? (
               <div key={sym} className="mb-3 last:mb-0">
-                <div className="flex items-center gap-2 mb-1.5">
-                  <div className={`w-6 h-6 rounded-full ${c.color} text-white font-bold text-[10px] flex items-center justify-center`}>{c.icon}</div>
-                  <span className="text-sm font-medium text-text-dark">{c.symbol} ({coinName(c)})</span>
+                <div className="flex items-center gap-2 mb-2">
+                  <div className={`w-7 h-7 rounded-full ${c.color} text-white font-bold text-[11px] flex items-center justify-center`}>{c.icon}</div>
+                  <span className="text-sm font-semibold text-text-dark">{c.symbol} ({coinName(c)})</span>
                 </div>
-                <div className="pl-8 space-y-1 text-xs">
-                  <div><span className="text-text-gray">{t('wc_confirm_address')}</span></div>
-                  <p className="text-[10px] text-text-dark font-mono break-all">{fakeWallet()}</p>
+                <div className="border-2 border-border rounded-lg p-3 bg-white">
+                  <p className="text-[10px] text-text-gray mb-1">{t('wc_confirm_address')}</p>
+                  <p className="text-[10px] text-text-dark font-mono break-all leading-relaxed">{fakeWallet()}</p>
                 </div>
               </div>
             ) : null
@@ -344,13 +314,13 @@ export default function SettingsCoins() {
         {/* Korbit exchange wallet info */}
         <div className="bg-gray-50 rounded-xl p-4 mb-4">
           <p className="text-xs font-semibold text-text-gray mb-3">{t('wc_confirm_korbit_info')}</p>
-          <div className="flex items-center gap-2 mb-1.5">
-            <div className="w-6 h-6 rounded-full bg-blue-500 text-white font-bold text-[10px] flex items-center justify-center">K</div>
-            <span className="text-sm font-medium text-text-dark">Korbit</span>
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-7 h-7 rounded-full bg-blue-500 text-white font-bold text-[11px] flex items-center justify-center">K</div>
+            <span className="text-sm font-semibold text-text-dark">Korbit</span>
           </div>
-          <div className="pl-8 space-y-1 text-xs">
-            <div><span className="text-text-gray">{t('wc_confirm_address')}</span></div>
-            <p className="text-[10px] text-text-dark font-mono break-all">{fakeWallet()}</p>
+          <div className="border-2 border-border rounded-lg p-3 bg-white">
+            <p className="text-[10px] text-text-gray mb-1">{t('wc_confirm_address')}</p>
+            <p className="text-[10px] text-text-dark font-mono break-all leading-relaxed">{fakeWallet()}</p>
           </div>
         </div>
 
@@ -383,14 +353,19 @@ export default function SettingsCoins() {
   if (step === 'success') return (
     <div className="flex flex-col h-[calc(100%-44px)] bg-white animate-fade-in">
       <div className="flex-1 flex flex-col items-center justify-center px-8">
-        <div className="animate-bounce-in"><CheckCircle size={64} className="text-green-500" /></div>
-        <p className="text-lg font-bold text-text-dark mt-4">{t('coin_register_success')}</p>
-        <div className="mt-4 bg-gray-50 rounded-xl p-4 w-full space-y-2">
+        {/* Green checkmark with circle outline */}
+        <div className="animate-bounce-in mb-6">
+          <div className="w-20 h-20 rounded-full border-4 border-green-500 flex items-center justify-center">
+            <Check size={40} className="text-green-500" strokeWidth={3} />
+          </div>
+        </div>
+        <p className="text-lg font-bold text-text-dark mb-6">{t('coin_register_success')}</p>
+        <div className="bg-gray-50 rounded-xl p-4 w-full space-y-3">
           {[...selected].map(sym => {
             const c = allCoins.find(x => x.symbol === sym)
             return c ? (
               <div key={sym} className="flex items-center gap-3">
-                <div className={`w-8 h-8 rounded-full ${c.color} text-white font-bold text-xs flex items-center justify-center`}>{c.icon}</div>
+                <div className={`w-9 h-9 rounded-full ${c.color} text-white font-bold text-xs flex items-center justify-center`}>{c.icon}</div>
                 <p className="font-medium text-sm text-text-dark">{coinName(c)} ({c.symbol})</p>
               </div>
             ) : null
@@ -400,9 +375,9 @@ export default function SettingsCoins() {
       <div className="px-6 pb-8">
         <button onClick={() => {
           if (fromOnboarding) navigate('/terms', { replace: true })
-          else if (fromKorbitCharge) navigate('/charge-korbit', { replace: true })
-          else setStep('list')
-        }} className="w-full py-4 bg-primary text-white font-semibold rounded-xl">{t('confirm')}</button>
+          else if (fromKorbitCharge) navigate('/home', { replace: true })
+          else navigate('/home', { replace: true })
+        }} className="w-full py-4 bg-[#2563EB] text-white font-semibold rounded-xl">{t('confirm')}</button>
       </div>
     </div>
   )
@@ -425,18 +400,30 @@ export default function SettingsCoins() {
 
   // Main List
   return (
-    <div className="flex flex-col h-[calc(100%-44px)] bg-bg-gray animate-slide-in">
+    <div className="flex flex-col h-[calc(100%-44px)] bg-white animate-slide-in">
       <Header title={t('settings_coins_title')} />
-      <div className="flex-1 overflow-y-auto p-4">
+      <div className="flex-1 overflow-y-auto px-4 pt-4">
         {coins.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-64">
-            <p className="text-4xl mb-3">🪙</p>
-            <p className="text-sm text-text-gray">{t('settings_coins_empty')}</p>
-            <p className="text-xs text-text-light mt-1 mb-4">{t('settings_coins_empty_desc')}</p>
-            <button onClick={startRegister} className="px-6 py-2.5 bg-primary text-white text-sm rounded-xl font-medium">{t('settings_coins_add')}</button>
+          <div className="border border-border rounded-2xl p-6 flex flex-col items-center">
+            {/* Gold coin icon */}
+            <div className="w-14 h-14 rounded-full bg-amber-100 flex items-center justify-center mb-4">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none">
+                <circle cx="12" cy="12" r="10" fill="#F59E0B" />
+                <circle cx="12" cy="12" r="7.5" fill="none" stroke="#D97706" strokeWidth="0.8" />
+                <rect x="9" y="7" width="6" height="10" rx="1" fill="none" stroke="#D97706" strokeWidth="1.2" />
+                <line x1="9" y1="9.5" x2="15" y2="9.5" stroke="#D97706" strokeWidth="0.8" />
+                <line x1="9" y1="12" x2="15" y2="12" stroke="#D97706" strokeWidth="0.8" />
+                <line x1="9" y1="14.5" x2="15" y2="14.5" stroke="#D97706" strokeWidth="0.8" />
+              </svg>
+            </div>
+            <p className="text-sm font-medium text-text-dark mb-1">{t('settings_coins_empty')}</p>
+            <p className="text-xs text-text-gray mb-5">{t('settings_coins_empty_desc')}</p>
+            <button onClick={startRegister} className="px-8 py-2.5 bg-primary text-white text-sm rounded-full font-semibold">
+              {t('settings_coins_add')}
+            </button>
           </div>
         ) : (
-          <div className="bg-white rounded-2xl overflow-hidden">
+          <div className="border border-border rounded-2xl overflow-hidden">
             {coins.map((coin, i) => (
               <div key={coin.id} className={`${i < coins.length - 1 ? 'border-b border-border' : ''}`}>
                 <div className="flex items-center px-4 py-4">
@@ -471,7 +458,7 @@ export default function SettingsCoins() {
           </div>
         )}
 
-        <button onClick={startRegister} className="w-full mt-3 flex items-center justify-center gap-2 bg-white rounded-2xl p-4 active:bg-gray-50">
+        <button onClick={startRegister} className="w-full mt-4 flex items-center justify-center gap-2 border border-border rounded-2xl p-4 active:bg-gray-50">
           <Plus size={18} className="text-primary" /><span className="text-sm font-medium text-primary">{t('settings_coins_add')}</span>
         </button>
       </div>

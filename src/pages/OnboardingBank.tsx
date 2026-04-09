@@ -51,7 +51,7 @@ export default function OnboardingBank() {
   const handleKorbitConnect = () => {
     // Navigate to Korbit OAuth flow (first-time authentication)
     // After completion, ChargeKorbit's 'connected' step will redirect back
-    navigate('/charge-korbit', { state: { fromOnboarding: true } })
+    navigate('/charge-korbit-onboarding', { state: { fromOnboarding: true } })
   }
 
   // === Type Select (Bank Account or Korbit) ===
@@ -96,7 +96,7 @@ export default function OnboardingBank() {
         </div>
       </div>
       <div className="px-6 pb-8 pt-4">
-        <button onClick={() => setStep(accountType === 'korbit' ? 'korbit-connect' : 'bank-select')} disabled={!accountType}
+        <button onClick={() => accountType === 'korbit' ? navigate('/charge-korbit-onboarding', { state: { fromOnboarding: true } }) : setStep('bank-select')} disabled={!accountType}
           className={`w-full py-4 font-semibold rounded-xl ${accountType ? 'bg-primary text-white' : 'bg-gray-200 text-text-light'}`}>{t('next')}</button>
       </div>
     </div>
@@ -167,13 +167,12 @@ export default function OnboardingBank() {
       <Header title={t('settings_account_terms')} onBack={() => setStep('form')} />
       <div className="flex-1 px-6 pt-6">
         <h2 className="text-base font-semibold text-text-dark mb-4">{t('settings_account_terms')}</h2>
-        <label className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl cursor-pointer">
-          <button onClick={() => setTermsChecked(!termsChecked)}
-            className={`w-5 h-5 rounded-full flex items-center justify-center transition-colors ${termsChecked ? 'bg-primary' : 'bg-gray-200'}`}>
+        <div onClick={() => setTermsChecked(!termsChecked)} className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl cursor-pointer">
+          <div className={`w-5 h-5 rounded-full flex items-center justify-center transition-colors ${termsChecked ? 'bg-primary' : 'bg-gray-200'}`}>
             {termsChecked && <Check size={12} className="text-white" strokeWidth={3} />}
-          </button>
+          </div>
           <span className="text-sm text-text-dark">[{t('terms_required')}] {t('settings_account_terms_check')}</span>
-        </label>
+        </div>
         <div className="mt-3 bg-gray-50 rounded-xl p-3 max-h-32 overflow-y-auto">
           <p className="text-[10px] text-text-gray leading-relaxed">{t('terms_service_content')}</p>
         </div>

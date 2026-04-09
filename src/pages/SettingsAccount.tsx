@@ -111,13 +111,12 @@ export default function SettingsAccount() {
               placeholder={t('account_holder_placeholder')}
               className="w-full px-4 py-3.5 bg-gray-50 border border-border rounded-xl text-sm text-text-dark focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20" />
           </div>
-          <label className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl cursor-pointer">
-            <button onClick={() => setIsDefault(!isDefault)}
-              className={`w-5 h-5 rounded flex items-center justify-center transition-colors ${isDefault ? 'bg-primary' : 'bg-gray-200'}`}>
+          <div onClick={() => setIsDefault(!isDefault)} className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl cursor-pointer">
+            <div className={`w-5 h-5 rounded flex items-center justify-center transition-colors ${isDefault ? 'bg-primary' : 'bg-gray-200'}`}>
               {isDefault && <Check size={12} className="text-white" strokeWidth={3} />}
-            </button>
+            </div>
             <span className="text-sm text-text-dark">{t('account_set_default')}</span>
-          </label>
+          </div>
         </div>
       </div>
       <div className="px-6 pb-8 pt-4">
@@ -135,13 +134,12 @@ export default function SettingsAccount() {
       <Header title={t('settings_account_terms')} onBack={() => setStep('form')} />
       <div className="flex-1 px-6 pt-6">
         <h2 className="text-base font-semibold text-text-dark mb-4">{t('settings_account_terms')}</h2>
-        <label className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl cursor-pointer">
-          <button onClick={() => setTermsChecked(!termsChecked)}
-            className={`w-5 h-5 rounded-full flex items-center justify-center transition-colors ${termsChecked ? 'bg-primary' : 'bg-gray-200'}`}>
+        <div onClick={() => setTermsChecked(!termsChecked)} className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl cursor-pointer">
+          <div className={`w-5 h-5 rounded-full flex items-center justify-center transition-colors ${termsChecked ? 'bg-primary' : 'bg-gray-200'}`}>
             {termsChecked && <Check size={12} className="text-white" strokeWidth={3} />}
-          </button>
+          </div>
           <span className="text-sm text-text-dark">[{t('terms_required')}] {t('settings_account_terms_check')}</span>
-        </label>
+        </div>
         <div className="mt-3 bg-gray-50 rounded-xl p-3 max-h-32 overflow-y-auto">
           <p className="text-[10px] text-text-gray leading-relaxed">{t('terms_service_content')}</p>
         </div>
