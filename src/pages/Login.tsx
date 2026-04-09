@@ -136,7 +136,7 @@ export default function Login() {
         setOtpState('idle')
         login('phone')
         updateProfile({ name: name.trim(), phone: phone.replace(/[^0-9]/g, ''), residenceId: nationalId })
-        navigate('/kyc-contact')
+        navigate('/onboarding-bank')
       }, 800)
     }, 1000)
   }
