@@ -5,7 +5,7 @@ import { PinInput } from '../components/PinInput'
 import { useStore } from '../store/useStore'
 import { useT } from '../hooks/useT'
 import { PIN_MAX_ATTEMPTS, PIN_LOCKOUT_MS } from '../constants'
-import { Lock, ScanFace } from 'lucide-react'
+import { Lock } from 'lucide-react'
 
 export default function PaymentPin() {
   const navigate = useNavigate()
@@ -15,7 +15,6 @@ export default function PaymentPin() {
   const [attempts, setAttempts] = useState(0)
   const [lockedUntil, setLockedUntil] = useState(0)
   const [lockRemaining, setLockRemaining] = useState(0)
-  const [faceIdScanning, setFaceIdScanning] = useState(false)
 
   const isLocked = lockedUntil > Date.now()
 
@@ -59,16 +58,6 @@ export default function PaymentPin() {
     }
   }
 
-  // Simulate Face ID biometric scan → navigate on success
-  const handleFaceId = () => {
-    if (isLocked || faceIdScanning) return
-    setFaceIdScanning(true)
-    setTimeout(() => {
-      setFaceIdScanning(false)
-      navigate('/payment-scan')
-    }, 1200)
-  }
-
   // Locked state
   if (isLocked) {
     const mins = Math.floor(lockRemaining / 60000)
@@ -97,22 +86,7 @@ export default function PaymentPin() {
   return (
     <div className="flex flex-col h-[calc(100%-44px)] bg-white animate-slide-in">
       <Header title={t('pay_pin_title')} />
-      <PinInput
-        title={t('pay_pin_enter')}
-        error={error}
-        onComplete={handleComplete}
-        onFaceId={handleFaceId}
-      />
-
-      {/* Face ID scanning overlay */}
-      {faceIdScanning && (
-        <div className="fixed inset-0 z-[400] flex flex-col items-center justify-center bg-black/60 animate-fade-in">
-          <div className="bg-white rounded-2xl px-10 py-8 flex flex-col items-center gap-4 shadow-xl">
-            <ScanFace size={56} className="text-primary animate-pulse" />
-            <p className="text-sm font-semibold text-text-dark">{t('pin_faceid_scanning')}</p>
-          </div>
-        </div>
-      )}
+      <PinInput title={t('pay_pin_enter')} error={error} onComplete={handleComplete} />
     </div>
   )
 }
