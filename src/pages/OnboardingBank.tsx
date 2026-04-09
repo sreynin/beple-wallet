@@ -91,7 +91,7 @@ export default function OnboardingBank() {
   }
 
   const handleKorbitConnect = () => {
-    navigate('/charge-korbit', { state: { fromOnboarding: true } })
+    navigate('/charge-korbit-onboarding', { state: { fromOnboarding: true } })
   }
 
   const allRequiredTerms = term1 && term2
@@ -161,7 +161,7 @@ export default function OnboardingBank() {
         </div>
       </div>
       <div className="px-6 pb-8 pt-4">
-        <button onClick={() => setStep(accountType === 'korbit' ? 'korbit-connect' : 'bank-select')} disabled={!accountType}
+        <button onClick={() => accountType === 'korbit' ? navigate('/charge-korbit-onboarding', { state: { fromOnboarding: true } }) : setStep('bank-select')} disabled={!accountType}
           className={`w-full py-4 font-semibold rounded-xl ${accountType ? 'bg-primary text-white' : 'bg-gray-200 text-text-light'}`}>{t('next')}</button>
       </div>
     </div>

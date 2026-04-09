@@ -78,6 +78,8 @@ export default function App() {
           <Route path="/pin-setup" element={<PinSetup />} />
           <Route path="/crypto-check" element={<CryptoCheck />} />
           <Route path="/onboarding-bank" element={<OnboardingBank />} />
+          <Route path="/charge-korbit-onboarding" element={<ChargeKorbit />} />
+          <Route path="/coins" element={<SettingsCoins />} />
 
           {/* Public - KYC Flow (accessible during onboarding) */}
           <Route path="/kyc-contact" element={<KycContact />} />
