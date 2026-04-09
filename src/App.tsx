@@ -13,6 +13,8 @@ import PinSetup from './pages/PinSetup'
 import AccountCheck from './pages/AccountCheck'
 import CryptoCheck from './pages/CryptoCheck'
 import OnboardingBank from './pages/OnboardingBank'
+import KycContact from './pages/KycContact'
+import KycContactVerify from './pages/KycContactVerify'
 import KycStart from './pages/KycStart'
 import KycPassport from './pages/KycPassport'
 import KycConfirm from './pages/KycConfirm'
@@ -78,6 +80,8 @@ export default function App() {
           <Route path="/onboarding-bank" element={<OnboardingBank />} />
 
           {/* Public - KYC Flow (accessible during onboarding) */}
+          <Route path="/kyc-contact" element={<KycContact />} />
+          <Route path="/kyc-contact-verify" element={<KycContactVerify />} />
           <Route path="/kyc-start" element={<KycStart />} />
           <Route path="/kyc-passport" element={<KycPassport />} />
           <Route path="/kyc-confirm" element={<KycConfirm />} />

@@ -4,10 +4,12 @@ import { Header } from '../components/Header'
 import { toast } from '../components/Toast'
 import { Check, Globe } from 'lucide-react'
 
-const languageOptions: { code: Language; label: string; sub: string }[] = [
-  { code: 'ko', label: '한국어', sub: 'Korean' },
-  { code: 'en', label: 'English', sub: 'English' },
-  { code: 'zh', label: '中文', sub: 'Chinese' },
+const languageOptions: { code: Language; flag: string; label: string; sub: string }[] = [
+  { code: 'ko', flag: '🇰🇷', label: '한국어', sub: 'Korean' },
+  { code: 'en', flag: '🇺🇸', label: 'English', sub: 'English' },
+  { code: 'ja', flag: '🇯🇵', label: '日本語', sub: 'Japanese' },
+  { code: 'zh', flag: '🇨🇳', label: '中文', sub: 'Chinese' },
+  { code: 'es', flag: '🇪🇸', label: 'Español', sub: 'Spanish' },
 ]
 
 export default function SettingsLanguage() {
@@ -38,11 +40,7 @@ export default function SettingsLanguage() {
                   isActive ? 'border-primary bg-primary/5' : 'border-transparent active:bg-gray-50'
                 }`}
               >
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                  isActive ? 'bg-primary/10' : 'bg-gray-50'
-                }`}>
-                  <Globe size={20} className={isActive ? 'text-primary' : 'text-text-gray'} />
-                </div>
+                <span className="text-2xl">{opt.flag}</span>
                 <div className="flex-1 text-left">
                   <p className={`text-sm font-semibold ${isActive ? 'text-primary' : 'text-text-dark'}`}>
                     {opt.label}

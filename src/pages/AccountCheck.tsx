@@ -1,70 +1,89 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useStore } from '../store/useStore'
 import { useT } from '../hooks/useT'
-import { Landmark, Globe, ShieldCheck, CreditCard } from 'lucide-react'
+import { Check } from 'lucide-react'
+
+type Selection = 'domestic' | 'foreigner' | null
 
 export default function AccountCheck() {
   const navigate = useNavigate()
   const { setUserType } = useStore()
   const t = useT()
+  const [selected, setSelected] = useState<Selection>(null)
 
-  const handleYes = () => {
-    setUserType('domestic')
-    navigate('/login')
-  }
-
-  const handleNo = () => {
-    setUserType('foreigner')
-    navigate('/kyc-start')
+  const handleNext = () => {
+    if (!selected) return
+    setUserType(selected)
+    if (selected === 'domestic') {
+      navigate('/login')
+    } else {
+      navigate('/kyc-contact')
+    }
   }
 
   return (
     <div className="flex flex-col h-[calc(100%-44px)] bg-white animate-slide-in">
       <div className="flex-1 px-6 pt-10">
-        <h2 className="text-xl font-bold text-text-dark leading-snug whitespace-pre-line">{t('account_check_heading')}</h2>
+        <h2 className="text-xl font-bold text-text-dark leading-snug whitespace-pre-line">
+          {t('account_check_heading')}
+        </h2>
         <p className="text-sm text-text-gray mt-2 mb-8">{t('account_check_desc')}</p>
 
-        <div className="space-y-4">
-          {/* YES - Korean bank */}
-          <button onClick={handleYes}
-            className="w-full flex items-center gap-4 p-5 border-2 border-border rounded-2xl active:border-primary active:bg-primary/5 transition-all">
-            <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-              <Landmark size={28} className="text-primary" />
-            </div>
-            <div className="text-left flex-1">
-              <p className="font-semibold text-text-dark">{t('account_check_yes')}</p>
-              <p className="text-xs text-text-gray mt-1">{t('account_check_yes_desc')}</p>
-              <div className="flex items-center gap-3 mt-2">
-                <span className="flex items-center gap-1 text-[10px] text-primary">
-                  <ShieldCheck size={10} />{t('account_check_yes_auth')}
-                </span>
-                <span className="flex items-center gap-1 text-[10px] text-text-light">
-                  <CreditCard size={10} />2,000,000 KRW
-                </span>
+        <div className="space-y-3">
+          {/* 내국인 (Domestic) */}
+          <button
+            onClick={() => setSelected('domestic')}
+            className={`w-full relative flex items-center justify-center px-5 py-4 rounded-xl border-2 transition-all
+              ${selected === 'domestic'
+                ? 'border-primary bg-primary/5'
+                : 'border-border bg-white active:bg-gray-50'
+              }`}
+          >
+            <span className={`font-semibold ${selected === 'domestic' ? 'text-primary' : 'text-text-dark'}`}>
+              {t('account_check_yes')}
+            </span>
+            {selected === 'domestic' && (
+              <div className="absolute right-4 w-6 h-6 rounded-full bg-primary flex items-center justify-center animate-bounce-in">
+                <Check size={14} className="text-white" strokeWidth={3} />
               </div>
-            </div>
+            )}
           </button>
 
-          {/* NO - Foreigner */}
-          <button onClick={handleNo}
-            className="w-full flex items-center gap-4 p-5 border-2 border-border rounded-2xl active:border-green-500 active:bg-green-50/50 transition-all">
-            <div className="w-14 h-14 rounded-2xl bg-green-50 flex items-center justify-center flex-shrink-0">
-              <Globe size={28} className="text-green-600" />
-            </div>
-            <div className="text-left flex-1">
-              <p className="font-semibold text-text-dark">{t('account_check_no')}</p>
-              <p className="text-xs text-text-gray mt-1">{t('account_check_no_desc')}</p>
-              <div className="flex items-center gap-3 mt-2">
-                <span className="flex items-center gap-1 text-[10px] text-green-600">
-                  <ShieldCheck size={10} />{t('account_check_no_auth')}
-                </span>
-                <span className="flex items-center gap-1 text-[10px] text-text-light">
-                  <CreditCard size={10} />1,000,000 KRW
-                </span>
+          {/* 외국인 (Foreigner) */}
+          <button
+            onClick={() => setSelected('foreigner')}
+            className={`w-full relative flex items-center justify-center px-5 py-4 rounded-xl border-2 transition-all
+              ${selected === 'foreigner'
+                ? 'border-primary bg-primary/5'
+                : 'border-border bg-white active:bg-gray-50'
+              }`}
+          >
+            <span className={`font-semibold ${selected === 'foreigner' ? 'text-primary' : 'text-text-dark'}`}>
+              {t('account_check_no')}
+            </span>
+            {selected === 'foreigner' && (
+              <div className="absolute right-4 w-6 h-6 rounded-full bg-primary flex items-center justify-center animate-bounce-in">
+                <Check size={14} className="text-white" strokeWidth={3} />
               </div>
-            </div>
+            )}
           </button>
         </div>
+      </div>
+
+      {/* CTA Button */}
+      <div className="px-6 pb-8">
+        <button
+          onClick={handleNext}
+          disabled={!selected}
+          className={`w-full py-4 font-semibold rounded-xl transition-colors
+            ${selected
+              ? 'bg-primary text-white active:bg-primary-dark'
+              : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+            }`}
+        >
+          {t('next')}
+        </button>
       </div>
     </div>
   )

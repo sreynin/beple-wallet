@@ -71,6 +71,8 @@ html, body, #root {
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  /* Contain fixed-position overlays within the phone frame */
+  transform: translateZ(0);
 }
 .screen::-webkit-scrollbar { display: none; }
 

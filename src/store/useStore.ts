@@ -21,7 +21,7 @@ function uniqueId() {
   return `${Date.now()}-${++idCounter}`
 }
 
-export type Language = 'ko' | 'en' | 'zh'
+export type Language = 'ko' | 'en' | 'ja' | 'zh' | 'es'
 export type Theme = 'light' | 'dark' | 'system'
 
 export interface CoinAsset {
