@@ -7,25 +7,25 @@ import { ArrowLeft, ChevronDown, Loader2, Check } from 'lucide-react'
 type Tab = 'email' | 'phone'
 
 const COUNTRY_CODES = [
-  { code: '+82', country: 'South Korea', flag: '🇰🇷' },
-  { code: '+1', country: 'USA', flag: '🇺🇸' },
-  { code: '+81', country: 'Japan', flag: '🇯🇵' },
-  { code: '+86', country: 'China', flag: '🇨🇳' },
-  { code: '+44', country: 'UK', flag: '🇬🇧' },
-  { code: '+49', country: 'Germany', flag: '🇩🇪' },
-  { code: '+33', country: 'France', flag: '🇫🇷' },
-  { code: '+61', country: 'Australia', flag: '🇦🇺' },
-  { code: '+65', country: 'Singapore', flag: '🇸🇬' },
-  { code: '+84', country: 'Vietnam', flag: '🇻🇳' },
-  { code: '+66', country: 'Thailand', flag: '🇹🇭' },
-  { code: '+63', country: 'Philippines', flag: '🇵🇭' },
+  { code: '+82', country: 'South Korea', localName: '대한민국', isoCode: 'KR', flag: '🇰🇷' },
+  { code: '+1',  country: 'USA',         localName: '미국',    isoCode: 'US', flag: '🇺🇸' },
+  { code: '+81', country: 'Japan',       localName: '일본',    isoCode: 'JP', flag: '🇯🇵' },
+  { code: '+86', country: 'China',       localName: '중국',    isoCode: 'CN', flag: '🇨🇳' },
+  { code: '+44', country: 'UK',          localName: '영국',    isoCode: 'GB', flag: '🇬🇧' },
+  { code: '+49', country: 'Germany',     localName: '독일',    isoCode: 'DE', flag: '🇩🇪' },
+  { code: '+33', country: 'France',      localName: '프랑스',  isoCode: 'FR', flag: '🇫🇷' },
+  { code: '+61', country: 'Australia',   localName: '호주',    isoCode: 'AU', flag: '🇦🇺' },
+  { code: '+65', country: 'Singapore',   localName: '싱가포르',isoCode: 'SG', flag: '🇸🇬' },
+  { code: '+84', country: 'Vietnam',     localName: '베트남',  isoCode: 'VN', flag: '🇻🇳' },
+  { code: '+66', country: 'Thailand',    localName: '태국',    isoCode: 'TH', flag: '🇹🇭' },
+  { code: '+63', country: 'Philippines', localName: '필리핀',  isoCode: 'PH', flag: '🇵🇭' },
 ]
 
 export default function KycContact() {
   const navigate = useNavigate()
   const t = useT()
 
-  const [tab, setTab] = useState<Tab>('email')
+  const [tab, setTab] = useState<Tab>('phone')
   const [email, setEmail] = useState('')
   const [countryCode, setCountryCode] = useState(COUNTRY_CODES[0])
   const [showCountrySheet, setShowCountrySheet] = useState(false)
@@ -35,14 +35,12 @@ export default function KycContact() {
   // Validation
   const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
   const phoneValid = phone.replace(/[^0-9]/g, '').length >= 8
-  const canSend = tab === 'email' ? emailValid : phoneValid
 
-  const formatPhone = (value: string) => {
-    const nums = value.replace(/[^0-9]/g, '').slice(0, 11)
-    if (nums.length <= 3) return nums
-    if (nums.length <= 7) return `${nums.slice(0, 3)}-${nums.slice(3)}`
-    return `${nums.slice(0, 3)}-${nums.slice(3, 7)}-${nums.slice(7)}`
+  // Numbers-only (no formatting dashes)
+  const handlePhoneInput = (value: string) => {
+    setPhone(value.replace(/[^0-9]/g, '').slice(0, 11))
   }
+  const canSend = tab === 'email' ? emailValid : phoneValid
 
   const handleSendCode = () => {
     if (!canSend || sending) return
@@ -59,54 +57,57 @@ export default function KycContact() {
 
   return (
     <div className="flex flex-col h-[calc(100%-44px)] bg-white animate-slide-in">
-      {/* Header */}
-      <div className="flex items-center px-4 py-3 border-b border-border">
+
+      {/* Back button only — no title bar */}
+      <div className="px-4 pt-4 pb-2">
         <button onClick={() => navigate('/account-check')} className="p-1 -ml-1 active:bg-gray-100 rounded-full">
           <ArrowLeft size={22} className="text-text-dark" />
         </button>
-        <h1 className="flex-1 text-center text-[15px] font-semibold text-text-dark mr-6">
-          {t('kyc_contact_header')}
-        </h1>
       </div>
 
       {/* Content */}
-      <div className="flex-1 px-6 pt-6 overflow-y-auto">
-        {/* Title */}
-        <h2 className="text-xl font-bold text-text-dark leading-snug whitespace-pre-line mb-2">
+      <div className="flex-1 px-6 pt-2 overflow-y-auto">
+        {/* Title — no subtitle */}
+        <h2 className="text-xl font-bold text-text-dark leading-snug whitespace-pre-line mb-8">
           {t('kyc_contact_heading')}
         </h2>
-        <p className="text-sm text-text-gray mb-6">{t('kyc_contact_desc')}</p>
 
-        {/* Tabs */}
-        <div className="flex border border-border rounded-lg overflow-hidden mb-6">
-          <button
-            onClick={() => setTab('email')}
-            className={`flex-1 py-2.5 text-sm font-semibold text-center transition-colors ${
-              tab === 'email' ? 'bg-text-dark text-white' : 'bg-white text-text-dark'
-            }`}
-          >
-            {t('kyc_contact_tab_email')}
-          </button>
+        {/* Tabs — underline style */}
+        <div className="flex border-b border-border mb-6">
           <button
             onClick={() => setTab('phone')}
-            className={`flex-1 py-2.5 text-sm font-semibold text-center transition-colors ${
-              tab === 'phone' ? 'bg-text-dark text-white' : 'bg-white text-text-dark'
+            className={`flex-1 py-2.5 text-sm font-semibold text-center transition-colors relative ${
+              tab === 'phone' ? 'text-text-dark' : 'text-text-gray'
             }`}
           >
             {t('kyc_contact_tab_phone')}
+            {tab === 'phone' && (
+              <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-text-dark rounded-t" />
+            )}
+          </button>
+          <button
+            onClick={() => setTab('email')}
+            className={`flex-1 py-2.5 text-sm font-semibold text-center transition-colors relative ${
+              tab === 'email' ? 'text-text-dark' : 'text-text-gray'
+            }`}
+          >
+            {t('kyc_contact_tab_email')}
+            {tab === 'email' && (
+              <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-text-dark rounded-t" />
+            )}
           </button>
         </div>
 
         {/* Email Tab */}
         {tab === 'email' && (
           <div className="animate-fade-in">
-            <label className="text-xs text-text-gray mb-1.5 block">{t('kyc_contact_email_label')}</label>
+            <label className="text-xs text-text-gray mb-1 block">{t('kyc_contact_email_label')}</label>
             <input
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder={t('kyc_contact_email_placeholder')}
-              className="w-full px-4 py-3.5 border border-border rounded-xl text-base text-text-dark placeholder:text-text-light focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
+              className="w-full py-3 border-b border-border text-base text-text-dark placeholder:text-text-light focus:border-primary focus:outline-none bg-transparent transition-colors"
             />
             <p className="text-xs text-text-gray mt-2">{t('kyc_contact_email_hint')}</p>
           </div>
@@ -115,27 +116,27 @@ export default function KycContact() {
         {/* Phone Tab */}
         {tab === 'phone' && (
           <div className="animate-fade-in">
-            {/* Country Code */}
-            <label className="text-xs text-text-gray mb-1.5 block">{t('kyc_contact_country_label')}</label>
+            {/* Country Code — bottom-line style */}
+            <label className="text-xs text-text-gray mb-1 block">{t('kyc_contact_country_label')}</label>
             <button
               onClick={() => setShowCountrySheet(true)}
-              className="w-full flex items-center justify-between px-4 py-3.5 border border-border rounded-xl mb-4 transition-all active:bg-gray-50"
+              className="w-full flex items-center justify-between py-3 border-b border-border mb-5 transition-colors active:opacity-70"
             >
               <span className="text-base text-text-dark">
-                {countryCode.flag} {countryCode.code} ({countryCode.country})
+                {countryCode.flag} {countryCode.localName} {countryCode.isoCode} {countryCode.code}
               </span>
               <ChevronDown size={18} className="text-text-gray" />
             </button>
 
-            {/* Phone Number */}
-            <label className="text-xs text-text-gray mb-1.5 block">{t('kyc_contact_phone_label')}</label>
+            {/* Phone Number — bottom-line style */}
+            <label className="text-xs text-text-gray mb-1 block">{t('kyc_contact_phone_label')}</label>
             <input
               type="tel"
               value={phone}
-              onChange={e => setPhone(formatPhone(e.target.value))}
+              onChange={e => handlePhoneInput(e.target.value)}
               placeholder={t('kyc_contact_phone_placeholder')}
-              maxLength={13}
-              className="w-full px-4 py-3.5 border border-border rounded-xl text-base text-text-dark placeholder:text-text-light focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
+              maxLength={11}
+              className="w-full py-3 border-b border-border text-base text-text-dark placeholder:text-text-light focus:border-primary focus:outline-none bg-transparent transition-colors"
             />
             <p className="text-xs text-text-gray mt-2">{t('kyc_contact_phone_hint')}</p>
           </div>
@@ -177,7 +178,7 @@ export default function KycContact() {
                   className="w-full flex items-center justify-between px-5 py-3.5 active:bg-gray-50 transition-colors"
                 >
                   <span className={`text-base ${countryCode.code === c.code ? 'text-primary font-semibold' : 'text-text-dark'}`}>
-                    {c.flag} {c.code} ({c.country})
+                    {c.flag} {c.localName} {c.isoCode} {c.code}
                   </span>
                   {countryCode.code === c.code && <Check size={20} className="text-primary" />}
                 </button>

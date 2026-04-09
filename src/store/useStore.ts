@@ -94,7 +94,6 @@ interface AppState {
   theme: Theme
   notificationsEnabled: boolean
   faceIdEnabled: boolean
-  cameraPermissionGranted: boolean
 
   // Wallet
   bippleMoney: number
@@ -127,7 +126,6 @@ interface AppState {
   setTheme: (theme: Theme) => void
   setNotificationsEnabled: (v: boolean) => void
   setFaceIdEnabled: (v: boolean) => void
-  setCameraPermissionGranted: (v: boolean) => void
   chargeBippleMoney: (amount: number) => void
   payBippleMoney: (amount: number, merchant: string) => void
   withdrawAtm: (amount: number) => void
@@ -166,7 +164,6 @@ const initialState = {
   theme: 'light' as Theme,
   notificationsEnabled: true,
   faceIdEnabled: false,
-  cameraPermissionGranted: false,
 
   bippleMoney: 0,
   coins: [] as CoinAsset[],
@@ -194,7 +191,6 @@ export const useStore = create<AppState>()(
       updateProfile: (data) => set((s) => ({ profile: { ...s.profile, ...data } })),
       setNotificationsEnabled: (v) => set({ notificationsEnabled: v }),
       setFaceIdEnabled: (v) => set({ faceIdEnabled: v }),
-      setCameraPermissionGranted: (v) => set({ cameraPermissionGranted: v }),
 
       chargeBippleMoney: (amount) => {
         const newBalance = get().bippleMoney + amount
