@@ -31,7 +31,7 @@ export function PinInput({ title, subtitle, error, onComplete, onClose }: PinInp
   const keys = ['1','2','3','4','5','6','7','8','9','','0','del']
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className="flex flex-col flex-1 bg-white">
       {/* X close */}
       <div className="flex justify-end px-4 pt-2">
         {onClose ? (

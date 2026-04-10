@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { PinInput } from '../components/PinInput'
-import { StepIndicator } from '../components/StepIndicator'
 import { Modal } from '../components/Modal'
 import { useStore } from '../store/useStore'
 import { useT } from '../hooks/useT'
@@ -129,11 +128,6 @@ export default function PinSetup() {
 
   return (
     <div className="flex flex-col h-[calc(100%-44px)] bg-white animate-slide-in">
-      {isSignupFlow && (
-        <div className="px-6 pt-3">
-          <StepIndicator current={3} />
-        </div>
-      )}
       <PinInput
         title={step === 'create' ? t('pin_enter') : step === 'confirm' ? t('pin_reenter') : ''}
         subtitle={step === 'create' ? t('pin_used_for') : step === 'confirm' ? t('pin_reenter_desc') : ''}
