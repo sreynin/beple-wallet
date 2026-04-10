@@ -374,7 +374,7 @@ export default function SettingsCoins() {
       </div>
       <div className="px-6 pb-8">
         <button onClick={() => {
-          if (fromOnboarding) navigate('/terms', { replace: true })
+          if (fromOnboarding) navigate('/pin-setup', { replace: true, state: { flow: 'signup' } })
           else if (fromKorbitCharge) navigate('/home', { replace: true })
           else navigate('/home', { replace: true })
         }} className="w-full py-4 bg-[#2563EB] text-white font-semibold rounded-xl">{t('confirm')}</button>

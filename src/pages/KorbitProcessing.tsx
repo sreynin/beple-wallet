@@ -19,6 +19,7 @@ type LocationState = {
   asset: KorbitAsset
   qty: number
   estimatedKrw: number
+  fromOnboarding?: boolean
 }
 
 function clampToNonNegativeInteger(value: unknown) {
@@ -35,6 +36,7 @@ export default function KorbitProcessing() {
 
   const state = (location.state || {}) as Partial<LocationState>
   const estimatedKrw = clampToNonNegativeInteger(state.estimatedKrw)
+  const fromOnboarding = state.fromOnboarding === true
 
   type Phase = 'redirect' | 'fake' | 'timeline'
   const [phase, setPhase] = useState<Phase>('redirect')
@@ -53,9 +55,9 @@ export default function KorbitProcessing() {
     chargeBippleMoney(estimatedKrw)
     navigate('/charge-complete', {
       replace: true,
-      state: { amount: estimatedKrw, method: 'Korbit' },
+      state: { amount: estimatedKrw, method: 'Korbit', fromOnboarding },
     })
-  }, [phase, chargeBippleMoney, estimatedKrw, navigate, tick])
+  }, [phase, chargeBippleMoney, estimatedKrw, fromOnboarding, navigate, tick])
 
   useEffect(() => {
     if (phase !== 'redirect') return

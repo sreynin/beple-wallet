@@ -74,7 +74,7 @@ export default function OnboardingBank() {
   const [firstPin, setFirstPin] = useState('')
   const [arsCode] = useState(String(Math.floor(Math.random() * 90 + 10)))
 
-  const goNext = () => navigate('/terms')
+  const goNext = () => navigate('/pin-setup', { state: { flow: 'signup' } })
 
   // Pre-fill name from profile or KYC data
   const getPrefilledName = () => {

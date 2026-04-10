@@ -5,7 +5,7 @@ import { CheckCircle } from 'lucide-react'
 
 export default function KycSuccess() {
   const navigate = useNavigate()
-  const { completeKyc } = useStore()
+  const { completeKyc, login } = useStore()
   const t = useT()
 
   return (
@@ -31,7 +31,7 @@ export default function KycSuccess() {
 
       <div className="px-6 pb-8">
         <button
-          onClick={() => { completeKyc(); navigate('/home') }}
+          onClick={() => { login('phone'); completeKyc(); navigate('/home') }}
           className="w-full py-4 bg-primary text-white font-semibold rounded-xl active:bg-primary-dark"
         >
           {t('kyc_success_go_home')}

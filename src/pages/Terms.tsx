@@ -4,7 +4,6 @@ import { Header } from '../components/Header'
 import { useStore } from '../store/useStore'
 import { useT } from '../hooks/useT'
 import { Check, ChevronDown, ChevronUp, User } from 'lucide-react'
-import { StepIndicator } from '../components/StepIndicator'
 
 interface TermItem {
   id: string
@@ -66,8 +65,6 @@ export default function Terms() {
       <Header title={t('terms_title')} showBack={true} />
 
       <div className="flex-1 px-6 pt-4 overflow-y-auto">
-        <StepIndicator current={3} />
-
         {/* Login info card */}
         {loginMethod && (
           <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-primary/5 to-primary/10 rounded-2xl mb-5 border border-primary/10">

@@ -26,12 +26,10 @@ export default function PinSetup() {
       navigate('/home', { replace: true })
     } else if (flow === 'reset') {
       navigate(-1)
-    } else if (location.state?.from === 'payment') {
+    } else if ((location.state as any)?.from === 'payment') {
       navigate('/payment-pin', { replace: true })
-    } else if (location.state?.from === 'settings') {
+    } else if ((location.state as any)?.from === 'settings') {
       navigate(-1)
-    } else if (isSignupFlow) {
-      navigate('/home', { replace: true })
     } else {
       navigate('/home', { replace: true })
     }
@@ -42,7 +40,7 @@ export default function PinSetup() {
       setFirstPin(pin)
       setStep('confirm')
       setError('')
-    } else {
+    } else if (step === 'confirm') {
       if (pin === firstPin) {
         setPin(pin)
         setShowFaceId(true)

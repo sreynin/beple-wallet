@@ -335,7 +335,7 @@ export default function ChargeKorbit() {
         </div>
       </div>
       <div className="px-6 pb-8">
-        <button onClick={() => fromOnboarding ? navigate('/terms') : setStep('select')} className="w-full py-4 bg-primary text-white font-semibold rounded-xl">{t('next')}</button>
+        <button onClick={() => fromOnboarding ? navigate('/pin-setup', { state: { flow: 'signup' } }) : setStep('select')} className="w-full py-4 bg-primary text-white font-semibold rounded-xl">{t('next')}</button>
       </div>
     </div>
   )
@@ -397,7 +397,7 @@ export default function ChargeKorbit() {
       </div>
       <div className="px-6 pb-8 pt-4">
         <button
-          onClick={() => navigate('/charge-korbit-processing', { state: { asset, qty: numQty, estimatedKrw } })}
+          onClick={() => navigate('/charge-korbit-processing', { state: { asset, qty: numQty, estimatedKrw, fromOnboarding } })}
           className="w-full py-4 bg-primary text-white font-semibold rounded-xl"
         >
           {t('korbit_confirm_btn')}
