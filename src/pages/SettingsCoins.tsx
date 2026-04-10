@@ -267,7 +267,7 @@ export default function SettingsCoins() {
             setStep('wc-code')
           }}
           disabled={!termsConsent}
-          className={`w-full py-4 font-semibold rounded-xl transition-colors ${termsConsent ? 'bg-[#F5C842] text-white active:bg-[#E5B832]' : 'bg-[#F5F5F5] text-[#BDBDBD]'}`}
+          className={`w-full py-4 font-semibold rounded-xl transition-colors ${termsConsent ? 'bg-[#2563EB] text-white active:bg-[#1d4fc7]' : 'bg-[#F5F5F5] text-[#BDBDBD]'}`}
         >
           {t('confirm')}
         </button>
