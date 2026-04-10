@@ -425,6 +425,8 @@ const en: Record<TranslationKeys, string> = {
   triplea_addr_warn1: 'Please send using the selected network.',
   triplea_addr_warn2: 'Assets may be lost if sent on a different network.',
   triplea_addr_warn3: 'Confirmation may take some time after deposit.',
+  triplea_addr_expired: 'Deposit address has expired. Please generate a new address.',
+  triplea_addr_invalid: 'Invalid address. Funds need to be returned to the payer.',
   triplea_addr_check: 'Check Deposit Status',
   triplea_wait_title: 'Checking Deposit',
   triplea_wait_heading: 'Checking your deposit',

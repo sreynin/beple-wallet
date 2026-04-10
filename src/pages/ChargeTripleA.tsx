@@ -48,7 +48,7 @@ export default function ChargeTripleA() {
   const navigate = useNavigate()
   const { chargeBippleMoney } = useStore()
   const t = useT()
-  const [step, setStep] = useState<Step>(sessionStorage.getItem('dtc-guide-skip') ? 'step1' : 'guide')
+  const [step, setStep] = useState<Step>('guide')
   const [selectedCoin, setSelectedCoin] = useState('')
   const [selectedNetwork, setSelectedNetwork] = useState('')
   const [confirms, setConfirms] = useState(0)
@@ -67,10 +67,18 @@ export default function ChargeTripleA() {
   const fee = Math.floor(grossKRW * COIN_CHARGE_FEE_RATE)
   const finalAmount = grossKRW - fee
 
-  // Timer countdown for step3
+  // Timer countdown for step3 — auto-cancel when expired
   useEffect(() => {
     if (step !== 'step3') return
-    const iv = setInterval(() => setTimer(t => Math.max(0, t - 1)), 1000)
+    const iv = setInterval(() => setTimer(prev => {
+      if (prev <= 1) {
+        clearInterval(iv)
+        toast(t('triplea_addr_expired'), 'error')
+        setStep('step1')
+        return 1800
+      }
+      return prev - 1
+    }), 1000)
     return () => clearInterval(iv)
   }, [step])
 

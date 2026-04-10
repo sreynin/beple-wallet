@@ -425,6 +425,8 @@ const ja: Record<TranslationKeys, string> = {
   triplea_addr_warn1: 'Please send using the selected network.',
   triplea_addr_warn2: 'Assets may be lost if sent on a different network.',
   triplea_addr_warn3: 'Confirmation may take some time after deposit.',
+  triplea_addr_expired: '入金有効時間が切れました。再度アドレスを生成してください。',
+  triplea_addr_invalid: '無効なアドレスです。資金は送金者に返却される必要があります。',
   triplea_addr_check: 'Check Deposit Status',
   triplea_wait_title: 'Checking Deposit',
   triplea_wait_heading: 'Checking your deposit',
