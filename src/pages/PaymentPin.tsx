@@ -101,7 +101,6 @@ export default function PaymentPin() {
         title={t('pay_pin_enter')}
         error={error}
         onComplete={handleComplete}
-        onFaceId={handleFaceId}
       />
 
       {/* Face ID scanning overlay */}

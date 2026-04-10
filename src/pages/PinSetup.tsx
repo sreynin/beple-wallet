@@ -139,7 +139,6 @@ export default function PinSetup() {
         subtitle={step === 'create' ? t('pin_used_for') : step === 'confirm' ? t('pin_reenter_desc') : ''}
         error={error}
         onComplete={handleComplete}
-        variant="light"
       />
 
       {/* FaceID Prompt — shows after PIN confirmed */}
