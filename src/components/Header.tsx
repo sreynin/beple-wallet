@@ -14,7 +14,7 @@ export function Header({ title, onBack, showBack = true, showClose, right }: Hea
   const handleBack = onBack || (() => navigate(-1))
 
   return (
-    <div className="flex items-center justify-between px-4 py-3 bg-white sticky top-0 z-40 border-b border-border">
+    <div className="flex items-center justify-between px-4 py-3 bg-white sticky top-0 z-40 border-b border-gray-200">
       <div className="w-10">
         {showBack && (
           <button onClick={handleBack} className="p-1 -ml-1 active:bg-gray-100 rounded-full">

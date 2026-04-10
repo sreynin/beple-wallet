@@ -6,9 +6,10 @@ interface PinInputProps {
   subtitle?: string
   error?: string
   onComplete: (pin: string) => void
+  onClose?: () => void
 }
 
-export function PinInput({ title, subtitle, error, onComplete }: PinInputProps) {
+export function PinInput({ title, subtitle, error, onComplete, onClose }: PinInputProps) {
   const [pin, setPin] = useState('')
   const t = useT()
 
@@ -31,40 +32,50 @@ export function PinInput({ title, subtitle, error, onComplete }: PinInputProps) 
 
   return (
     <div className="flex flex-col h-full bg-white">
-      <div className="flex-1 flex flex-col items-center justify-center px-8 pt-12">
-        <h2 className="text-lg font-semibold text-text-dark text-center">{title}</h2>
-        {subtitle && <p className="text-sm text-text-gray mt-1">{subtitle}</p>}
+      {/* X close */}
+      <div className="flex justify-end px-4 pt-2">
+        {onClose ? (
+          <button onClick={onClose} className="p-1">
+            <span className="text-xl leading-none text-text-gray">&times;</span>
+          </button>
+        ) : <div className="h-8" />}
+      </div>
 
-        <div className="flex gap-3 mt-8">
+      {/* Title + dots */}
+      <div className="flex flex-col items-center mt-6 px-8">
+        <h2 className="text-lg font-bold text-text-dark text-center leading-snug whitespace-pre-line">{title}</h2>
+        {subtitle && <p className="text-xs text-text-gray mt-2">{subtitle}</p>}
+
+        <div className="flex gap-3 mt-5">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div
-              key={i}
-              className={`w-3.5 h-3.5 rounded-full transition-all duration-200 ${
-                i < pin.length ? 'bg-primary scale-110' : 'bg-gray-200'
-              }`}
-            />
+            <div key={i} className={`w-2.5 h-2.5 rounded-full transition-colors ${
+              i < pin.length ? 'bg-text-dark' : 'bg-gray-300'
+            }`} />
           ))}
         </div>
 
         {error && (
-          <p className="text-error text-sm mt-4 animate-fade-in">{error}</p>
+          <p className="text-error text-sm mt-3 animate-fade-in">{error}</p>
         )}
       </div>
 
-      <div className="grid grid-cols-3 gap-0 bg-gray-50 border-t border-border">
-        {keys.map((key, i) => (
-          <button
-            key={i}
-            onClick={() => key && handleKey(key)}
-            disabled={!key}
-            className={`h-16 flex items-center justify-center text-xl font-medium transition-colors
-              ${key === '' ? 'cursor-default' : 'active:bg-gray-200'}
-              ${key === 'del' ? 'text-text-gray text-base' : 'text-text-dark'}
-            `}
-          >
-            {key === 'del' ? t('pin_delete') : key}
-          </button>
-        ))}
+      {/* Spacer */}
+      <div className="flex-1" />
+
+      {/* Number pad */}
+      <div className="px-8 pb-8">
+        <div className="grid grid-cols-3 gap-y-1">
+          {keys.map((key, i) => (
+            <button key={i}
+              onClick={() => key && handleKey(key)}
+              disabled={!key}
+              className={`py-4 text-center text-xl select-none ${
+                key === '' ? '' : 'active:bg-gray-50 rounded-lg'
+              } ${key === 'del' ? 'text-sm text-text-gray font-normal' : 'text-text-dark font-light'}`}>
+              {key === 'del' ? t('pin_delete') : key}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   )

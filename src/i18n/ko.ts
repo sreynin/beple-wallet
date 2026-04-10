@@ -853,7 +853,7 @@ const ko = {
   // Open Banking Registration
   ob_bank_register_title: '계좌 등록',
   ob_bank_select_heading: '본인 명의의 계좌를 선택하세요.',
-  ob_openbanking_title: '오픈뱅킹 계좌 등록 시 아래 관련 동의가 필요합니다.',
+  ob_openbanking_title: '오픈뱅킹 계좌 등록 시\n아래 약관 동의가 필요합니다.',
   ob_openbanking_what: '오픈뱅킹이란?',
   ob_openbanking_desc: '은행 및 증권사간 2개 이상 금융 계좌를 하나의 프로그램으로 관리할 수 있도록 하는 표준화된 금융 시스템입니다.',
   ob_openbanking_term1: '(필수) 오픈뱅킹 참여은행 자동이체 이용약관',
