@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useStore } from '../store/useStore'
 import { useT } from '../hooks/useT'
 import { BottomNav } from '../components/BottomNav'
-import { ChevronRight, CreditCard, Lock, FileText, Info, LogOut, Globe, Bell, ScanFace, ShieldCheck, ShieldX, Palette } from 'lucide-react'
+import { ChevronRight, CreditCard, Lock, FileText, Info, LogOut, Globe, Bell, ScanFace, ShieldCheck, ShieldX, Palette, Coins } from 'lucide-react'
 import { Modal } from '../components/Modal'
 import { toast } from '../components/Toast'
 
@@ -87,6 +87,15 @@ export default function Settings() {
               <p className="text-[10px] text-text-light mt-0.5">{t('settings_language_desc')}</p>
             </div>
             <span className="text-xs text-primary font-medium mr-1">{currentLangLabel}</span>
+            <ChevronRight size={16} className="text-text-light" />
+          </button>
+
+          {/* Coins — navigates to page */}
+          <button onClick={() => navigate('/settings/coins')} className="w-full flex items-center gap-3 px-4 py-4 active:bg-gray-50 border-b border-border">
+            <div className="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center"><Coins size={18} className="text-amber-500" /></div>
+            <div className="flex-1 text-left">
+              <p className="text-sm font-medium text-text-dark">{t('settings_coins_title')}</p>
+            </div>
             <ChevronRight size={16} className="text-text-light" />
           </button>
 

@@ -4,12 +4,14 @@ import { Header } from '../components/Header'
 import { Modal } from '../components/Modal'
 import { useT } from '../hooks/useT'
 import { toast } from '../components/Toast'
+import { useStore } from '../store/useStore'
 import { Check, Loader2, XCircle, RotateCcw, AlertTriangle } from 'lucide-react'
 
 type FailReason = 'passport' | 'face' | 'stay' | 'timeout' | null
 
 export default function KycVerify() {
   const navigate = useNavigate()
+  const { login } = useStore()
   const t = useT()
   const [progress, setProgress] = useState(0)
   const [failed, setFailed] = useState<FailReason>(null)
@@ -117,7 +119,7 @@ export default function KycVerify() {
           <RotateCcw size={18} />
           {t('state_kyc_fail_retry')}
         </button>
-        <button onClick={() => navigate('/home', { replace: true })}
+        <button onClick={() => { login('phone'); navigate('/home', { replace: true }) }}
           className="w-full py-3 text-text-gray text-sm font-medium">
           {t('state_kyc_fail_home')}
         </button>

@@ -10,7 +10,7 @@ export default function ChargeComplete() {
   const location = useLocation()
   const { bippleMoney } = useStore()
   const t = useT()
-  const { amount = 0, method = '' } = (location.state as any) || {}
+  const { amount = 0, method = '', fromOnboarding = false } = (location.state as any) || {}
 
   useEffect(() => {
     toast(t('state_charge_success'), 'success')
@@ -29,7 +29,7 @@ export default function ChargeComplete() {
         </div>
       </div>
       <div className="px-6 pb-8 space-y-2">
-        <button onClick={() => navigate('/home', { replace: true })} className="w-full py-4 bg-primary text-white font-semibold rounded-xl">{t('charge_complete_home')}</button>
+        <button onClick={() => navigate(fromOnboarding ? '/pin-setup' : '/home', { replace: true, state: fromOnboarding ? { flow: 'signup' } : undefined })} className="w-full py-4 bg-primary text-white font-semibold rounded-xl">{t('charge_complete_home')}</button>
         <button onClick={() => navigate('/history')} className="w-full py-3 text-primary text-sm font-medium">{t('charge_complete_history')}</button>
       </div>
     </div>

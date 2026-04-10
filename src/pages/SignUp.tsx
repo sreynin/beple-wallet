@@ -118,7 +118,7 @@ export default function SignUp() {
     if (!email.trim()) { toast(t('signup_email_required'), 'error'); return }
     updateProfile({ name: fullName.trim(), phone: phone.trim(), email: email.trim() })
     login(phoneVerified ? 'phone' : emailVerified ? 'email' : 'email')
-    navigate('/terms')
+    navigate('/pin-setup', { state: { flow: 'signup' } })
   }
 
   const formatTimer = (sec: number) => {
