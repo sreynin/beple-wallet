@@ -2,17 +2,206 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useT } from '../hooks/useT'
 import { toast } from '../components/Toast'
-import { ArrowLeft, AlertCircle, HelpCircle, Camera } from 'lucide-react'
+import { ArrowLeft, AlertCircle, HelpCircle, Camera, Check, ChevronRight, Info } from 'lucide-react'
 import { Modal } from '../components/Modal'
 
+type DocType = 'passport' | 'alien'
+type FlowState = 'select-type' | 'shoot-guide' | 'camera'
 type ScanState = 'ready' | 'scanning' | 'captured' | 'failed' | 'retry-loop'
+
+// Per-doc items to photograph
+const DOC_ITEMS: Record<DocType, { key: string; labelKey: string; optional?: boolean }[]> = {
+  passport: [
+    { key: 'front',  labelKey: 'kyc_doc_passport_front' },
+    { key: 'selfie', labelKey: 'kyc_doc_selfie' },
+  ],
+  alien: [
+    { key: 'front',  labelKey: 'kyc_doc_alien_front' },
+    { key: 'back',   labelKey: 'kyc_doc_alien_back', optional: true },
+    { key: 'selfie', labelKey: 'kyc_doc_selfie' },
+  ],
+}
 
 export default function KycPassport() {
   const navigate = useNavigate()
   const t = useT()
+
+  // Flow
+  const [flow, setFlow] = useState<FlowState>('select-type')
+  const [docType, setDocType] = useState<DocType>('passport')
+  const [capturedItems, setCapturedItems] = useState<Set<string>>(new Set())
+
+  // Camera scan
   const [state, setState] = useState<ScanState>('ready')
   const [failCount, setFailCount] = useState(0)
   const [showFaq, setShowFaq] = useState(false)
+
+  const items = DOC_ITEMS[docType]
+  const requiredItems = items.filter(i => !i.optional).map(i => i.key)
+  const allRequiredCaptured = requiredItems.every(k => capturedItems.has(k))
+
+  // ── Step 1: Select document type ─────────────────────────────────────────
+  if (flow === 'select-type') return (
+    <div className="flex flex-col h-[calc(100%-44px)] bg-white animate-slide-in">
+      {/* Back button only, no header bar */}
+      <div className="px-4 pt-4 pb-2">
+        <button onClick={() => navigate(-1)} className="p-1 -ml-1 active:bg-gray-100 rounded-full">
+          <ArrowLeft size={22} className="text-text-dark" />
+        </button>
+      </div>
+
+      <div className="flex-1 px-6 pt-4 overflow-y-auto">
+        <h2 className="text-[22px] font-bold text-text-dark leading-snug whitespace-pre-line">{t('kyc_doc_select_title')}</h2>
+        <p className="text-[13px] text-text-gray mt-3 whitespace-pre-line">{t('kyc_doc_select_desc')}</p>
+
+        <div className="mt-8 space-y-3">
+          {/* Passport */}
+          <button
+            onClick={() => setDocType('passport')}
+            className={`w-full text-left px-4 py-4 rounded-xl border transition-all flex items-start gap-3 ${
+              docType === 'passport' ? 'border-primary bg-primary/5' : 'border-gray-200'
+            }`}
+          >
+            <span className={`mt-0.5 w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 ${
+              docType === 'passport' ? 'bg-primary' : 'border-2 border-gray-300'
+            }`}>
+              {docType === 'passport' && <Check size={12} strokeWidth={3} className="text-white" />}
+            </span>
+            <div>
+              <p className="text-[15px] font-semibold text-text-dark">{t('kyc_doc_passport')}</p>
+              <p className="text-xs text-text-gray mt-0.5">{t('kyc_doc_passport_desc')}</p>
+            </div>
+          </button>
+
+          {/* Alien Registration Card */}
+          <button
+            onClick={() => setDocType('alien')}
+            className={`w-full text-left px-4 py-4 rounded-xl border transition-all flex items-start gap-3 ${
+              docType === 'alien' ? 'border-primary bg-primary/5' : 'border-gray-200'
+            }`}
+          >
+            <span className={`mt-0.5 w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 ${
+              docType === 'alien' ? 'bg-primary' : 'border-2 border-gray-300'
+            }`}>
+              {docType === 'alien' && <Check size={12} strokeWidth={3} className="text-white" />}
+            </span>
+            <div>
+              <p className="text-[15px] font-semibold text-text-dark">{t('kyc_doc_alien')}</p>
+              <p className="text-xs text-text-gray mt-0.5">{t('kyc_doc_alien_desc')}</p>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <div className="px-6 pb-8 pt-4">
+        <button
+          onClick={() => { setCapturedItems(new Set()); setFlow('shoot-guide') }}
+          className="w-full py-4 bg-primary text-white font-semibold rounded-xl active:bg-primary-dark"
+        >
+          {t('next')}
+        </button>
+      </div>
+    </div>
+  )
+
+  // ── Step 2: Shoot guide (checklist of sides) ──────────────────────────────
+  if (flow === 'shoot-guide') {
+    // Find the first uncaptured item index for highlighting
+    const firstUncapturedIdx = items.findIndex(item => !capturedItems.has(item.key))
+
+    return (
+      <div className="flex flex-col h-[calc(100%-44px)] bg-white animate-slide-in">
+        {/* Back button only */}
+        <div className="px-4 pt-4 pb-2">
+          <button onClick={() => setFlow('select-type')} className="p-1 -ml-1 active:bg-gray-100 rounded-full">
+            <ArrowLeft size={22} className="text-text-dark" />
+          </button>
+        </div>
+
+        <div className="flex-1 px-6 pt-4 overflow-y-auto">
+          <h2 className="text-[22px] font-bold text-text-dark leading-snug whitespace-pre-line">{t('kyc_doc_shoot_title')}</h2>
+          <p className="text-[13px] text-text-gray mt-2">{t('kyc_doc_shoot_desc')}</p>
+
+          <div className="mt-8 space-y-3">
+            {items.map((item, idx) => {
+              const done = capturedItems.has(item.key)
+              const isActive = idx === firstUncapturedIdx
+
+              return (
+                <button
+                  key={item.key}
+                  onClick={() => {
+                    setCapturedItems(prev => new Set([...prev, item.key]))
+                  }}
+                  className={`w-full flex items-center justify-between px-4 py-4 rounded-xl transition-all ${
+                    done
+                      ? 'bg-primary/5 border border-primary'
+                      : isActive
+                        ? 'bg-primary/5 border border-primary'
+                        : 'bg-gray-50 border border-gray-100'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <span className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${
+                      done
+                        ? 'bg-primary'
+                        : isActive
+                          ? 'bg-primary'
+                          : 'bg-gray-200'
+                    }`}>
+                      {done
+                        ? <Check size={14} strokeWidth={2.5} className="text-white" />
+                        : isActive
+                          ? <Info size={14} className="text-white" />
+                          : <span className="w-2 h-2 rounded-full bg-gray-400" />
+                      }
+                    </span>
+                    <span className={`text-[14px] font-medium ${
+                      done || isActive ? 'text-text-dark' : 'text-text-gray'
+                    }`}>
+                      {t(item.labelKey as Parameters<typeof t>[0])}
+                      {item.optional && <span className="text-xs text-text-gray ml-1">({t('optional')})</span>}
+                    </span>
+                  </div>
+                  <span className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                    done
+                      ? 'bg-primary'
+                      : isActive
+                        ? 'bg-primary'
+                        : 'bg-gray-200'
+                  }`}>
+                    {done
+                      ? <Check size={16} className="text-white" />
+                      : <Camera size={16} className={isActive ? 'text-white' : 'text-gray-400'} />
+                    }
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+
+          <button className="flex items-center gap-1 text-[13px] text-primary font-medium mt-6">
+            <span>{t('kyc_doc_tip')}</span>
+            <ChevronRight size={14} />
+          </button>
+        </div>
+
+        <div className="px-6 pb-8 pt-4">
+          <button
+            onClick={() => { setState('ready'); setFlow('camera') }}
+            disabled={!allRequiredCaptured}
+            className={`w-full py-4 font-semibold rounded-xl transition-colors ${
+              allRequiredCaptured
+                ? 'bg-primary text-white active:bg-primary-dark'
+                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+            }`}
+          >
+            {t('next')}
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   const handleCapture = () => {
     setState('scanning')
@@ -31,11 +220,13 @@ export default function KycPassport() {
 
   const handleRetry = () => setState('ready')
 
+  // ── Step 3: Camera view + OCR states ─────────────────────────────────────
+
   // === OCR Failed ===
   if (state === 'failed') return (
     <div className="flex flex-col h-[calc(100%-44px)] bg-[#1f1f1f] animate-fade-in">
       <div className="flex items-center px-4 py-3">
-        <button onClick={() => navigate(-1)} className="p-1 -ml-1 active:bg-white/10 rounded-full">
+        <button onClick={() => setFlow('shoot-guide')} className="p-1 -ml-1 active:bg-white/10 rounded-full">
           <ArrowLeft size={22} className="text-white" />
         </button>
         <h1 className="flex-1 text-[15px] font-semibold text-white ml-2">{t('kyc_passport_title')}</h1>
@@ -97,10 +288,12 @@ export default function KycPassport() {
     <div className="flex flex-col h-[calc(100%-44px)] bg-[#1f1f1f] animate-slide-in">
       {/* Header */}
       <div className="flex items-center px-4 py-3">
-        <button onClick={() => navigate(-1)} className="p-1 -ml-1 active:bg-white/10 rounded-full">
+        <button onClick={() => setFlow('shoot-guide')} className="p-1 -ml-1 active:bg-white/10 rounded-full">
           <ArrowLeft size={22} className="text-white" />
         </button>
-        <h1 className="text-[17px] font-semibold text-white ml-3">{t('kyc_passport_title')}</h1>
+        <h1 className="text-[17px] font-semibold text-white ml-3">
+          {docType === 'passport' ? t('kyc_passport_title') : t('kyc_alien_title')}
+        </h1>
       </div>
 
       <div className="flex-1 flex flex-col items-center px-5">

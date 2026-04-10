@@ -2,30 +2,39 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Header } from '../components/Header'
 import { PermissionDialog } from '../components/PermissionDialog'
+import { useStore } from '../store/useStore'
 import { useT } from '../hooks/useT'
 import { Zap } from 'lucide-react'
 
 export default function PaymentScan() {
   const navigate = useNavigate()
   const t = useT()
-  const [scanning, setScanning] = useState(false)
-  const [permissionAsked, setPermissionAsked] = useState(false)
-  const [permissionGranted, setPermissionGranted] = useState(false)
+  const { cameraPermissionGranted, setCameraPermissionGranted } = useStore()
 
-  const handleScan = () => {
-    if (!permissionGranted) {
-      setPermissionAsked(true)
-      return
-    }
+  const [scanning, setScanning] = useState(false)
+  // Show dialog only if permission has never been granted before
+  const [permissionAsked, setPermissionAsked] = useState(false)
+
+  const doScan = () => {
     setScanning(true)
     setTimeout(() => { navigate('/payment-confirm', { state: { merchant: t('pay_scan_demo_merchant'), amount: 12500 } }) }, 1500)
   }
 
+  const handleScan = () => {
+    if (!cameraPermissionGranted) {
+      // First time — ask for permission
+      setPermissionAsked(true)
+      return
+    }
+    // Already granted — go straight to scan
+    doScan()
+  }
+
   const handlePermissionAllow = () => {
     setPermissionAsked(false)
-    setPermissionGranted(true)
-    setScanning(true)
-    setTimeout(() => { navigate('/payment-confirm', { state: { merchant: t('pay_scan_demo_merchant'), amount: 12500 } }) }, 1500)
+    // Persist so the dialog never shows again
+    setCameraPermissionGranted(true)
+    doScan()
   }
 
   const handlePermissionDeny = () => {
@@ -43,7 +52,7 @@ export default function PaymentScan() {
           <div className="absolute top-0 right-0 w-12 h-12 border-t-4 border-r-4 border-primary rounded-tr-xl" />
           <div className="absolute bottom-0 left-0 w-12 h-12 border-b-4 border-l-4 border-primary rounded-bl-xl" />
           <div className="absolute bottom-0 right-0 w-12 h-12 border-b-4 border-r-4 border-primary rounded-br-xl" />
-          {permissionGranted && (
+          {cameraPermissionGranted && (
             <div className="absolute left-4 right-4 h-0.5 bg-primary/80" style={{ animation: 'scanLine 2s linear infinite' }} />
           )}
           {scanning && (
@@ -53,7 +62,7 @@ export default function PaymentScan() {
               </div>
             </div>
           )}
-          {!permissionGranted && !scanning && (
+          {!cameraPermissionGranted && !scanning && (
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
                 <p className="text-white/40 text-xs">{t('state_permission_camera')}</p>

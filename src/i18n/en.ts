@@ -60,7 +60,7 @@ const en: Record<TranslationKeys, string> = {
 
   // KYC Contact
   kyc_contact_header: 'Contact Verification',
-  kyc_contact_heading: 'Please enter your\ncontact information',
+  kyc_contact_heading: 'Sign up with your\nmobile number or email.',
   kyc_contact_desc: 'This will be used for payment and app notifications.',
   kyc_contact_tab_email: 'Email',
   kyc_contact_tab_phone: 'Phone',
@@ -68,10 +68,10 @@ const en: Record<TranslationKeys, string> = {
   kyc_contact_email_placeholder: 'example@email.com',
   kyc_contact_email_hint: 'Enter an email where you can receive verification codes.',
   kyc_contact_country_label: 'Country Code',
-  kyc_contact_phone_label: 'Phone Number',
-  kyc_contact_phone_placeholder: '010-0000-0000',
-  kyc_contact_phone_hint: 'Enter a phone number where you can receive verification codes.',
-  kyc_contact_send_code: 'Send Verification Code',
+  kyc_contact_phone_label: 'Mobile Number',
+  kyc_contact_phone_placeholder: 'Numbers only',
+  kyc_contact_phone_hint: 'Enter a phone number where you can receive the verification code.',
+  kyc_contact_send_code: 'Request Code',
   kyc_contact_verify_header: 'Enter Code',
   kyc_contact_verify_title: 'Enter the\nverification code',
   kyc_contact_verify_sent_email: ' — Verification code sent.',
@@ -124,27 +124,40 @@ const en: Record<TranslationKeys, string> = {
 
   // Terms
   terms_title: 'Terms of Service',
-  terms_heading: 'Please agree to the terms\nto use Beple Wallet',
-  terms_desc: 'Required for smooth service delivery.',
-  terms_all: 'Agree to All Terms',
+  terms_heading: 'Please agree to the terms of use.',
+  terms_all: 'Agree to all.',
   terms_required: 'Required',
   terms_optional: 'Optional',
-  terms_service: 'Service Terms Agreement',
-  terms_privacy_collect: 'Personal Data Collection & Use Agreement',
-  terms_marketing: 'Marketing Communications Agreement',
-  terms_agree_continue: 'Agree & Continue',
-  terms_service_content: 'Article 1 (Purpose) These terms define the rights, obligations, and responsibilities between Bipple Pay Co., Ltd. ("Company") and members regarding the use of Beple Wallet services.',
+  terms_finance: 'Electronic Financial Transaction Terms',
+  terms_service: 'Service Terms of Use',
+  terms_privacy_collect: 'Personal Data Collection & Use',
+  terms_card: 'Card Service Terms',
+  terms_openbank: 'Open Banking Financial Info Terms',
+  terms_biometric: 'Biometric & Sensitive Data Collection',
+  terms_location: 'Location-Based Service Terms',
+  terms_marketing: 'Marketing & Advertising Consent',
   terms_privacy_content: 'Collected items: Name, Date of Birth, Phone Number, Email\nPurpose: Identity verification and service provision, fraud prevention\nRetention period: 5 years after membership withdrawal',
-  terms_marketing_content: 'Receive marketing information including events and discount offers from Beple Wallet.',
+  terms_biometric_content: 'Collected items: Facial recognition data, fingerprint data\nPurpose: Biometric authentication and quick login\nRetention period: Deleted immediately upon deactivation',
+  terms_marketing_content: 'Receive marketing and promotional information including events and discount offers from Beple Wallet.',
+  terms_service_content: 'Article 1 (Purpose) These terms define the rights, obligations, and responsibilities between Bipple Pay Co., Ltd. ("Company") and members regarding the use of Beple Wallet services.',
 
   // PIN
   pin_title: 'Set Transaction PIN',
-  pin_enter: 'Please enter a 6-digit PIN',
-  pin_reenter: 'Please enter again',
+  pin_enter: 'Please enter a\n6-digit transaction PIN',
+  pin_confirm_header: 'Confirm PIN',
+  pin_reenter: 'Please enter your\ntransaction PIN again',
   pin_used_for: 'Used for payments and withdrawals',
-  pin_reenter_desc: 'Enter again to confirm',
+  pin_reenter_desc: 'Enter the same PIN to confirm',
   pin_mismatch: 'Numbers do not match.',
   pin_delete: 'Del',
+  pin_faceid_scanning: 'Authenticating with Face ID...',
+
+  // Biometric registration
+  bio_register_title: 'Register biometric authentication?',
+  bio_register_desc: 'Use Face ID or fingerprint instead of\nyour PIN for faster authentication.',
+  bio_skip: 'Skip',
+  bio_register: 'Register',
+  optional: 'Optional',
 
   // Account Check
   account_check_heading: 'Please select\nyour nationality.',
@@ -210,6 +223,23 @@ const en: Record<TranslationKeys, string> = {
   kyc_start: 'Start Verification',
   kyc_notice: '* A limit of 1,000,000 KRW applies under special provisions.\n* Your information is encrypted and processed securely.',
 
+  // KYC Document Selection
+  kyc_doc_select_header: 'Select ID',
+  kyc_doc_select_title: 'Select the type of ID\nfor verification.',
+  kyc_doc_select_desc: 'Copies or IDs issued by other countries\ncannot be used',
+  kyc_doc_passport: 'Passport',
+  kyc_doc_passport_desc: 'Faster approval when registered in person.',
+  kyc_doc_alien: 'Alien Registration Card',
+  kyc_doc_alien_desc: 'Includes residence card, alien registration',
+  kyc_doc_tip: 'Check shooting TIPs',
+  kyc_doc_shoot_title: 'Take photos of your ID\nand selfie.',
+  kyc_doc_shoot_desc: 'Please prepare your ID document.',
+  kyc_doc_passport_front: 'Passport front',
+  kyc_doc_alien_front: 'Alien Registration Card front',
+  kyc_doc_alien_back: 'Alien Registration Card back',
+  kyc_doc_selfie: 'Selfie',
+  kyc_alien_title: 'Alien Registration Card Scan',
+
   // KYC Passport
   kyc_passport_title: 'Passport Scan',
   kyc_passport_guide: 'Place your passport in the frame without glare',
@@ -252,11 +282,12 @@ const en: Record<TranslationKeys, string> = {
   kyc_verify_hikorea: 'Cross-referencing with HiKorea data.',
 
   // KYC Success
-  kyc_success_title: 'Verification Complete',
-  kyc_success_msg: 'Identity verification is complete.\nYou can now freely use all\nBeple Wallet services.',
+  kyc_success_title: 'Verification Complete!',
+  kyc_success_msg: 'Identity verification has been successfully completed. You can now use Beple Wallet services.',
   kyc_success_limit: 'Current Charging Limit',
   kyc_success_grade: 'Verification Level',
-  kyc_success_go_home: 'Go to Home',
+  kyc_success_upgrade_hint: 'Upgrade to Full KYC to increase your limit.',
+  kyc_success_continue: 'Continue',
 
   // Home
   home_balance: 'Beple Money Balance',

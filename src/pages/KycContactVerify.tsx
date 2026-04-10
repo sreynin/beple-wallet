@@ -93,11 +93,11 @@ export default function KycContactVerify() {
         } else {
           updateProfile({ phone: contactValue })
         }
-        // Domestic → bank setup, Foreigner → KYC start
+        // Domestic → bank setup, Foreigner → Terms → KYC start
         if (userType === 'domestic') {
           navigate('/onboarding-bank', { replace: true })
         } else {
-          navigate('/kyc-start', { replace: true })
+          navigate('/terms', { replace: true, state: { flow: 'kyc' } })
         }
       } else {
         toast(t('kyc_contact_verify_fail'), 'error')
