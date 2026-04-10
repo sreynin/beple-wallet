@@ -51,7 +51,7 @@ function BankLogo({ id, size = 32 }: { id: string; size?: number }) {
 }
 
 type AccountType = 'bank' | 'korbit'
-type Step = 'type-select' | 'bank-select' | 'terms' | 'form' | 'ars' | 'verifying' | 'done' | 'korbit-connect' | 'korbit-verifying' | 'korbit-done'
+type Step = 'type-select' | 'bank-select' | 'form' | 'ars' | 'verifying' | 'done' | 'korbit-connect' | 'korbit-verifying' | 'korbit-done'
 
 export default function OnboardingBank() {
   const navigate = useNavigate()
@@ -63,9 +63,6 @@ export default function OnboardingBank() {
   const [selBank, setSelBank] = useState('')
   const [accountNumber, setAccountNumber] = useState('')
   const [holderName, setHolderName] = useState('')
-  const [term1, setTerm1] = useState(false)
-  const [term2, setTerm2] = useState(false)
-  const [term3, setTerm3] = useState(false)
   const [arsCode] = useState(String(Math.floor(Math.random() * 90 + 10)))
 
   const goNext = () => navigate('/pin-setup', { state: { flow: 'signup' } })
@@ -92,31 +89,6 @@ export default function OnboardingBank() {
 
   const handleKorbitConnect = () => {
     navigate('/charge-korbit-onboarding', { state: { fromOnboarding: true } })
-  }
-
-  const allRequiredTerms = term1 && term2
-  const allTerms = term1 && term2 && term3
-
-  const handleAgreeAll = () => {
-    if (allTerms) {
-      setTerm1(false)
-      setTerm2(false)
-      setTerm3(false)
-    } else {
-      setTerm1(true)
-      setTerm2(true)
-      setTerm3(true)
-    }
-  }
-
-  const handleTermsConfirm = () => {
-    if (allRequiredTerms) {
-      // Pre-fill holder name when moving to form
-      if (!holderName) {
-        setHolderName(getPrefilledName())
-      }
-      setStep('form')
-    }
   }
 
   // === Type Select (Bank Account or Korbit) ===
@@ -193,92 +165,11 @@ export default function OnboardingBank() {
         </div>
       </div>
       <div className="px-6 pb-8 pt-4">
-        <button onClick={() => { setTerm1(false); setTerm2(false); setTerm3(false); setStep('terms') }} disabled={!selBank}
+        <button onClick={() => {
+          if (!holderName) setHolderName(getPrefilledName())
+          setStep('form')
+        }} disabled={!selBank}
           className={`w-full py-4 font-semibold rounded-xl ${selBank ? 'bg-primary text-white' : 'bg-gray-200 text-text-light'}`}>{t('next')}</button>
-      </div>
-    </div>
-  )
-
-  // === Bank: Open Banking Consent ===
-  if (step === 'terms') return (
-    <div className="flex flex-col h-[calc(100%-44px)] bg-white animate-slide-in">
-      <Header title={t('ob_bank_register_title')} onBack={() => setStep('bank-select')} />
-      <div className="flex-1 px-5 pt-5 overflow-y-auto">
-        {/* Title */}
-        <h2 className="text-base font-bold text-text-dark mb-4">{t('ob_openbanking_title')}</h2>
-
-        {/* What is Open Banking */}
-        <div className="mb-5">
-          <p className="text-xs font-semibold text-text-dark mb-1">{t('ob_openbanking_what')}</p>
-          <p className="text-[11px] text-text-gray leading-relaxed">{t('ob_openbanking_desc')}</p>
-        </div>
-
-        {/* Consent Checkboxes */}
-        <div className="space-y-0 border border-border rounded-xl overflow-hidden mb-3">
-          {/* Term 1 - Required */}
-          <button onClick={() => setTerm1(!term1)}
-            className="w-full flex items-center gap-3 px-4 py-3.5 border-b border-border">
-            <div className={`w-5 h-5 rounded flex items-center justify-center flex-shrink-0 transition-colors ${
-              term1 ? 'bg-primary' : 'border-2 border-gray-300'
-            }`}>
-              {term1 && <Check size={12} className="text-white" strokeWidth={3} />}
-            </div>
-            <span className="text-xs text-text-dark flex-1 text-left">{t('ob_openbanking_term1')}</span>
-            <ChevronRight size={16} className="text-text-light flex-shrink-0" />
-          </button>
-
-          {/* Term 2 - Required */}
-          <button onClick={() => setTerm2(!term2)}
-            className="w-full flex items-center gap-3 px-4 py-3.5 border-b border-border">
-            <div className={`w-5 h-5 rounded flex items-center justify-center flex-shrink-0 transition-colors ${
-              term2 ? 'bg-primary' : 'border-2 border-gray-300'
-            }`}>
-              {term2 && <Check size={12} className="text-white" strokeWidth={3} />}
-            </div>
-            <span className="text-xs text-text-dark flex-1 text-left">{t('ob_openbanking_term2')}</span>
-            <ChevronRight size={16} className="text-text-light flex-shrink-0" />
-          </button>
-
-          {/* Term 3 - Optional */}
-          <button onClick={() => setTerm3(!term3)}
-            className="w-full flex items-center gap-3 px-4 py-3.5">
-            <div className={`w-5 h-5 rounded flex items-center justify-center flex-shrink-0 transition-colors ${
-              term3 ? 'bg-primary' : 'border-2 border-gray-300'
-            }`}>
-              {term3 && <Check size={12} className="text-white" strokeWidth={3} />}
-            </div>
-            <span className="text-xs text-text-dark flex-1 text-left">{t('ob_openbanking_term3')}</span>
-            <ChevronRight size={16} className="text-text-light flex-shrink-0" />
-          </button>
-        </div>
-
-        {/* Agree All */}
-        <button onClick={handleAgreeAll}
-          className="flex items-center justify-center gap-2 w-full py-2 mb-5">
-          <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
-            allTerms ? 'bg-primary' : 'border-2 border-gray-300'
-          }`}>
-            {allTerms && <Check size={12} className="text-white" strokeWidth={3} />}
-          </div>
-          <span className="text-xs font-semibold text-primary">{t('ob_openbanking_agree_all')}</span>
-        </button>
-
-        {/* SMS Warning */}
-        <div className="bg-gray-50 rounded-xl p-4 mb-4">
-          <p className="text-xs font-semibold text-text-dark mb-2">{t('ob_openbanking_sms_warning')}</p>
-          <p className="text-[10px] text-text-gray leading-relaxed mb-2">{t('ob_openbanking_sms_desc')}</p>
-          <p className="text-[10px] text-text-gray leading-relaxed">{t('ob_openbanking_sms_desc2')}</p>
-        </div>
-      </div>
-
-      {/* Cancel / Confirm Buttons */}
-      <div className="px-5 pb-8 pt-4 flex gap-3">
-        <button onClick={() => setStep('bank-select')}
-          className="flex-1 py-4 font-semibold rounded-xl border border-border text-text-gray">{t('ob_cancel')}</button>
-        <button onClick={handleTermsConfirm} disabled={!allRequiredTerms}
-          className={`flex-1 py-4 font-semibold rounded-xl ${
-            allRequiredTerms ? 'bg-primary text-white' : 'bg-gray-200 text-text-light'
-          }`}>{t('ob_confirm')}</button>
       </div>
     </div>
   )
@@ -286,7 +177,7 @@ export default function OnboardingBank() {
   // === Bank: Account Form (Redesigned) ===
   if (step === 'form') return (
     <div className="flex flex-col h-[calc(100%-44px)] bg-white animate-slide-in">
-      <Header title={t('ob_bank_register_title')} onBack={() => setStep('terms')} />
+      <Header title={t('ob_bank_register_title')} onBack={() => setStep('bank-select')} />
       <div className="flex-1 px-5 pt-5 overflow-y-auto">
         {/* Heading */}
         <h2 className="text-base font-bold text-text-dark mb-1 whitespace-pre-line">{t('ob_form_heading')}</h2>

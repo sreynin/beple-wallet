@@ -4,10 +4,10 @@ import { useT } from '../hooks/useT'
 import { Header } from '../components/Header'
 import { BottomSheet } from '../components/BottomSheet'
 import { toast } from '../components/Toast'
-import { Plus, ChevronRight, Check, Loader2, CheckCircle, XCircle, Copy, AlertCircle, Lock } from 'lucide-react'
+import { Plus, ChevronRight, Check, Loader2, CheckCircle, XCircle, Copy, Lock, Info } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
 
-type Step = 'list' | 'coin' | 'wc-code' | 'wc-confirm' | 'verifying' | 'success' | 'fail'
+type Step = 'list' | 'coin' | 'wc-terms' | 'wc-code' | 'wc-confirm' | 'verifying' | 'success' | 'fail'
 
 const allCoins = [
   { symbol: 'PCI', ko: '페이코인', en: 'PayCoin', icon: '▶', color: 'bg-blue-500', paySupport: true, available: true },
@@ -46,9 +46,11 @@ export default function SettingsCoins() {
   const [termsOpen, setTermsOpen] = useState(false)
   const [termsPrivacy, setTermsPrivacy] = useState(false)
   const [termsThird, setTermsThird] = useState(false)
+  const [termsConsent, setTermsConsent] = useState(false)
   const [verifyCode, setVerifyCode] = useState('')
   const [timeLeft, setTimeLeft] = useState(180)
   const [infoConfirmed, setInfoConfirmed] = useState(false)
+  const [otpCopied, setOtpCopied] = useState(false)
 
   const selectableCoins = useMemo(() =>
     allCoins.filter(c => !coins.some(ec => ec.symbol === c.symbol && ec.source === 'Korbit')),
@@ -62,10 +64,6 @@ export default function SettingsCoins() {
       next.delete(sym)
     } else {
       next.add(sym)
-      // Auto-show terms sheet when a coin is selected
-      setTermsPrivacy(false)
-      setTermsThird(false)
-      setTermsOpen(true)
     }
     setSelected(next)
   }
@@ -78,7 +76,8 @@ export default function SettingsCoins() {
   }
 
   const startRegister = () => {
-    setSelected(new Set()); setTermsPrivacy(false); setTermsThird(false)
+    setSelected(new Set())
+    setTermsPrivacy(false); setTermsThird(false); setTermsConsent(false)
     setInfoConfirmed(false)
     setStep('coin')
   }
@@ -167,7 +166,7 @@ export default function SettingsCoins() {
         </button>
       </div>
 
-      {/* ② Terms Popup */}
+      {/* Terms Popup */}
       <BottomSheet open={termsOpen} onClose={() => setTermsOpen(false)}>
         <div className="px-6 py-5">
           <button onClick={() => { const n = !(termsPrivacy && termsThird); setTermsPrivacy(n); setTermsThird(n) }}
@@ -195,9 +194,8 @@ export default function SettingsCoins() {
           </div>
           <button onClick={() => {
             setTermsOpen(false)
-            setVerifyCode(generateCode())
-            setTimeLeft(180)
-            setStep('wc-code')
+            setTermsConsent(false)
+            setStep('wc-terms')
           }} disabled={!termsPrivacy || !termsThird}
             className={`w-full py-4 font-semibold rounded-xl ${termsPrivacy && termsThird ? 'bg-primary text-white' : 'bg-gray-200 text-text-light'}`}>
             {t('wc_terms_agree')}
@@ -207,48 +205,136 @@ export default function SettingsCoins() {
     </div>
   )
 
-  // ④ Verification Code
-  if (step === 'wc-code') return (
+  // ② Wallet Connect Terms (full page, matching kb-terms design)
+  if (step === 'wc-terms') return (
     <div className="flex flex-col h-[calc(100%-44px)] bg-white animate-slide-in">
       <Header title="Wallet Connect" onBack={() => setStep('coin')} />
-      <div className="flex-1 px-6 pt-6 overflow-y-auto">
-        <h2 className="text-lg font-bold text-text-dark leading-snug whitespace-pre-line">{t('wc_code_heading')}</h2>
-        <p className="text-xs text-text-gray mt-2">{t('wc_safe_notice')}</p>
-        <div className="flex items-center gap-2 mt-3 mb-8">
-          <Lock size={14} className="text-green-600" />
-          <span className="text-xs text-green-600 font-medium">https://korbit.co.kr</span>
+      <div className="flex-1 px-5 pt-5 overflow-y-auto pb-4">
+        <h2 className="text-[30px] font-bold text-text-dark leading-[1.2] whitespace-pre-line mb-1">
+          {t('kb_wc_heading')}
+        </h2>
+        <p className="text-[11px] text-text-gray mb-4">{t('kb_wc_subheading')}</p>
+
+        <div className="flex items-center gap-1.5 mb-4">
+          <Lock size={13} className="text-green-600" />
+          <span className="text-[13px] text-green-600">https://korbit.co.kr</span>
         </div>
 
-        <div className="text-center mb-2">
-          <span className="text-sm font-medium text-primary">{String(mins).padStart(2, '0')}:{String(secs).padStart(2, '0')}</span>
+        <p className="text-[12px] text-text-gray mb-5 leading-relaxed">{t('kb_wc_instruction')}</p>
+
+        {/* OTP section */}
+        <div className="mb-5 bg-[#F9F9F9] border border-[#E9E9E9] rounded-2xl px-4 py-4">
+          <p className="text-[15px] font-bold text-text-dark text-center mb-1">{t('kb_wc_otp_title')}</p>
+          <p className="text-[11px] text-text-gray text-center whitespace-pre-line leading-relaxed mb-4">{t('kb_wc_otp_desc')}</p>
+          <div className="flex justify-center gap-2">
+            {[0,1,2,3].map(i => (
+              <div key={i} className="w-8 h-10 rounded-md border-2 border-[#C7D6F5] bg-white" />
+            ))}
+            <div className="w-1" />
+            {[4,5,6,7].map(i => (
+              <div key={i} className="w-8 h-10 rounded-md border-2 border-[#C7D6F5] bg-white" />
+            ))}
+          </div>
         </div>
+
+        {/* Caution box */}
+        <div className="bg-[#FFF8E1] border border-[#F0D46A] rounded-xl p-4 mb-5">
+          <div className="flex items-center gap-1.5 mb-2.5">
+            <Info size={14} className="text-[#F9A825]" />
+            <span className="text-[13px] font-semibold text-[#F9A825]">{t('kb_wc_caution_title')}</span>
+          </div>
+          <ul className="space-y-2 text-[10px] text-text-gray leading-relaxed">
+            <li>• {t('kb_wc_caution1')}</li>
+            <li>• {t('kb_wc_caution2')}</li>
+            <li>• {t('kb_wc_caution3')}</li>
+          </ul>
+        </div>
+
+        {/* Consent checkbox */}
+        <button onClick={() => setTermsConsent(!termsConsent)} className="flex items-center gap-3 w-full text-left">
+          <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${termsConsent ? 'bg-primary' : 'bg-gray-200'}`}>
+            {termsConsent && <Check size={11} className="text-white" strokeWidth={3} />}
+          </div>
+          <span className="text-[14px] text-text-dark">{t('kb_wc_consent')}</span>
+        </button>
+      </div>
+
+      <div className="px-6 pb-8 pt-4">
+        <button
+          onClick={() => {
+            setVerifyCode(generateCode())
+            setTimeLeft(180)
+            setStep('wc-code')
+          }}
+          disabled={!termsConsent}
+          className={`w-full py-4 font-semibold rounded-xl transition-colors ${termsConsent ? 'bg-[#F5C842] text-white active:bg-[#E5B832]' : 'bg-[#F5F5F5] text-[#BDBDBD]'}`}
+        >
+          {t('confirm')}
+        </button>
+      </div>
+    </div>
+  )
+
+  // ④ OTP Code Display (matching kb-otp design)
+  if (step === 'wc-code') return (
+    <div className="flex flex-col h-[calc(100%-44px)] bg-white animate-slide-in">
+      <Header title="Wallet Connect" onBack={() => setStep('wc-terms')} />
+      <div className="flex-1 px-6 pt-6 overflow-y-auto pb-4">
+        <h2 className="text-[17px] font-bold text-text-dark leading-snug whitespace-pre-line mb-1">
+          {t('kb_otp_heading')}
+        </h2>
+        <p className="text-xs text-text-gray mb-4">{t('kb_wc_subheading')}</p>
+
+        <div className="flex items-center gap-1.5 mb-5">
+          <Lock size={13} className="text-green-600" />
+          <span className="text-[13px] text-blue-600">https://korbit.co.kr</span>
+        </div>
+
+        {/* Timer */}
+        <div className="flex justify-end mb-2">
+          <span className="text-[#E53935] text-sm font-semibold font-mono">
+            {String(mins).padStart(2, '0')}:{String(secs).padStart(2, '0')}
+          </span>
+        </div>
+
+        {/* OTP Code */}
         <div className="text-center mb-4">
-          <p className="text-4xl font-bold text-primary tracking-[0.15em]">{verifyCode.slice(0, 4)} {verifyCode.slice(4)}</p>
+          <p className="text-[36px] font-bold text-text-dark tracking-widest font-mono">{verifyCode.slice(0, 4)} {verifyCode.slice(4)}</p>
         </div>
-        <div className="flex justify-center mb-8">
-          <button onClick={() => { navigator.clipboard.writeText(verifyCode); toast(t('wc_code_copied'), 'success') }}
-            className="flex items-center gap-1.5 px-4 py-2 bg-primary/10 text-primary text-xs font-medium rounded-full">
-            <Copy size={14} />{t('wc_code_copy')}
+
+        {/* Copy button */}
+        <div className="flex justify-center mb-6">
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(verifyCode)
+              setOtpCopied(true)
+              setTimeout(() => setOtpCopied(false), 2000)
+            }}
+            className="flex items-center gap-2 px-4 py-2 border border-[#D6DCEA] rounded-full text-sm text-text-gray active:bg-gray-50"
+          >
+            <Copy size={14} />
+            {otpCopied ? t('kb_otp_copied') : t('kb_otp_copy')}
           </button>
         </div>
 
-        <div className="space-y-3 mb-6">
-          {[t('wc_step_1'), t('wc_step_2'), t('wc_step_3'), t('wc_step_4')].map((text, i) => (
-            <div key={i} className="flex gap-3">
-              <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span className="text-[10px] font-bold text-primary">{i + 1}</span>
-              </div>
-              <p className="text-xs text-text-gray leading-relaxed">{text}</p>
-            </div>
-          ))}
-        </div>
+        {/* Instructions */}
+        <ul className="space-y-2 text-xs text-text-gray leading-relaxed mb-5">
+          <li>• {t('kb_otp_inst1')}</li>
+          <li>• {t('kb_otp_inst2')}</li>
+          <li>• {t('kb_otp_inst3')}</li>
+          <li>• {t('kb_otp_inst4')}</li>
+        </ul>
 
-        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-4">
-          <div className="flex items-center gap-1.5 mb-2">
-            <AlertCircle size={14} className="text-yellow-600" />
-            <span className="text-xs font-semibold text-yellow-700">{t('wc_notice_title')}</span>
+        {/* Caution box */}
+        <div className="bg-[#FFF8E1] rounded-xl p-4">
+          <div className="flex items-center gap-1.5 mb-2.5">
+            <Info size={14} className="text-[#F9A825]" />
+            <span className="text-[13px] font-semibold text-[#F9A825]">{t('kb_wc_caution_title')}</span>
           </div>
-          <p className="text-[11px] text-yellow-700">• {t('wc_notice_1')}</p>
+          <ul className="space-y-2 text-[11px] text-text-gray leading-relaxed">
+            <li>• {t('kb_otp_caution1')}</li>
+            <li>• {t('kb_otp_caution2')}</li>
+          </ul>
         </div>
       </div>
       <div className="px-6 pb-8 pt-4">
@@ -257,7 +343,7 @@ export default function SettingsCoins() {
           setStep('wc-confirm')
           window.scrollTo(0, 0)
         }}
-          className="w-full py-4 bg-[#2563EB] text-white font-semibold rounded-xl border-2 border-[#2563EB] active:bg-[#1d4fc7]">{t('wc_complete')}</button>
+          className="w-full py-4 bg-[#2563EB] text-white font-semibold rounded-xl active:bg-[#1d4fc7]">{t('kb_otp_confirm')}</button>
       </div>
     </div>
   )
