@@ -423,6 +423,8 @@ const ko = {
   triplea_addr_warn1: '네트워크를 선택하여 전송해주세요.',
   triplea_addr_warn2: '다른 네트워크 전송 시 자산이 손실될 수 있습니다.',
   triplea_addr_warn3: '입금 후 컨펌까지 시간이 소요될 수 있습니다.',
+  triplea_addr_expired: '입금 유효 시간이 만료되었습니다. 다시 주소를 생성해주세요.',
+  triplea_addr_invalid: '유효하지 않은 주소입니다. 자금은 발신자에게 반환되어야 합니다.',
   triplea_addr_check: '입금 상태 확인',
   triplea_wait_title: '입금 확인 중',
   triplea_wait_heading: '입금을 확인하고 있습니다',

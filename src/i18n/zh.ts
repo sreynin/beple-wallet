@@ -425,6 +425,8 @@ const zh: Record<TranslationKeys, string> = {
   triplea_addr_warn1: '请使用所选网络发送。',
   triplea_addr_warn2: '通过不同网络发送可能导致资产损失。',
   triplea_addr_warn3: '存入后确认可能需要一些时间。',
+  triplea_addr_expired: '充值地址已过期。请重新生成地址。',
+  triplea_addr_invalid: '无效地址。资金需要退还给付款人。',
   triplea_addr_check: '检查充值状态',
   triplea_wait_title: '正在确认充值',
   triplea_wait_heading: '正在确认您的充值',
