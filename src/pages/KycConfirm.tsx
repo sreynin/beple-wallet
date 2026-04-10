@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Header } from '../components/Header'
 import { useStore } from '../store/useStore'
 import { useT } from '../hooks/useT'
@@ -14,9 +14,12 @@ const initialData = {
 
 export default function KycConfirm() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { setKycData, updateProfile } = useStore()
   const t = useT()
   const [form, setForm] = useState(initialData)
+
+  const incomingState = location.state as { captured?: string[]; docType?: string } | null
 
   const handleSubmit = () => {
     // Save to KYC data
@@ -28,7 +31,12 @@ export default function KycConfirm() {
       nationality: form.nationality,
       birthDate: form.birthDate,
     })
-    navigate('/kyc-face')
+    navigate('/kyc-passport', {
+      state: {
+        captured: incomingState?.captured || ['front'],
+        docType: incomingState?.docType || 'passport',
+      }
+    })
   }
 
   const fields: { key: keyof typeof form; labelKey: Parameters<typeof t>[0]; placeholder: string; disabled?: boolean }[] = [
